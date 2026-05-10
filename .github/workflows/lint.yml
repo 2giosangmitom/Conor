@@ -23,7 +23,7 @@ jobs:
         run: bun install
 
       - name: Run ESLint
-        run: bun run lint
+        run: bun lint
 
       - name: Check formatting with oxfmt
-        run: bun run fmt:check
+        run: bun fmt:check

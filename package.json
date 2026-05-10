@@ -10,8 +10,8 @@
     "postinstall": "bun run --bun nuxt prepare",
     "fmt:check": "oxfmt --check .",
     "fmt:fix": "oxfmt --write .",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "bun run --bun eslint .",
+    "lint:fix": "bun run --bun eslint . --fix"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
