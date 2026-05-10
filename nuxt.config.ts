@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     db: {
       dialect: "postgresql",
       driver: "neon-http",
+      applyMigrationsDuringBuild: false,
     },
     cache: true,
     kv: true,
@@ -25,5 +26,9 @@ export default defineNuxtConfig({
     experimental: {
       componentDetection: true,
     },
+  },
+  runtimeConfig: {
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   },
 });
