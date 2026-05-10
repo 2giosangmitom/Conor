@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/eslint",
     "@nuxt/ui",
+    "@vueuse/nuxt",
   ],
   hub: {
     db: {
