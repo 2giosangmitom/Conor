@@ -1,17 +1,37 @@
 {
   "name": "nghego",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "bun run --bun nuxt build",
     "dev": "bun run --bun nuxt dev",
     "generate": "bun run --bun nuxt generate",
     "preview": "bun run --bun nuxt preview",
-    "postinstall": "bun run --bun nuxt prepare"
+    "postinstall": "bun run --bun nuxt prepare",
+    "fmt:check": "oxfmt --check .",
+    "fmt:fix": "oxfmt --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@nuxt/a11y": "1.0.0-alpha.1",
+    "@nuxt/eslint": "1.15.2",
+    "@nuxt/fonts": "0.14.0",
+    "@nuxt/hints": "1.1.1",
+    "@nuxt/icon": "2.2.2",
+    "@nuxt/image": "2.0.0",
+    "@nuxthub/core": "0.10.7",
+    "better-auth": "^1.6.10",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
+    "eslint": "^9.0.0 || ^10.0.0",
     "nuxt": "^4.4.4",
-    "vue": "^3.5.33",
+    "vue": "^3.5.34",
     "vue-router": "^5.0.6"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.48.0",
+    "typescript": "^6.0.3"
   }
 }
