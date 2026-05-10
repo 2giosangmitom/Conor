@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     db: {
       dialect: "postgresql",
       driver: "neon-http",
-      applyMigrationsDuringBuild: false,
+      applyMigrationsDuringBuild: process.env.NODE_ENV === "production",
     },
     cache: true,
     kv: true,
