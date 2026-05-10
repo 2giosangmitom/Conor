@@ -2,7 +2,6 @@
   <div class="flex min-h-screen items-center justify-center">
     <UCard class="w-full max-w-md">
       <UAuthForm
-        ref="authForm"
         title="Sign Up"
         description="Create your account to get started."
         icon="i-lucide-user-plus"
