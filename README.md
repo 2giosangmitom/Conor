@@ -5,9 +5,9 @@ This is a Nuxt 4 project.
 ## Development
 
 ```bash
-bun install
+pnpm install
 ```
 
 ```bash
-bun dev
+pnpm dev
 ```
