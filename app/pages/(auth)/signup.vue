@@ -77,8 +77,8 @@ const handleSignUp = async (event: { data: { name: string; email: string; passwo
       throw new Error(result.error.message)
     }
 
-    // Redirect to sign in or auto sign in
-    await navigateTo('/signin')
+    // Better Auth auto-signs in after successful sign-up, so send the user to the authenticated landing page.
+    await navigateTo('/')
   } catch (error: unknown) {
     console.error('Sign up error:', error instanceof Error ? error.message : String(error))
   }
