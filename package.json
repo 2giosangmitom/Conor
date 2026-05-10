@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun run --bun nuxt build",
-    "dev": "bun run --bun nuxt dev",
-    "generate": "bun run --bun nuxt generate",
-    "preview": "bun run --bun nuxt preview",
-    "postinstall": "bun run --bun nuxt prepare",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "fmt:check": "oxfmt --check .",
     "fmt:fix": "oxfmt --write .",
-    "lint": "bun run --bun eslint .",
-    "lint:fix": "bun run --bun eslint . --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -34,6 +34,6 @@
   },
   "devDependencies": {
     "oxfmt": "^0.48.0",
-    "typescript": "^6.0.3"
+    "typescript": "^5.9.3"
   }
 }

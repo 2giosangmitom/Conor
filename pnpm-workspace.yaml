@@ -1,0 +1,8 @@
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  sharp: true
+  unrs-resolver: false
+  vue-demi: false
+
+shamefullyHoist: true
