@@ -12,7 +12,10 @@ export default defineNuxtConfig({
     "@nuxt/ui",
   ],
   hub: {
-    db: "postgresql",
+    db: {
+      dialect: "postgresql",
+      driver: "neon-http",
+    },
     cache: true,
     kv: true,
     blob: true,
