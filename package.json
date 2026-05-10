@@ -1,0 +1,17 @@
+{
+  "name": "nghego",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun run --bun nuxt build",
+    "dev": "bun run --bun nuxt dev",
+    "generate": "bun run --bun nuxt generate",
+    "preview": "bun run --bun nuxt preview",
+    "postinstall": "bun run --bun nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^4.4.4",
+    "vue": "^3.5.33",
+    "vue-router": "^5.0.6"
+  }
+}
