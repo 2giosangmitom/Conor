@@ -1,7 +1,7 @@
 <template>
   <div>
-    Header
+    Đầu trang
     <slot />
-    Footer
+    Chân trang
   </div>
 </template>

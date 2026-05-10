@@ -1,6 +1,6 @@
 <template>
   <div>
-    Landing page
-    <UButton>Test button</UButton>
+    Trang chủ
+    <UButton>Nút thử</UButton>
   </div>
 </template>

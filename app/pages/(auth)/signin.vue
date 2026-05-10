@@ -1,67 +1,90 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center">
-    <UCard class="w-full max-w-md">
-      <UAuthForm
-        ref="authForm"
-        title="Sign In"
-        description="Enter your credentials to access your account."
-        icon="i-lucide-log-in"
-        :fields="fields"
-        :submit="{ label: 'Sign In', block: true }"
-        @submit="handleSignIn"
-      />
-      <template #footer>
-        <p class="text-sm text-center text-muted">
-          Don't have an account?
-          <NuxtLink to="/signup" class="text-primary hover:underline">
-            Sign up
-          </NuxtLink>
-        </p>
-      </template>
-    </UCard>
-  </div>
+  <UCard class="w-full max-w-md">
+    <UAuthForm
+      ref="authForm"
+      title="Đăng nhập"
+      description="Nhập thông tin để truy cập tài khoản."
+      icon="i-lucide-log-in"
+      :fields="fields"
+      :providers="providers"
+      :submit="{ label: 'Đăng nhập', block: true }"
+      @submit="handleSignIn"
+    />
+    <template #footer>
+      <p class="text-sm text-center text-muted">
+        Chưa có tài khoản?
+        <NuxtLink to="/signup" class="text-primary hover:underline"> Đăng ký </NuxtLink>
+      </p>
+    </template>
+  </UCard>
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from '#app'
-import { authClient } from '~/utils/auth'
+import type { ButtonProps } from "@nuxt/ui";
+import { authClient } from "~/utils/auth";
+
+definePageMeta({
+  layout: "auth",
+});
 
 const fields = [
   {
-    name: 'email',
-    type: 'email',
-    label: 'Email',
-    placeholder: 'Enter your email',
+    name: "email",
+    type: "email",
+    label: "Email",
+    placeholder: "Nhập email",
     required: true,
   },
   {
-    name: 'password',
-    type: 'password',
-    label: 'Password',
-    placeholder: 'Enter your password',
+    name: "password",
+    type: "password",
+    label: "Mật khẩu",
+    placeholder: "Nhập mật khẩu",
     required: true,
   },
-]
+];
 
 const handleSignIn = async (event: { data: { email: string; password: string } }) => {
-  const { email, password } = event.data
+  const { email, password } = event.data;
 
   try {
     const result = await authClient.signIn.email({
       email,
       password,
-    })
+    });
 
     if (result.error) {
-      throw new Error(result.error.message)
+      throw new Error(result.error.message);
     }
 
-    // Redirect to home or dashboard
-    await navigateTo('/')
+    // Chuyển đến trang chủ hoặc dashboard
+    await navigateTo("/");
   } catch (error: unknown) {
     // Handle error, maybe show toast
-    console.error('Sign in error:', error instanceof Error ? error.message : String(error))
+    console.error("Lỗi đăng nhập:", error instanceof Error ? error.message : String(error));
     // You can use UToast or similar to show error
   }
-}
+};
+
+const handleGoogleSignIn = async () => {
+  try {
+    const result = await authClient.signIn.social({ provider: "google" });
+
+    if (result?.error) {
+      throw new Error(result.error.message);
+    }
+  } catch (error: unknown) {
+    console.error("Lỗi đăng nhập Google:", error instanceof Error ? error.message : String(error));
+  }
+};
+
+const providers: ButtonProps[] = [
+  {
+    label: "Tiếp tục với Google",
+    icon: "i-simple-icons-google",
+    variant: "outline",
+    block: true,
+    onClick: handleGoogleSignIn,
+  },
+];
 </script>

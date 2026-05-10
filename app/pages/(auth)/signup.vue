@@ -1,68 +1,76 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center">
-    <UCard class="w-full max-w-md">
-      <UAuthForm
-        title="Sign Up"
-        description="Create your account to get started."
-        icon="i-lucide-user-plus"
-        :fields="fields"
-        :submit="{ label: 'Sign Up', block: true }"
-        @submit="handleSignUp"
-      />
-      <template #footer>
-        <p class="text-sm text-center text-muted">
-          Already have an account?
-          <NuxtLink to="/signin" class="text-primary hover:underline">
-            Sign in
-          </NuxtLink>
-        </p>
-      </template>
-    </UCard>
-  </div>
+  <UCard class="w-full max-w-md">
+    <UAuthForm
+      title="Đăng ký"
+      description="Tạo tài khoản để bắt đầu."
+      icon="i-lucide-user-plus"
+      :fields="fields"
+      :providers="providers"
+      :submit="{ label: 'Đăng ký', block: true }"
+      @submit="handleSignUp"
+    />
+    <template #footer>
+      <p class="text-sm text-center text-muted">
+        Đã có tài khoản?
+        <NuxtLink to="/signin" class="text-primary hover:underline"> Đăng nhập </NuxtLink>
+      </p>
+    </template>
+  </UCard>
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from '#app'
-import { authClient } from '~/utils/auth'
+import type { ButtonProps } from "@nuxt/ui";
+import { authClient } from "~/utils/auth";
+
+definePageMeta({
+  layout: "auth",
+});
 
 const fields = [
   {
-    name: 'name',
-    type: 'text',
-    label: 'Name',
-    placeholder: 'Enter your full name',
+    name: "name",
+    type: "text",
+    label: "Họ và tên",
+    placeholder: "Nhập họ và tên",
     required: true,
   },
   {
-    name: 'email',
-    type: 'email',
-    label: 'Email',
-    placeholder: 'Enter your email',
+    name: "email",
+    type: "email",
+    label: "Email",
+    placeholder: "Nhập email",
     required: true,
   },
   {
-    name: 'password',
-    type: 'password',
-    label: 'Password',
-    placeholder: 'Enter your password',
+    name: "password",
+    type: "password",
+    label: "Mật khẩu",
+    placeholder: "Nhập mật khẩu",
     required: true,
   },
   {
-    name: 'confirmPassword',
-    type: 'password',
-    label: 'Confirm Password',
-    placeholder: 'Confirm your password',
+    name: "confirmPassword",
+    type: "password",
+    label: "Xác nhận mật khẩu",
+    placeholder: "Nhập lại mật khẩu",
     required: true,
   },
-]
+];
 
-const handleSignUp = async (event: { data: { name: string; email: string; password: string; confirmPassword: string } }) => {
-  const { name, email, password, confirmPassword } = event.data
+const handleSignUp = async (event: {
+  data: {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  };
+}) => {
+  const { name, email, password, confirmPassword } = event.data;
 
   if (password !== confirmPassword) {
     // Handle error
-    console.error('Passwords do not match')
-    return
+    console.error("Mật khẩu không khớp");
+    return;
   }
 
   try {
@@ -70,16 +78,38 @@ const handleSignUp = async (event: { data: { name: string; email: string; passwo
       name,
       email,
       password,
-    })
+    });
 
     if (result.error) {
-      throw new Error(result.error.message)
+      throw new Error(result.error.message);
     }
 
-    // Better Auth auto-signs in after successful sign-up, so send the user to the authenticated landing page.
-    await navigateTo('/')
+    // Better Auth tự động đăng nhập sau khi đăng ký thành công, nên chuyển đến trang đã đăng nhập.
+    await navigateTo("/");
   } catch (error: unknown) {
-    console.error('Sign up error:', error instanceof Error ? error.message : String(error))
+    console.error("Lỗi đăng ký:", error instanceof Error ? error.message : String(error));
   }
-}
+};
+
+const handleGoogleSignIn = async () => {
+  try {
+    const result = await authClient.signIn.social({ provider: "google" });
+
+    if (result?.error) {
+      throw new Error(result.error.message);
+    }
+  } catch (error: unknown) {
+    console.error("Lỗi đăng nhập Google:", error instanceof Error ? error.message : String(error));
+  }
+};
+
+const providers: ButtonProps[] = [
+  {
+    label: "Tiếp tục với Google",
+    icon: "i-simple-icons-google",
+    variant: "outline",
+    block: true,
+    onClick: handleGoogleSignIn,
+  },
+];
 </script>
