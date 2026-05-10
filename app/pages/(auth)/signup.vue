@@ -1,5 +1,6 @@
 <template>
   <UCard class="w-full max-w-md">
+    <h1 class="sr-only">Đăng ký</h1>
     <UAuthForm
       title="Đăng ký"
       description="Tạo tài khoản để bắt đầu."
@@ -12,7 +13,9 @@
     <template #footer>
       <p class="text-sm text-center text-muted">
         Đã có tài khoản?
-        <NuxtLink to="/signin" class="text-primary hover:underline"> Đăng nhập </NuxtLink>
+        <NuxtLink to="/signin" class="text-primary underline underline-offset-4 hover:decoration-2">
+          Đăng nhập
+        </NuxtLink>
       </p>
     </template>
   </UCard>
@@ -24,6 +27,10 @@ import { authClient } from "~/utils/auth";
 
 definePageMeta({
   layout: "auth",
+});
+
+useHead({
+  title: "Đăng ký",
 });
 
 const fields = [
