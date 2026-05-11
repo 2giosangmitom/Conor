@@ -1,14 +1,18 @@
-import { db } from "@nuxthub/db";
-import { betterAuth } from "better-auth";
+import { db, schema } from "@nuxthub/db";
+import { betterAuth } from "better-auth/minimal";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { kv } from "@nuxthub/kv";
-
-const config = useRuntimeConfig();
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: {
+      ...schema,
+    },
   }),
+  rateLimit: {
+    storage: "secondary-storage",
+  },
   secondaryStorage: {
     get(key) {
       return kv.get(key);
@@ -26,8 +30,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: config.googleClientId,
-      clientSecret: config.googleClientSecret,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
 });
