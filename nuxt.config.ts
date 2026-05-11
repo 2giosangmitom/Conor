@@ -27,8 +27,4 @@ export default defineNuxtConfig({
       componentDetection: true,
     },
   },
-  runtimeConfig: {
-    googleClientId: process.env.GOOGLE_CLIENT_ID,
-    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  },
 });
