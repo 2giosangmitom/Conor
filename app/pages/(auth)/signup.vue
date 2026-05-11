@@ -180,15 +180,16 @@ const handleGoogleSignIn = async () => {
   }
 };
 
-const providers = computed<ButtonProps[]>(() => [
+const providers: ButtonProps[] = [
   {
     label: "Tiếp tục với Google",
     icon: "i-simple-icons-google",
-    variant: "outline",
+    variant: "subtle",
+    color: "primary",
     block: true,
     loading: isSubmitting.value,
     disabled: isSubmitting.value,
     onClick: handleGoogleSignIn,
   },
-]);
+];
 </script>
