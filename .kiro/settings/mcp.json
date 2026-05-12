@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "nuxt-ui": {
+      "url": "https://ui.nuxt.com/mcp"
+    },
+    "nuxt": {
+      "url": "https://nuxt.com/mcp"
+    },
+    "better-auth": {
+      "url": "https://mcp.better-auth.com/mcp"
+    }
+  }
+}
