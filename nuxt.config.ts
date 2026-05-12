@@ -12,6 +12,11 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@vueuse/nuxt",
   ],
+  hints: {
+    features: {
+      lazyLoad: false,
+    },
+  },
   hub: {
     db: {
       dialect: "postgresql",
