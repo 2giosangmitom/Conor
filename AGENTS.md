@@ -1,52 +1,54 @@
 # AGENTS.md
 
-## Tổng quan dự án
+## Project Overview
 
-Dự án này sử dụng **Vue.js** làm nền tảng frontend kết hợp với **Nuxt.js** làm framework, và **NuxtUI** làm thư viện component chính.
+This project uses **Vue.js** as the frontend foundation combined with **Nuxt.js** as the framework, and **NuxtUI** as the primary UI component library.
 
 ---
 
-## Quy tắc bắt buộc (Rules)
+## Mandatory Rules
 
-### ✅ Luôn sử dụng component từ NuxtUI
+### ✅ Always use components from NuxtUI
 
-Tất cả các component UI **phải** được lấy từ thư viện [NuxtUI](https://ui.nuxt.com/). Không được tự viết component từ đầu nếu NuxtUI đã có sẵn component tương đương.
+All UI components **must** come from the [NuxtUI](https://ui.nuxt.com/) library. Do not write custom components from scratch if NuxtUI already provides an equivalent.
 
-**Ví dụ đúng:**
+**Correct:**
 
 ```vue
-<!-- ✅ Dùng UButton từ NuxtUI -->
-<UButton label="Đăng nhập" color="primary" />
+<!-- ✅ Use UButton from NuxtUI -->
+<UButton label="Login" color="primary" />
 
-<!-- ✅ Dùng UInput từ NuxtUI -->
-<UInput v-model="email" placeholder="Email của bạn" />
+<!-- ✅ Use UInput from NuxtUI -->
+<UInput v-model="email" placeholder="Your email" />
 
-<!-- ✅ Dùng UModal từ NuxtUI -->
+<!-- ✅ Use UModal from NuxtUI -->
 <UModal v-model="isOpen">
   <template #content>...</template>
 </UModal>
 ```
 
-**Ví dụ sai:**
+**Wrong:**
 
 ```vue
-<!-- ❌ Không tự viết button thủ công -->
-<button class="bg-blue-500 text-white px-4 py-2 rounded">Đăng nhập</button>
+<!-- ❌ Do not write a button manually -->
+<button class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
 
-<!-- ❌ Không tự dựng input từ HTML thuần -->
-<input type="text" class="border rounded p-2" placeholder="Email của bạn" />
+<!-- ❌ Do not build an input from raw HTML -->
+<input type="text" class="border rounded p-2" placeholder="Your email" />
 ```
 
 ---
 
-### ✅ Thứ tự ưu tiên khi chọn component
+### ✅ Component selection priority
 
-1. **NuxtUI component** — kiểm tra tại https://ui.nuxt.com/components trước khi làm bất cứ điều gì.
-2. **Tùy chỉnh qua `ui` prop hoặc slot** — nếu cần thay đổi giao diện, dùng `ui` prop hoặc slot của NuxtUI thay vì override bằng CSS tùy ý.
-3. **Wrap component NuxtUI** — nếu cần component tái sử dụng với config mặc định riêng, hãy wrap component NuxtUI thay vì viết mới hoàn toàn.
+Before writing any UI code, always check https://ui.nuxt.com/components first. Follow this priority order:
+
+1. **NuxtUI component** — use it directly if it covers your use case.
+2. **Customize via `ui` prop or slots** — if the default appearance needs adjustment, use NuxtUI's `ui` prop or named slots instead of arbitrary CSS overrides.
+3. **Wrap a NuxtUI component** — if you need a reusable component with custom default config, wrap a NuxtUI component rather than building one from scratch.
 
 ```vue
-<!-- ✅ Wrap NuxtUI component để tái sử dụng -->
+<!-- ✅ Wrap a NuxtUI component for reuse -->
 <!-- components/AppButton.vue -->
 <template>
   <UButton v-bind="$props" color="primary" size="md" />
@@ -55,50 +57,50 @@ Tất cả các component UI **phải** được lấy từ thư viện [NuxtUI]
 
 ---
 
-### ✅ Tùy chỉnh giao diện
+### ✅ Customizing component appearance
 
-Để tùy chỉnh giao diện component NuxtUI, sử dụng theo thứ tự ưu tiên:
+When NuxtUI components need visual customization, follow this priority order:
 
-1. **`ui` prop** để override class nội bộ của component.
-2. **Slot** để inject nội dung tùy chỉnh.
-3. **`app.config.ts`** để thiết lập theme mặc định toàn cục.
+1. **`ui` prop** — override internal classes of the component.
+2. **Slots** — inject custom content into the component.
+3. **`app.config.ts`** — set global default theme settings.
 
 ```vue
-<!-- ✅ Dùng ui prop để tùy chỉnh -->
-<UButton label="Xác nhận" :ui="{ base: 'font-bold tracking-wide' }" />
+<!-- ✅ Use the ui prop to customize -->
+<UButton label="Confirm" :ui="{ base: 'font-bold tracking-wide' }" />
 ```
 
 ---
 
-### ❌ Những điều không được làm
+### ❌ What NOT to do
 
-| Không được                                                     | Thay bằng                                 |
-| -------------------------------------------------------------- | ----------------------------------------- |
-| Tự viết component Button, Input, Modal, ... từ đầu             | Dùng `UButton`, `UInput`, `UModal`, ...   |
-| Dùng thư viện UI khác (Element Plus, Vuetify, shadcn-vue, ...) | Dùng NuxtUI                               |
-| Override style bằng `!important` hoặc CSS inline tùy tiện      | Dùng `ui` prop hoặc `app.config.ts`       |
-| Tạo component layout tùy ý (Grid, Container, ...)              | Dùng `UContainer`, Tailwind utility class |
+| Forbidden                                                         | Use instead                             |
+| ----------------------------------------------------------------- | --------------------------------------- |
+| Writing Button, Input, Modal, etc. from scratch                   | `UButton`, `UInput`, `UModal`, ...      |
+| Using other UI libraries (Element Plus, Vuetify, shadcn-vue, ...) | NuxtUI                                  |
+| Overriding styles with `!important` or arbitrary inline CSS       | `ui` prop or `app.config.ts`            |
+| Building custom layout components (Grid, Container, ...)          | `UContainer` + Tailwind utility classes |
 
 ---
 
-## Cấu trúc thư mục khuyến nghị
+## Recommended Directory Structure
 
 ```
 .
 ├── components/
-│   └── app/           # Các wrapper component dựa trên NuxtUI
+│   └── app/           # NuxtUI-based wrapper components
 ├── pages/             # Nuxt pages
-├── layouts/           # Nuxt layouts (dùng UContainer, v.v.)
+├── layouts/           # Nuxt layouts (using UContainer, etc.)
 ├── composables/       # Vue composables
-├── app.config.ts      # Cấu hình NuxtUI theme toàn cục
-└── nuxt.config.ts     # Cấu hình Nuxt + khai báo module NuxtUI
+├── app.config.ts      # Global NuxtUI theme configuration
+└── nuxt.config.ts     # Nuxt config + NuxtUI module registration
 ```
 
 ---
 
-## Cấu hình NuxtUI
+## NuxtUI Setup
 
-Đảm bảo `@nuxt/ui` đã được khai báo trong `nuxt.config.ts`:
+Ensure `@nuxt/ui` is registered in `nuxt.config.ts`:
 
 ```ts
 // nuxt.config.ts
@@ -107,7 +109,7 @@ export default defineNuxtConfig({
 });
 ```
 
-Để tùy chỉnh theme mặc định:
+To customize the default theme globally:
 
 ```ts
 // app.config.ts
@@ -125,7 +127,7 @@ export default defineAppConfig({
 
 ---
 
-## Tài liệu tham khảo
+## References
 
 - [NuxtUI Components](https://ui.nuxt.com/components)
 - [NuxtUI Theming](https://ui.nuxt.com/getting-started/theming)
