@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen flex-col">
+  <UContainer>
     <header class="px-4 py-3">
       <div class="text-sm font-medium">Đầu trang</div>
     </header>
@@ -9,5 +9,5 @@
     <footer class="px-4 py-3">
       <div class="text-sm">Chân trang</div>
     </footer>
-  </div>
+  </UContainer>
 </template>

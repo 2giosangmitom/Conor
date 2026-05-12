@@ -12,7 +12,6 @@
     <UAuthForm
       title="Đăng nhập"
       description="Nhập thông tin để truy cập tài khoản của bạn."
-      icon="i-lucide-log-in"
       :fields="fields"
       :providers="providers"
       :submit="{
@@ -22,7 +21,11 @@
         disabled: isSubmitting,
       }"
       @submit="handleSignIn"
-    />
+    >
+      <template #header>
+        <NuxtImg src="/images/logo.png" width="150" height="150" alt="Logo" />
+      </template>
+    </UAuthForm>
     <template #footer>
       <p class="text-sm text-center text-muted">
         Chưa có tài khoản?
@@ -148,15 +151,16 @@ const handleGoogleSignIn = async () => {
   }
 };
 
-const providers = computed<ButtonProps[]>(() => [
+const providers: ButtonProps[] = [
   {
     label: "Tiếp tục với Google",
     icon: "i-simple-icons-google",
-    variant: "outline",
+    variant: "subtle",
+    color: "primary",
     block: true,
     loading: isSubmitting.value,
     disabled: isSubmitting.value,
     onClick: handleGoogleSignIn,
   },
-]);
+];
 </script>
