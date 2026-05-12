@@ -1,0 +1,1 @@
+ALTER TABLE "video" RENAME COLUMN "url" TO "youtube_video_id";
