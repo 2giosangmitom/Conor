@@ -1,135 +1,81 @@
 # AGENTS.md
 
+This document provides project context and contribution guidelines for AI agents and human developers. All contributors **must** follow the rules outlined here to ensure consistency and quality.
+
+---
+
 ## Project Overview
 
-This project uses **Vue.js** as the frontend foundation combined with **Nuxt.js** as the framework, and **NuxtUI** as the primary UI component library.
+A modern YouTube dictation application that transcribes YouTube videos in real-time.
+
+**Stack:**
+
+- **Framework:** Nuxt 4 (with Nitro server engine)
+- **UI:** NuxtUI v3
+- **Styling:** TailwindCSS v4
+- **Package Manager:** pnpm
 
 ---
 
-## Mandatory Rules
+## Commands
 
-### ✅ Always use components from NuxtUI
+```bash
+# Start development server
+pnpm dev
 
-All UI components **must** come from the [NuxtUI](https://ui.nuxt.com/) library. Do not write custom components from scratch if NuxtUI already provides an equivalent.
+# Build for production
+pnpm build
 
-**Correct:**
+# Preview production build
+pnpm preview
 
-```vue
-<!-- ✅ Use UButton from NuxtUI -->
-<UButton label="Login" color="primary" />
+# Lint the codebase
+pnpm lint
 
-<!-- ✅ Use UInput from NuxtUI -->
-<UInput v-model="email" placeholder="Your email" />
+# Check formatting
+pnpm fmt:check
 
-<!-- ✅ Use UModal from NuxtUI -->
-<UModal v-model="isOpen">
-  <template #content>...</template>
-</UModal>
-```
-
-**Wrong:**
-
-```vue
-<!-- ❌ Do not write a button manually -->
-<button class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
-
-<!-- ❌ Do not build an input from raw HTML -->
-<input type="text" class="border rounded p-2" placeholder="Your email" />
-```
-
----
-
-### ✅ Component selection priority
-
-Before writing any UI code, always check https://ui.nuxt.com/components first. Follow this priority order:
-
-1. **NuxtUI component** — use it directly if it covers your use case.
-2. **Customize via `ui` prop or slots** — if the default appearance needs adjustment, use NuxtUI's `ui` prop or named slots instead of arbitrary CSS overrides.
-3. **Wrap a NuxtUI component** — if you need a reusable component with custom default config, wrap a NuxtUI component rather than building one from scratch.
-
-```vue
-<!-- ✅ Wrap a NuxtUI component for reuse -->
-<!-- components/AppButton.vue -->
-<template>
-  <UButton v-bind="$props" color="primary" size="md" />
-</template>
+# Format the codebase
+pnpm fmt
 ```
 
 ---
 
-### ✅ Customizing component appearance
+## Rules
 
-When NuxtUI components need visual customization, follow this priority order:
+### General
 
-1. **`ui` prop** — override internal classes of the component.
-2. **Slots** — inject custom content into the component.
-3. **`app.config.ts`** — set global default theme settings.
+1. **Never install new dependencies** without explicit user approval. Prefer built-in Nuxt/NuxtUI features first.
+2. **Prefer TypeScript** for all new files. Avoid `any` types — use proper interfaces or `unknown`.
+3. **Do not modify** `nuxt.config.ts`, `tailwind.config.ts`, or `package.json` unless the task explicitly requires it.
 
-```vue
-<!-- ✅ Use the ui prop to customize -->
-<UButton label="Confirm" :ui="{ base: 'font-bold tracking-wide' }" />
-```
+### Vue & Nuxt Conventions
 
----
+4. Use the **Composition API with `<script setup lang="ts">`** for all components. Never use Options API.
+5. Use **auto-imports** — do not manually import `ref`, `computed`, `useRoute`, etc. Nuxt handles this automatically.
+6. Name composables with the `use` prefix (e.g., `useTranscription.ts`) and place them in `app/composables/`.
+7. Place **server-only logic** in `server/` (API routes, DB calls). Never import server utilities in client components.
+8. Use `shared/utils/` for logic that runs on both client and server.
+9. Prefer `useFetch` or `useAsyncData` for data fetching in pages; use `$fetch` inside event handlers and server routes.
 
-### ❌ What NOT to do
+### UI & Styling
 
-| Forbidden                                                         | Use instead                             |
-| ----------------------------------------------------------------- | --------------------------------------- |
-| Writing Button, Input, Modal, etc. from scratch                   | `UButton`, `UInput`, `UModal`, ...      |
-| Using other UI libraries (Element Plus, Vuetify, shadcn-vue, ...) | NuxtUI                                  |
-| Overriding styles with `!important` or arbitrary inline CSS       | `ui` prop or `app.config.ts`            |
-| Building custom layout components (Grid, Container, ...)          | `UContainer` + Tailwind utility classes |
+10. **Always use NuxtUI components** for UI elements (buttons, inputs, modals, etc.). Do not create custom alternatives to components already in NuxtUI.
+11. Style with **TailwindCSS utility classes**. Avoid scoped `<style>` blocks unless necessary for complex animations or third-party overrides.
+12. Use **CSS variables and Tailwind tokens** for colors/spacing — no hardcoded hex values in templates.
+13. Ensure all interactive elements are **keyboard accessible** and include appropriate ARIA attributes.
 
----
+### Code Quality
 
-## Recommended Directory Structure
-
-```
-.
-├── components/
-│   └── app/           # NuxtUI-based wrapper components
-├── pages/             # Nuxt pages
-├── layouts/           # Nuxt layouts (using UContainer, etc.)
-├── composables/       # Vue composables
-├── app.config.ts      # Global NuxtUI theme configuration
-└── nuxt.config.ts     # Nuxt config + NuxtUI module registration
-```
+14. Run `pnpm lint` and `pnpm fmt:check` before considering any task complete. Fix all errors — do not suppress them.
+15. Keep components **focused and small**. Extract reusable logic into composables and reusable UI into components.
+16. Write **self-documenting code**. Add JSDoc comments only for non-obvious functions or public composable APIs.
 
 ---
 
-## NuxtUI Setup
+## AI Agent Notes
 
-Ensure `@nuxt/ui` is registered in `nuxt.config.ts`:
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  modules: ["@nuxt/ui"],
-});
-```
-
-To customize the default theme globally:
-
-```ts
-// app.config.ts
-export default defineAppConfig({
-  ui: {
-    button: {
-      default: {
-        color: "primary",
-        size: "md",
-      },
-    },
-  },
-});
-```
-
----
-
-## References
-
-- [NuxtUI Components](https://ui.nuxt.com/components)
-- [NuxtUI Theming](https://ui.nuxt.com/getting-started/theming)
-- [Nuxt.js Docs](https://nuxt.com/docs)
-- [Vue.js Docs](https://vuejs.org/guide/introduction)
+- When generating code, always respect the auto-import behavior — do not add redundant import statements for Nuxt/Vue core APIs.
+- When unsure whether a component exists in NuxtUI, check [ui.nuxt.com](https://ui.nuxt.com) before creating a custom one.
+- Prefer editing existing files over creating new ones when the change is small and contextually fits.
+- Always output complete file contents when modifying a file — no partial snippets with `// ... rest unchanged`.
