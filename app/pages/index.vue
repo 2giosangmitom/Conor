@@ -1,20 +1,19 @@
 <template>
-  <div>
-    <h1 class="text-2xl font-semibold">Trang chủ</h1>
-    <p v-if="session.data">
-      Chào mừng, {{ session.data.user.name }}! Bạn đã đăng nhập thành công.
-      <UButton class="ml-4" color="error" variant="outline" size="sm" @click="authClient.signOut()">
-        Đăng xuất
-      </UButton>
-    </p>
-    <UButton to="/signin">Sign in</UButton>
-  </div>
+  <LandingPage />
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: "Trang chủ",
-});
+definePageMeta({
+  layout: 'landing',
+})
 
-const session = authClient.useSession();
+useHead({
+  title: 'Luyện nghe tiếng Anh miễn phí qua YouTube',
+  meta: [
+    {
+      name: 'description',
+      content: 'NgheGo - Luyện nghe chép chính tả tiếng Anh từ video YouTube miễn phí. Cải thiện listening, vocabulary và phản xạ tiếng Anh bằng video thực tế.',
+    },
+  ],
+})
 </script>
