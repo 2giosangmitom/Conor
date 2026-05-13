@@ -10,16 +10,17 @@
               :key="avatar.alt"
               :src="avatar.src"
               :alt="avatar.alt"
-              :ui="{ base: 'ring-2 ring-white' }"
+              :ui="{ root: 'ring-2 ring-white' }"
             />
           </UAvatarGroup>
           <div class="text-center sm:text-left">
             <p
               class="font-semibold text-sm"
-              style="color: #1d1b20; font-family: &quot;Plus Jakarta Sans&quot;, sans-serif"
+              style='color: #1d1b20; font-family: "Plus Jakarta Sans&quot sans-serif'
             >
               Được tin dùng bởi hàng ngàn người học
             </p>
+
             <div class="flex items-center gap-1 justify-center sm:justify-start mt-0.5">
               <UIcon
                 v-for="i in 5"
@@ -28,9 +29,7 @@
                 class="w-3.5 h-3.5"
                 style="color: #f59e0b"
               />
-              <span
-                class="text-xs ml-1"
-                style="color: #7a7582; font-family: &quot;Inter&quot;, sans-serif"
+              <span class="text-xs ml-1" style='color: #7a7582; font-family: "Inter&quot sans-serif'
                 >4.9/5 từ người học</span
               >
             </div>
@@ -44,20 +43,20 @@
             :key="stat.label"
             class="flex flex-col items-center gap-1 p-6 rounded-3xl text-center transition-transform hover:-translate-y-1"
             style="
-              background: white;
               box-shadow:
                 0 10px 25px -5px rgba(0, 0, 0, 0.04),
                 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+              background white
             "
           >
             <span
               class="text-4xl font-bold"
-              style="font-family: &quot;Plus Jakarta Sans&quot;, sans-serif; color: #10b981"
+              style='font-family: "Plus Jakarta Sans&quot sans-serif; color: #10b981'
               >{{ stat.value }}</span
             >
             <span
               class="text-sm font-medium"
-              style="color: #494551; font-family: &quot;Inter&quot;, sans-serif"
+              style='font-family: "Inter&quot sans-serif; color: #494551'
               >{{ stat.label }}</span
             >
           </div>
@@ -66,12 +65,12 @@
         <!-- Community join badge -->
         <div
           class="flex items-center gap-3 px-5 py-3 rounded-full"
-          style="background: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06)"
+          style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); background white"
         >
-          <div class="w-2 h-2 rounded-full animate-pulse" style="background: #10b981"></div>
+          <div class="w-2 h-2 rounded-full animate-pulse" style="background: #10b981" />
           <span
             class="text-sm font-medium"
-            style="color: #494551; font-family: &quot;Inter&quot;, sans-serif"
+            style='color: #494551; font-family: "Inter&quot sans-serif'
           >
             <span class="font-bold" style="color: #10b981">+1K</span> người đã tham gia cộng đồng
             tuần này
