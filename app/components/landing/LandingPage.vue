@@ -3,7 +3,7 @@
     <LandingHeader />
     <main>
       <LandingHeroSection />
-      <LandingSocialProof />
+      <!-- <LandingSocialProof /> -->
       <LandingTrendingVideos />
       <LandingFeaturesSection />
       <LandingHowItWorks />
