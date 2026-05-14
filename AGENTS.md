@@ -10,8 +10,8 @@ A modern YouTube dictation application that transcribes YouTube videos in real-t
 
 **Stack:**
 
-- **Framework:** Nuxt 4 (with Nitro server engine)
-- **UI:** NuxtUI v3
+- **Framework:** Nuxt 4
+- **UI:** NuxtUI 4
 - **Styling:** TailwindCSS v4
 - **Package Manager:** pnpm
 
@@ -70,12 +70,3 @@ pnpm fmt
 14. Run `pnpm lint` and `pnpm fmt:check` before considering any task complete. Fix all errors — do not suppress them.
 15. Keep components **focused and small**. Extract reusable logic into composables and reusable UI into components.
 16. Write **self-documenting code**. Add JSDoc comments only for non-obvious functions or public composable APIs.
-
----
-
-## AI Agent Notes
-
-- When generating code, always respect the auto-import behavior — do not add redundant import statements for Nuxt/Vue core APIs.
-- When unsure whether a component exists in NuxtUI, check [ui.nuxt.com](https://ui.nuxt.com) before creating a custom one.
-- Prefer editing existing files over creating new ones when the change is small and contextually fits.
-- Always output complete file contents when modifying a file — no partial snippets with `// ... rest unchanged`.
