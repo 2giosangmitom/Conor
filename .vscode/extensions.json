@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "thk.faah",
     "oxc.oxc-vscode",
     "yoavbls.pretty-ts-errors",
     "bradlc.vscode-tailwindcss",
