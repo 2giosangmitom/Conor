@@ -8,5 +8,5 @@ allowBuilds:
   unrs-resolver: false
   vue-demi: false
 overrides:
-  '@hono/node-server@<1.19.13': '>=1.19.13'
-  esbuild@<=0.24.2: '>=0.25.0'
+  "@hono/node-server@<1.19.13": ">=1.19.13"
+  esbuild@<=0.24.2: ">=0.25.0"
