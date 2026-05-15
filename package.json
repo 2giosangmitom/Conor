@@ -11,7 +11,8 @@
     "fmt:check": "oxfmt --check .",
     "fmt:fix": "oxfmt --write .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.107",
     "oxfmt": "^0.49.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.9"
   }
 }
