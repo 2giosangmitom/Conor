@@ -27,10 +27,11 @@
     "@vercel/blob": "^2.3.3",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "14.3.0",
+    "ai": "^6.0.183",
     "better-auth": "^1.6.11",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "motion-v": "^2.2.1",
     "nuxt": "^4.4.5",
     "tailwindcss": "^4.3.0",
@@ -38,11 +39,12 @@
     "unstorage": "^1.17.5",
     "vue": "^3.5.34",
     "vue-router": "^5.0.7",
+    "workflow": "^4.2.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.107",
-    "oxfmt": "^0.49.0",
+    "oxfmt": "^0.50.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.9"
   }

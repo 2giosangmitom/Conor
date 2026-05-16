@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   modules: [
     "@nuxthub/core",
+    "workflow/nuxt",
     "@nuxt/hints",
     "@nuxt/a11y",
     "@nuxt/image",
