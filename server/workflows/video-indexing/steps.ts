@@ -7,7 +7,6 @@ import { google } from "@ai-sdk/google";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { kv } from "@nuxthub/kv";
-import { VideoIndexingEventCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 
 interface VideoInfo {
   title: string;
