@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+.workflow-data
 
 # Node dependencies
 node_modules
