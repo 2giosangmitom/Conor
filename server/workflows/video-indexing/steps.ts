@@ -2,7 +2,7 @@ import { getYouTubeVideoInfo } from "../../utils/youtube";
 import { FatalError, getWritable } from "workflow";
 import { parseSync, type Node } from "subtitle";
 import type { ReadabilityApi } from "text-readability";
-import { pipeline, type FeatureExtractionPipeline } from "@xenova/transformers";
+import { pipeline, type FeatureExtractionPipeline } from "@huggingface/transformers";
 import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
@@ -221,7 +221,7 @@ async function getEmbeddingPipeline(): Promise<FeatureExtractionPipeline> {
   }
 
   const instance = await pipeline("feature-extraction", MODEL_NAME, {
-    quantized: true,
+    dtype: "q8",
   });
 
   if (typeof instance !== "function") {
