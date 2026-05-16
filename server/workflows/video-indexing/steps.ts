@@ -7,6 +7,7 @@ import { google } from "@ai-sdk/google";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { kv } from "@nuxthub/kv";
+import { VideoIndexingEventCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 
 interface VideoInfo {
   title: string;
@@ -35,13 +36,6 @@ const SUPPORTED_LANGUAGES = ["en"];
 
 const STREAM_NAMESPACE = "logs";
 
-export interface VideoIndexingLog {
-  level: "info" | "error";
-  step: string;
-  message: string;
-  timestamp: string;
-}
-
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
   const writer = writable.getWriter();
@@ -66,8 +60,7 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
 
   await writeLog({
     level: "info",
-    step: "get-info",
-    message: "Fetching video metadata",
+    code: VideoIndexingEventCode.FetchingMetadata,
   });
 
   const info = await getYouTubeVideoInfo(youtubeId);
@@ -92,8 +85,7 @@ export async function checkDuration(videoInfo: VideoInfo): Promise<void> {
 
   await writeLog({
     level: "info",
-    step: "check-duration",
-    message: "Checking duration",
+    code: VideoIndexingEventCode.CheckingDuration,
   });
 
   if (videoInfo.duration > MAX_DURATION) {
@@ -106,8 +98,7 @@ export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
 
   await writeLog({
     level: "info",
-    step: "check-language",
-    message: "Checking language",
+    code: VideoIndexingEventCode.CheckingLanguage,
   });
 
   if (!SUPPORTED_LANGUAGES.includes(videoInfo.language)) {
@@ -120,8 +111,7 @@ export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSub
 
   await writeLog({
     level: "info",
-    step: "generate-transcript",
-    message: "Generating transcript",
+    code: VideoIndexingEventCode.GeneratingTranscript,
   });
 
   if (!videoInfo.subtitlesUrl) {
@@ -152,8 +142,7 @@ export async function analyzeVideo(
 
   await writeLog({
     level: "info",
-    step: "analyze-video",
-    message: "Labeling topic and level",
+    code: VideoIndexingEventCode.AnalyzingVideo,
   });
 
   const transcript = subtitles
@@ -191,8 +180,7 @@ export async function persistVideoIndex(params: {
 
   await writeLog({
     level: "info",
-    step: "persist-video",
-    message: "Saving video and transcript",
+    code: VideoIndexingEventCode.PersistingVideo,
   });
 
   const { youtubeId, info, analysis, subtitles } = params;
@@ -236,8 +224,7 @@ export async function persistVideoIndex(params: {
 
   await writeLog({
     level: "info",
-    step: "persist-video",
-    message: "Saved video and transcript",
+    code: VideoIndexingEventCode.PersistedVideo,
   });
 
   return existing;

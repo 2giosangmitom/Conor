@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { start, getRun } from "workflow/api";
 import { kv } from "@nuxthub/kv";
 import { handleIndexVideo } from "~~/server/workflows/video-indexing";
-import type { VideoIndexingLog } from "~~/server/workflows/video-indexing/steps";
+import type { VideoIndexingLog } from "~~/shared/types/video-indexing";
 
 const INDEXING_KEY_PREFIX = "video-indexing:";
 const STREAM_NAMESPACE = "logs";

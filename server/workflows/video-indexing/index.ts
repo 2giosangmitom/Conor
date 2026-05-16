@@ -10,6 +10,7 @@ import {
   finalizeIndexing,
 } from "./steps";
 import { FatalError } from "workflow";
+import { VideoIndexingEventCode } from "~~/shared/types/video-indexing";
 
 export async function handleIndexVideo(youtubeId: string) {
   "use workflow";
@@ -17,8 +18,7 @@ export async function handleIndexVideo(youtubeId: string) {
   try {
     await logIndexing({
       level: "info",
-      step: "workflow",
-      message: "Indexing started",
+      code: VideoIndexingEventCode.IndexingStarted,
     });
     const info = await getInfo(youtubeId);
     await checkDuration(info);
@@ -36,8 +36,7 @@ export async function handleIndexVideo(youtubeId: string) {
     });
     await logIndexing({
       level: "info",
-      step: "workflow",
-      message: "Indexing completed",
+      code: VideoIndexingEventCode.IndexingCompleted,
     });
     await clearIndexingRun(youtubeId);
     await finalizeIndexing();
@@ -46,8 +45,7 @@ export async function handleIndexVideo(youtubeId: string) {
   } catch (error) {
     await logIndexing({
       level: "error",
-      step: "workflow",
-      message: "Indexing failed",
+      code: VideoIndexingEventCode.IndexingFailed,
     });
     await clearIndexingRun(youtubeId);
     await finalizeIndexing();
