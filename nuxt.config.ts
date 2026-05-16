@@ -28,6 +28,11 @@ export default defineNuxtConfig({
     kv: true,
     blob: true,
   },
+  nitro: {
+    externals: {
+      external: ["onnxruntime-node"],
+    },
+  },
   ui: {
     experimental: {
       componentDetection: true,
