@@ -1,9 +1,12 @@
 import { getYouTubeVideoInfo } from "../../utils/youtube";
-import { FatalError } from "workflow";
+import { FatalError, getWritable } from "workflow";
 import { parseSync, type Node } from "subtitle";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 import { google } from "@ai-sdk/google";
+import { db, schema } from "@nuxthub/db";
+import { eq } from "drizzle-orm";
+import { kv } from "@nuxthub/kv";
 
 interface VideoInfo {
   title: string;
@@ -30,6 +33,29 @@ interface VideoAnalysis {
 const MAX_DURATION = 60 * 60; // 1 hour in seconds
 const SUPPORTED_LANGUAGES = ["en"];
 
+const STREAM_NAMESPACE = "logs";
+
+export interface VideoIndexingLog {
+  level: "info" | "error";
+  step: string;
+  message: string;
+  timestamp: string;
+}
+
+async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+  const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
+  const writer = writable.getWriter();
+
+  try {
+    await writer.write({
+      ...entry,
+      timestamp: new Date().toISOString(),
+    });
+  } finally {
+    writer.releaseLock();
+  }
+}
+
 export enum VideoIndexingErrors {
   VIDEO_TOO_LONG = "VIDEO_TOO_LONG",
   UNSUPPORTED_LANGUAGE = "UNSUPPORTED_LANGUAGE",
@@ -37,6 +63,12 @@ export enum VideoIndexingErrors {
 
 export async function getInfo(youtubeId: string): Promise<VideoInfo> {
   "use step";
+
+  await writeLog({
+    level: "info",
+    step: "get-info",
+    message: "Fetching video metadata",
+  });
 
   const info = await getYouTubeVideoInfo(youtubeId);
 
@@ -58,6 +90,12 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
 export async function checkDuration(videoInfo: VideoInfo): Promise<void> {
   "use step";
 
+  await writeLog({
+    level: "info",
+    step: "check-duration",
+    message: "Checking duration",
+  });
+
   if (videoInfo.duration > MAX_DURATION) {
     throw new FatalError(VideoIndexingErrors.VIDEO_TOO_LONG);
   }
@@ -66,6 +104,12 @@ export async function checkDuration(videoInfo: VideoInfo): Promise<void> {
 export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
   "use step";
 
+  await writeLog({
+    level: "info",
+    step: "check-language",
+    message: "Checking language",
+  });
+
   if (!SUPPORTED_LANGUAGES.includes(videoInfo.language)) {
     throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
   }
@@ -73,6 +117,12 @@ export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
 
 export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[]> {
   "use step";
+
+  await writeLog({
+    level: "info",
+    step: "generate-transcript",
+    message: "Generating transcript",
+  });
 
   if (!videoInfo.subtitlesUrl) {
     throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
@@ -100,6 +150,12 @@ export async function analyzeVideo(
 ): Promise<VideoAnalysis> {
   "use step";
 
+  await writeLog({
+    level: "info",
+    step: "analyze-video",
+    message: "Labeling topic and level",
+  });
+
   const transcript = subtitles
     .map((subtitle) => subtitle.text)
     .join(" ")
@@ -108,7 +164,7 @@ export async function analyzeVideo(
     .slice(0, 5000);
 
   const { output } = await generateText({
-    model: google("gemini-3.1-pro-preview"),
+    model: google("gemini-2.5-flash"),
     output: Output.object({
       schema: z.object({
         topic: z.string().min(3).max(100),
@@ -123,4 +179,84 @@ Transcript: ${transcript}`,
   });
 
   return output;
+}
+
+export async function persistVideoIndex(params: {
+  youtubeId: string;
+  info: VideoInfo;
+  analysis: VideoAnalysis;
+  subtitles: VideoSubtitle[];
+}): Promise<typeof schema.video.$inferSelect> {
+  "use step";
+
+  await writeLog({
+    level: "info",
+    step: "persist-video",
+    message: "Saving video and transcript",
+  });
+
+  const { youtubeId, info, analysis, subtitles } = params;
+
+  const [inserted] = await db
+    .insert(schema.video)
+    .values({
+      title: info.title,
+      youtubeId,
+      duration: info.duration,
+      topic: analysis.topic,
+      level: analysis.level,
+      thumbnailUrl: info.thumbnailUrl,
+    })
+    .onConflictDoNothing({
+      target: schema.video.youtubeId,
+    })
+    .returning();
+
+  const [existing] = inserted
+    ? [inserted]
+    : await db.select().from(schema.video).where(eq(schema.video.youtubeId, youtubeId));
+
+  if (!existing) {
+    throw new FatalError("VIDEO_NOT_SAVED");
+  }
+
+  if (inserted) {
+    const transcriptRows = subtitles.map((subtitle, index) => ({
+      videoId: existing.id,
+      sentenceIndex: index,
+      startTime: Math.round(subtitle.start * 1000),
+      endTime: Math.round(subtitle.end * 1000),
+      text: subtitle.text,
+    }));
+
+    if (transcriptRows.length > 0) {
+      await db.insert(schema.videoTranscriptSentence).values(transcriptRows);
+    }
+  }
+
+  await writeLog({
+    level: "info",
+    step: "persist-video",
+    message: "Saved video and transcript",
+  });
+
+  return existing;
+}
+
+export async function logIndexing(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+  "use step";
+
+  await writeLog(entry);
+}
+
+export async function clearIndexingRun(youtubeId: string): Promise<void> {
+  "use step";
+
+  await kv.del(`video-indexing:${youtubeId}`);
+}
+
+export async function finalizeIndexing(): Promise<void> {
+  "use step";
+
+  await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
 }

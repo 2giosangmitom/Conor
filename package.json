@@ -28,7 +28,7 @@
     "@vercel/blob": "^2.3.3",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "14.3.0",
-    "ai": "^6.0.183",
+    "ai": "^6.0.184",
     "better-auth": "^1.6.11",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
@@ -45,7 +45,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.107",
+    "@iconify-json/lucide": "^1.2.108",
     "oxfmt": "^0.50.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.9"
