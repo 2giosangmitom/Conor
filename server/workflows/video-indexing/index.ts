@@ -10,6 +10,7 @@ import {
   finalizeIndexing,
 } from "./steps";
 import { FatalError } from "workflow";
+import { VideoIndexingEventCode } from "../../../shared/types/video-indexing";
 
 export async function handleIndexVideo(youtubeId: string) {
   "use workflow";
