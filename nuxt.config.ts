@@ -33,4 +33,9 @@ export default defineNuxtConfig({
       componentDetection: true,
     },
   },
+  vite: {
+    ssr: {
+      external: ["onnxruntime-node"],
+    },
+  },
 });
