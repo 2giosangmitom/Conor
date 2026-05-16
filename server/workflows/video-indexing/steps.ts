@@ -2,7 +2,7 @@ import { getYouTubeVideoInfo } from "../../utils/youtube";
 import { FatalError, getWritable } from "workflow";
 import { parseSync, type Node } from "subtitle";
 import type { ReadabilityApi } from "text-readability";
-import { pipeline, type FeatureExtractionPipeline } from "@huggingface/transformers";
+import natural from "natural";
 import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
@@ -11,6 +11,8 @@ import {
   VideoIndexingEventCode,
   type VideoIndexingLog,
 } from "../../../shared/types/video-indexing";
+
+const { TfIdf } = natural;
 
 interface VideoInfo {
   title: string;
@@ -34,8 +36,7 @@ interface VideoAnalysis {
   level: EnglishLevel;
 }
 
-const MAX_DURATION = 60 * 60; // 1 hour in seconds
-const SUPPORTED_LANGUAGES = ["en"];
+const MAX_DURATION = 60 * 60;
 
 const STREAM_NAMESPACE = "logs";
 
@@ -43,7 +44,10 @@ const MAX_TRANSCRIPT_LENGTH = 15000;
 const RS_MODULE = "text-readability";
 let readabilityApi: ReadabilityApi | undefined;
 const MAX_TOPIC_INPUT_LENGTH = 3000;
-const MODEL_NAME = "Xenova/all-MiniLM-L6-v2";
+
+const KEYWORD_BOOST_WEIGHT = 3.0;
+const TITLE_BOOST_WEIGHT = 2.0;
+const TAG_BOOST_WEIGHT = 1.5;
 
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
@@ -57,6 +61,18 @@ async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<voi
   } finally {
     writer.releaseLock();
   }
+}
+
+function findEnglishCaptionUrl(
+  captions: Record<string, Array<{ ext: string; url: string }>>,
+): string {
+  for (const key of Object.keys(captions)) {
+    if (/^en(-.*)?$/i.test(key)) {
+      const vtt = captions[key]?.find((c) => c.ext === "vtt");
+      if (vtt) return vtt.url;
+    }
+  }
+  return "";
 }
 
 export enum VideoIndexingErrors {
@@ -83,9 +99,7 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
         ?.url,
     tags: info.tags,
     language: info.language,
-    subtitlesUrl: info.automatic_captions.en
-      .filter((caption: { ext: string }) => caption.ext === "vtt")
-      .map((caption: { url: string }) => caption.url)[0],
+    subtitlesUrl: findEnglishCaptionUrl(info.automatic_captions),
   };
 }
 
@@ -110,7 +124,7 @@ export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
     code: VideoIndexingEventCode.CheckingLanguage,
   });
 
-  if (!SUPPORTED_LANGUAGES.includes(videoInfo.language)) {
+  if (!/^en(-.*)?$/i.test(videoInfo.language)) {
     throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
   }
 }
@@ -174,33 +188,94 @@ async function labelTopic(
   transcript: string,
   metadata: { title: string; tags: string[] },
 ): Promise<string> {
+  const tfidf = new TfIdf();
+
+  for (const topic of TOPIC_CATALOG) {
+    const topicText = `${topic.label} ${topic.description} ${topic.keywords.join(" ")}`;
+    tfidf.addDocument(topicText.toLowerCase());
+  }
+
   const input = buildTopicInput(transcript, metadata);
-  const [catalogEmbeddings, inputEmbedding] = await Promise.all([
-    getTopicCatalogEmbeddings(),
-    embedText(input),
-  ]);
+  tfidf.addDocument(input.toLowerCase());
 
-  if (!inputEmbedding) {
-    return "Khác";
-  }
+  const scores = TOPIC_CATALOG.map((topic, index) => {
+    let score = 0;
 
-  let bestIndex = 0;
-  let bestScore = -1;
-
-  for (let index = 0; index < catalogEmbeddings.length; index += 1) {
-    const embedding = catalogEmbeddings[index];
-    if (!embedding) {
-      continue;
+    const terms = tfidf.listTerms(index);
+    for (const term of terms) {
+      score += term.tfidf;
     }
 
-    const score = cosineSimilarity(inputEmbedding, embedding);
-    if (score > bestScore) {
-      bestScore = score;
-      bestIndex = index;
+    const keywordMatches = calculateKeywordBoost(input, topic);
+    const titleMatches = calculateTitleBoost(metadata.title, topic);
+    const tagMatches = calculateTagBoost(metadata.tags, topic);
+
+    return {
+      label: topic.label,
+      score: score + keywordMatches + titleMatches + tagMatches,
+    };
+  });
+
+  scores.sort((a, b) => b.score - a.score);
+
+  return scores[0]?.label ?? "Other";
+}
+
+function calculateKeywordBoost(text: string, topic: TopicDefinition): number {
+  if (topic.keywords.length === 0) return 0;
+
+  const lowerText = text.toLowerCase();
+  let boost = 0;
+
+  for (const keyword of topic.keywords) {
+    const lowerKeyword = keyword.toLowerCase();
+    const regex = new RegExp(`\\b${escapeRegex(lowerKeyword)}\\b`, "gi");
+    const matches = lowerText.match(regex);
+    if (matches) {
+      boost += matches.length * KEYWORD_BOOST_WEIGHT;
     }
   }
 
-  return TOPIC_CATALOG[bestIndex]?.label ?? "Khác";
+  return boost;
+}
+
+function calculateTitleBoost(title: string, topic: TopicDefinition): number {
+  if (topic.keywords.length === 0) return 0;
+
+  const lowerTitle = title.toLowerCase();
+  let boost = 0;
+
+  for (const keyword of topic.keywords) {
+    const lowerKeyword = keyword.toLowerCase();
+    if (lowerTitle.includes(lowerKeyword)) {
+      boost += TITLE_BOOST_WEIGHT;
+    }
+  }
+
+  return boost;
+}
+
+function calculateTagBoost(tags: string[], topic: TopicDefinition): number {
+  if (topic.keywords.length === 0) return 0;
+
+  let boost = 0;
+  const lowerTags = tags.map((tag) => tag.toLowerCase());
+
+  for (const tag of lowerTags) {
+    for (const keyword of topic.keywords) {
+      const lowerKeyword = keyword.toLowerCase();
+      if (tag.includes(lowerKeyword) || lowerKeyword.includes(tag)) {
+        boost += TAG_BOOST_WEIGHT;
+        break;
+      }
+    }
+  }
+
+  return boost;
+}
+
+function escapeRegex(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function buildTopicInput(transcript: string, metadata: { title: string; tags: string[] }): string {
@@ -210,94 +285,6 @@ function buildTopicInput(transcript: string, metadata: { title: string; tags: st
   const parts = [title, tags, transcript].filter((value) => value.length > 0);
 
   return parts.join(". ").slice(0, MAX_TOPIC_INPUT_LENGTH);
-}
-
-let embeddingPipeline: FeatureExtractionPipeline | undefined;
-let topicCatalogEmbeddings: Array<number[] | null> | undefined;
-
-async function getEmbeddingPipeline(): Promise<FeatureExtractionPipeline> {
-  if (embeddingPipeline) {
-    return embeddingPipeline;
-  }
-
-  const instance = await pipeline("feature-extraction", MODEL_NAME, {
-    dtype: "q8",
-  });
-
-  if (typeof instance !== "function") {
-    throw new Error("Embedding pipeline initialization failed");
-  }
-
-  embeddingPipeline = instance as FeatureExtractionPipeline;
-  return embeddingPipeline;
-}
-
-async function embedText(text: string): Promise<number[] | null> {
-  const extractor = await getEmbeddingPipeline();
-  const output = (await extractor(text, {
-    pooling: "mean",
-  })) as unknown;
-
-  return extractEmbedding(output);
-}
-
-function extractEmbedding(output: unknown): number[] | null {
-  let raw: number[] | null = null;
-
-  if (
-    output &&
-    typeof output === "object" &&
-    "tolist" in output &&
-    typeof (output as { tolist: unknown }).tolist === "function"
-  ) {
-    const list = (output as { tolist(): unknown[][] }).tolist();
-    if (Array.isArray(list) && list.length > 0 && Array.isArray(list[0])) {
-      raw = list[0] as unknown as number[];
-    }
-  }
-
-  if (!raw || raw.length === 0) {
-    return null;
-  }
-
-  return normalizeVector(raw);
-}
-
-function normalizeVector(vec: number[]): number[] {
-  let magnitude = 0;
-  for (const v of vec) {
-    magnitude += v * v;
-  }
-  magnitude = Math.sqrt(magnitude);
-  if (magnitude === 0) return vec;
-  return vec.map((v) => v / magnitude);
-}
-
-async function getTopicCatalogEmbeddings(): Promise<Array<number[] | null>> {
-  if (!topicCatalogEmbeddings) {
-    const entries = buildTopicEntries(TOPIC_CATALOG);
-    const embeddings = await Promise.all(entries.map((topic) => embedText(topic)));
-    topicCatalogEmbeddings = embeddings;
-  }
-
-  return topicCatalogEmbeddings;
-}
-
-function buildTopicEntries(catalog: TopicDefinition[]): string[] {
-  return catalog.map((topic) => `${topic.label}. ${topic.description}`.trim());
-}
-
-function cosineSimilarity(a: number[], b: number[]): number {
-  if (a.length === 0 || b.length === 0 || a.length !== b.length) {
-    return 0;
-  }
-
-  let sum = 0;
-  for (let i = 0; i < a.length; i += 1) {
-    sum += (a[i] ?? 0) * (b[i] ?? 0);
-  }
-
-  return sum;
 }
 
 async function getEnglishLevel(text: string): Promise<EnglishLevel> {
