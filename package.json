@@ -24,7 +24,7 @@
     "@nuxt/scripts": "1.1.0",
     "@nuxt/ui": "^4.7.1",
     "@nuxthub/core": "0.10.7",
-    "@unhead/vue": "^2.1.15",
+    "@unhead/vue": "^3.1.0",
     "@upstash/redis": "^1.38.0",
     "@vercel/blob": "^2.3.3",
     "@vueuse/core": "^14.3.0",
@@ -36,6 +36,7 @@
     "motion-v": "^2.2.1",
     "natural": "^8.1.1",
     "nuxt": "^4.4.5",
+    "shaders": "^2.5.124",
     "subtitle": "^4.2.2",
     "tailwindcss": "^4.3.0",
     "text-readability": "^1.1.1",
@@ -48,9 +49,10 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.108",
+    "@iconify-json/openmoji": "^1.2.27",
     "@iconify-json/simple-icons": "^1.2.82",
     "oxfmt": "^0.50.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vue-tsc": "^3.2.9"
   }
 }
