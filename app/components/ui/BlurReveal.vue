@@ -12,8 +12,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   duration: 1,
   staggerDelay: 0.2,
-  blur: "20px",
-  yOffset: 20,
+  blur: "10px",
+  yOffset: 10,
   class: "",
 });
 
