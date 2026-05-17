@@ -36,6 +36,7 @@
     "motion-v": "^2.2.1",
     "natural": "^8.1.1",
     "nuxt": "^4.4.5",
+    "shaders": "^2.5.124",
     "subtitle": "^4.2.2",
     "tailwindcss": "^4.3.0",
     "text-readability": "^1.1.1",

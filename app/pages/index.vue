@@ -10,12 +10,11 @@
               <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
                 Hoàn toàn miễn phí
               </UBadge>
-              <span class="font-heading">Luyện nghe chép chính tả Tiếng Anh với các video bạn</span>
-              <UiFlipWords
-                :words="['yêu thích', 'đam mê', 'hứng thú']"
-                :duration="3000"
-                class="whitespace-nowrap font-heading"
-              />
+              <ClientOnly>
+                <UiAuroraText :colors="auroraColors">
+                  Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                </UiAuroraText>
+              </ClientOnly>
             </div>
           </template>
           <template #links>
@@ -48,6 +47,23 @@
 
 <script setup lang="ts">
 const videoUrl = ref("");
+const colorMode = useColorMode();
+
+const auroraColors = computed(() => {
+  return colorMode.value === "dark"
+    ? [
+        "var(--color-primary-100)",
+        "var(--color-primary-200)",
+        "var(--color-primary-300)",
+        "var(--color-primary-400)",
+      ]
+    : [
+        "var(--color-primary-300)",
+        "var(--color-primary-500)",
+        "var(--color-primary-700)",
+        "var(--color-primary-900)",
+      ];
+});
 
 function handleStart() {
   if (!videoUrl.value) return;
