@@ -1,5 +1,5 @@
 <template>
-  <UMain class="relative overflow-hidden">
+  <UMain>
     <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
       <UPageHero
         description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
@@ -47,7 +47,7 @@
       </UPageHero>
     </UiBlurReveal>
 
-    <div class="bg-elevated">
+    <div class="bg-muted">
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
         <UPageSection
           id="stats"
@@ -110,7 +110,7 @@
       </UiStarsBg>
     </UiBlurReveal>
 
-    <div class="bg-elevated">
+    <div class="bg-muted">
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
         <UPageSection
           id="how-to-use"
@@ -162,11 +162,24 @@
         </UPageSection>
       </UiBlurReveal>
     </div>
+
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageSection
+        id="faq"
+        headline="FAQ"
+        title="Câu hỏi thường gặp"
+        description="Giải đáp các thắc mắc thường gặp về NgheGo"
+      >
+        <template #body>
+          <UAccordion :items="faqItems" class="max-w-3xl mx-auto" />
+        </template>
+      </UPageSection>
+    </UiBlurReveal>
   </UMain>
 </template>
 
 <script setup lang="ts">
-import type { PageFeatureProps } from "@nuxt/ui";
+import type { PageFeatureProps, AccordionItem } from "@nuxt/ui";
 
 const videoUrl = ref("");
 const colorMode = useColorMode();
@@ -312,6 +325,39 @@ const howToUseSteps: HowToUseStep[] = [
     bgColor: "bg-primary/10",
   },
 ];
+
+const faqItems = ref<AccordionItem[]>([
+  {
+    label: "NgheGo là gì?",
+    content:
+      "NgheGo là công cụ luyện nghe chép chính tả tiếng Anh miễn phí, sử dụng video YouTube và AI để tạo bản transcript chính xác, giúp bạn cải thiện kỹ năng nghe hiệu quả.",
+  },
+  {
+    label: "NgheGo có miễn phí không?",
+    content:
+      "Hoàn toàn miễn phí! Không giới hạn số lượng video luyện tập, không phí ẩn, bạn có thể sử dụng thoải mái mọi tính năng.",
+  },
+  {
+    label: "Tôi có cần đăng ký tài khoản không?",
+    content:
+      "Bạn có thể luyện nghe ngay mà không cần đăng ký. Tuy nhiên, đăng nhập bằng Google giúp lưu tiến trình và theo dõi quá trình học của bạn.",
+  },
+  {
+    label: "NgheGo hỗ trợ ngôn ngữ nào?",
+    content:
+      "Hiện tại NgheGo tập trung vào luyện nghe tiếng Anh với nhiều accent khác nhau. Chúng tôi sẽ hỗ trợ thêm ngôn ngữ trong tương lai.",
+  },
+  {
+    label: "Làm sao để bắt đầu luyện nghe?",
+    content:
+      "Chỉ cần dán link YouTube vào ô nhập liệu trên trang chủ và nhấn 'Bắt đầu'. Hệ thống sẽ tự động xử lý và chuẩn bị bài luyện tập cho bạn.",
+  },
+  {
+    label: "Tôi có thể luyện nghe với video bất kỳ không?",
+    content:
+      "Bạn có thể luyện nghe với hầu hết video YouTube có phụ đề hoặc audio rõ ràng. Một số video có bản quyền đặc biệt có thể không hỗ trợ.",
+  },
+]);
 
 function handleStart() {
   if (!videoUrl.value) return;
