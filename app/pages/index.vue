@@ -8,7 +8,7 @@
           <template #title>
             <div class="flex flex-col items-center gap-4">
               <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
-                Không cần đăng nhập
+                Hoàn toàn miễn phí
               </UBadge>
               <span class="font-heading">Luyện nghe chép chính tả Tiếng Anh với các video bạn</span>
               <UiFlipWords
@@ -19,19 +19,19 @@
             </div>
           </template>
           <template #links>
-            <div class="mt-6 flex flex-col items-center gap-4 sm:flex-row">
+            <div class="flex flex-col items-center gap-2 sm:flex-row">
               <UInput
                 v-model="videoUrl"
                 placeholder="https://www.youtube.com/watch?v=example"
                 aria-label="Dán link YouTube vào đây"
-                leading-icon="simple-icons:youtube"
-                class="min-w-md"
+                leading-icon="openmoji:youtube"
+                class="lg:min-w-md"
                 size="xl"
                 @keyup.enter="handleStart"
               />
               <UButton
                 label="Bắt đầu"
-                trailing-icon="i-lucide-play"
+                trailing-icon="lucide:play"
                 size="xl"
                 color="primary"
                 variant="solid"
@@ -51,9 +51,11 @@ const videoUrl = ref("");
 
 function handleStart() {
   if (!videoUrl.value) return;
+
+  const youtubeId = new URL(videoUrl.value).searchParams.get("v");
+
   navigateTo({
-    path: "/learn",
-    query: { url: videoUrl.value },
+    path: `/practice/${youtubeId}`,
   });
 }
 </script>
