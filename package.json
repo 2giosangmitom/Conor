@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.108",
+    "@iconify-json/simple-icons": "^1.2.82",
     "oxfmt": "^0.50.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.9"
