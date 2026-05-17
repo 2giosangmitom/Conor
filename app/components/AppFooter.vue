@@ -7,9 +7,11 @@ const columns: FooterColumn[] = [
     children: [
       {
         label: "Tính năng",
+        to: "#features",
       },
       {
         label: "Cách sử dụng",
+        to: "#how-to-use",
       },
     ],
   },

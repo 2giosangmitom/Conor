@@ -100,7 +100,7 @@
     </div>
 
     <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UiStarsBg class="min-h-150" star-color="var(--color-secondary)">
+      <UiStarsBg>
         <UPageSection
           id="features"
           headline="Tính năng"
@@ -177,27 +177,21 @@
       </UPageSection>
     </UiBlurReveal>
 
-    <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-        <div class="relative">
-          <UiFlickeringGrid
-            :square-size="4"
-            :grid-gap="6"
-            :flicker-chance="0.3"
-            :max-opacity="0.3"
-            color="var(--color-primary-400)"
-            class="absolute inset-0"
-          />
-          <UPageCTA
-            title="Sẵn sàng luyện nghe ngay?"
-            description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
-            variant="naked"
-            :links="ctaLinks"
-            class="relative z-10"
-          />
-        </div>
-      </UiBlurReveal>
-    </div>
+    <UiStarsBg>
+      <div class="light:bg-primary-200/20 dark:bg-primary-950/50">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+          <div class="relative overflow-hidden">
+            <UPageCTA
+              title="Sẵn sàng luyện nghe ngay?"
+              description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
+              variant="naked"
+              :links="ctaLinks"
+              class="relative z-10"
+            />
+          </div>
+        </UiBlurReveal>
+      </div>
+    </UiStarsBg>
   </UMain>
 </template>
 
