@@ -2,9 +2,7 @@
   <div>
     <AppHeader />
     <UContainer>
-      <UMain>
-        <slot />
-      </UMain>
+      <slot />
     </UContainer>
     <AppFooter />
   </div>

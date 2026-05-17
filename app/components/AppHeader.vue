@@ -6,7 +6,7 @@ const isAuthModalOpen = ref(false);
 
 const navigationItems: NavigationMenuItem[] = [
   {
-    label: "Cách dùng",
+    label: "Cách sử dụng",
     to: "/#how-to-use",
     active: route.path === "/" && route.hash === "#how-to-use",
   },

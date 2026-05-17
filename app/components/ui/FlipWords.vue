@@ -61,9 +61,9 @@ watch(isVisible, (newValue) => {
 </script>
 
 <template>
-  <div class="relative inline-block px-2">
+  <span class="relative inline-block px-2">
     <Transition @after-enter="$emit('animationStart')" @after-leave="$emit('animationComplete')">
-      <div
+      <span
         v-show="isVisible"
         :class="
           cn(
@@ -94,9 +94,9 @@ watch(isVisible, (newValue) => {
             <span class="inline-block">&nbsp;</span>
           </span>
         </template>
-      </div>
+      </span>
     </Transition>
-  </div>
+  </span>
 </template>
 
 <style>
