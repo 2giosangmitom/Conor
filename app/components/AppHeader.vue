@@ -121,12 +121,12 @@ async function signInWithGoogle() {
   <UModal
     v-model:open="isAuthModalOpen"
     title="Đăng nhập"
-    description="Đăng nhập bằng tài khoản Google để tiếp tục."
+    description="Đăng nhập bằng tài khoản Google hoặc Facebook."
   >
     <template #body>
       <UAuthForm
         title="Đăng nhập"
-        description="Đăng nhập bằng tài khoản Google để tiếp tục."
+        description="Đăng nhập bằng tài khoản Google."
         :fields="[]"
         :providers="authProviders"
       />
