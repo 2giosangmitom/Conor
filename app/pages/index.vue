@@ -105,6 +105,56 @@
         :features="features"
       />
     </UiBlurReveal>
+
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageSection
+        id="how-to-use"
+        headline="Cách sử dụng"
+        title="Bắt đầu luyện nghe chỉ trong 5 bước"
+        description="Quy trình luyện nghe chép chính tả đơn giản, hiệu quả"
+      >
+        <template #body>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <UPageCard
+              v-for="(step, index) in howToUseSteps"
+              :key="step.title"
+              variant="outline"
+              class="group"
+            >
+              <template #leading>
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex items-center justify-center size-8 rounded-full border border-dashed border-primary text-primary text-sm font-bold"
+                  >
+                    {{ String(index + 1).padStart(2, "0") }}
+                  </div>
+                  <div
+                    class="size-10 rounded-lg flex items-center justify-center"
+                    :class="step.bgColor"
+                  >
+                    <UIcon :name="step.icon" :class="step.color" class="size-5" />
+                  </div>
+                </div>
+              </template>
+              <template #title>{{ step.title }}</template>
+              <template #description>
+                <p class="mb-3">{{ step.description }}</p>
+                <ul class="space-y-1.5">
+                  <li
+                    v-for="point in step.points"
+                    :key="point"
+                    class="flex items-start gap-2 text-sm text-muted"
+                  >
+                    <UIcon name="lucide:check" class="size-4 text-primary shrink-0 mt-0.5" />
+                    <span>{{ point }}</span>
+                  </li>
+                </ul>
+              </template>
+            </UPageCard>
+          </div>
+        </template>
+      </UPageSection>
+    </UiBlurReveal>
   </UMain>
 </template>
 
@@ -134,6 +184,15 @@ interface Stat {
   icon: string;
   value: number;
   label: string;
+  color: string;
+  bgColor: string;
+}
+
+interface HowToUseStep {
+  icon: string;
+  title: string;
+  description: string;
+  points: string[];
   color: string;
   bgColor: string;
 }
@@ -192,6 +251,58 @@ const features: PageFeatureProps[] = [
     icon: "lucide:gift",
     title: "Hoàn toàn miễn phí",
     description: "Không giới hạn, không phí ẩn, dùng thoải mái",
+  },
+];
+
+const howToUseSteps: HowToUseStep[] = [
+  {
+    icon: "lucide:link",
+    title: "Dán link YouTube",
+    description: "Chọn video YouTube bạn muốn luyện nghe",
+    points: [
+      "Dán URL video YouTube vào ô nhập liệu",
+      "Hệ thống tự động tải video và chuẩn bị audio",
+    ],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:sparkles",
+    title: "AI tạo transcript",
+    description: "Hệ thống tự động tạo bản chép lời chính xác",
+    points: [
+      "AI xử lý và tạo transcript chất lượng cao",
+      "Hỗ trợ nhiều accent tiếng Anh khác nhau",
+    ],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:headphones",
+    title: "Nghe & gõ lại",
+    description: "Nghe từng câu và gõ lại những gì bạn nghe được",
+    points: ["Nghe các đoạn audio ngắn, rõ ràng", "Gõ lại từng từ ngay trên trình duyệt"],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:circle-check",
+    title: "Kiểm tra & sửa lỗi",
+    description: "So sánh với transcript và sửa lỗi ngay",
+    points: ["Tìm những chỗ bỏ sót trong bài nghe", "Sửa lỗi từng dòng trước khi chuyển câu tiếp"],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:trending-up",
+    title: "Theo dõi tiến trình",
+    description: "Xem thống kê chi tiết và cải thiện mỗi ngày",
+    points: [
+      "Xem điểm Accuracy cho từng câu luyện tập",
+      "Thống kê giúp bạn cải thiện kỹ năng nghe",
+    ],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
   },
 ];
 
