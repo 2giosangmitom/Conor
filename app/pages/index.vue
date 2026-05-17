@@ -2,6 +2,7 @@
   <UMain>
     <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
       <UPageHero
+        ref="heroRef"
         description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
       >
         <template #title>
@@ -175,6 +176,28 @@
         </template>
       </UPageSection>
     </UiBlurReveal>
+
+    <div class="bg-muted">
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <div class="relative">
+          <UiFlickeringGrid
+            :square-size="4"
+            :grid-gap="6"
+            :flicker-chance="0.3"
+            :max-opacity="0.3"
+            color="var(--color-primary-400)"
+            class="absolute inset-0"
+          />
+          <UPageCTA
+            title="Sẵn sàng luyện nghe ngay?"
+            description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
+            variant="naked"
+            :links="ctaLinks"
+            class="relative z-10"
+          />
+        </div>
+      </UiBlurReveal>
+    </div>
   </UMain>
 </template>
 
@@ -182,6 +205,7 @@
 import type { PageFeatureProps, AccordionItem } from "@nuxt/ui";
 
 const videoUrl = ref("");
+const heroRef = useTemplateRef("heroRef");
 const colorMode = useColorMode();
 
 const auroraColors = computed(() => {
@@ -193,10 +217,10 @@ const auroraColors = computed(() => {
         "var(--color-primary-400)",
       ]
     : [
-        "var(--color-primary-300)",
-        "var(--color-primary-500)",
+        "var(--color-primary-800)",
         "var(--color-primary-700)",
-        "var(--color-primary-900)",
+        "var(--color-primary-600)",
+        "var(--color-primary-500)",
       ];
 });
 
@@ -326,6 +350,15 @@ const howToUseSteps: HowToUseStep[] = [
   },
 ];
 
+const ctaLinks = [
+  {
+    label: "Bắt đầu luyện nghe",
+    trailingIcon: "lucide:play",
+    size: "lg" as const,
+    onClick: scrollToHero,
+  },
+];
+
 const faqItems = ref<AccordionItem[]>([
   {
     label: "NgheGo là gì?",
@@ -358,6 +391,13 @@ const faqItems = ref<AccordionItem[]>([
       "Bạn có thể luyện nghe với hầu hết video YouTube có phụ đề hoặc audio rõ ràng. Một số video có bản quyền đặc biệt có thể không hỗ trợ.",
   },
 ]);
+
+function scrollToHero() {
+  if (heroRef.value) {
+    const el = heroRef.value.$el;
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+}
 
 function handleStart() {
   if (!videoUrl.value) return;

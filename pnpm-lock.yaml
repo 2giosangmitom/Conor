@@ -71,9 +71,6 @@ importers:
       nuxt:
         specifier: ^4.4.5
         version: 4.4.5(1f66628bc7032c6eb32114e015d05c60)
-      shaders:
-        specifier: ^2.5.124
-        version: 2.5.124(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.34(typescript@6.0.3))
       subtitle:
         specifier: ^4.2.2
         version: 4.2.2
@@ -7893,29 +7890,6 @@ packages:
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
 
-  shaders@2.5.124:
-    resolution: {integrity: sha512-Q5I4U+uYrg/wU7OEBq3OG/WAkL571Qbh90Ejb6SEXj9pdAhjX6SrS8wW3Zfu7NCqpENKwLsePIfWzymwaHZW+w==}
-    peerDependencies:
-      pixi.js: ^8.0.0
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
-      solid-js: ^1.8.0
-      svelte: ^5
-      vue: ^3.5.0
-    peerDependenciesMeta:
-      pixi.js:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      solid-js:
-        optional: true
-      svelte:
-        optional: true
-      vue:
-        optional: true
-
   sharp@0.34.5:
     resolution: {integrity: sha512-Ou9I5Ft9WNcCbXrU9cMgPBcCK8LiwLqcbywW3t4oDV37n1pzpuNLsYiAV8eODnjbtQlSDwZ2cUEeQz4E54Hltg==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
@@ -8211,9 +8185,6 @@ packages:
 
   text-readability@1.1.1:
     resolution: {integrity: sha512-lo0KlcNRhlBAxTCEPXMFricim2vJVm0xAVdy40N6WQDn+MeKDBFxl0bMdP2YIMm9ph34CPvxYO/Lxb1QIi67ig==}
-
-  three@0.184.0:
-    resolution: {integrity: sha512-wtTRjG92pM5eUg/KuUnHsqSAlPM296brTOcLgMRqEeylYTh/CdtvKUvCyyCQTzFuStieWxvZb8mVTMvdPyUpxg==}
 
   throttleit@2.1.0:
     resolution: {integrity: sha512-nt6AMGKW1p/70DF/hGBdJB57B8Tspmbp5gfJ8ilhLnt7kkr2ye7hzD6NVG8GGErk2HWF34igrL2CXmNIkzKqKw==}
@@ -17089,14 +17060,6 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
-  shaders@2.5.124(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.34(typescript@6.0.3)):
-    dependencies:
-      three: 0.184.0
-    optionalDependencies:
-      react: 19.2.6
-      react-dom: 19.2.6(react@19.2.6)
-      vue: 3.5.34(typescript@6.0.3)
-
   sharp@0.34.5:
     dependencies:
       '@img/colour': 1.1.0
@@ -17441,8 +17404,6 @@ snapshots:
     dependencies:
       pluralize: 8.0.0
       syllable: 5.0.1
-
-  three@0.184.0: {}
 
   throttleit@2.1.0: {}
 
