@@ -14,18 +14,18 @@
             />
           </template>
           <template #links>
-            <UFieldGroup class="w-full max-w-lg">
+            <div class="mt-6 flex flex-col items-center gap-4 sm:flex-row">
               <UInput
                 v-model="videoUrl"
-                placeholder="Dán link YouTube vào đây..."
+                placeholder="https://www.youtube.com/watch?v=example"
                 aria-label="Dán link YouTube vào đây"
                 leading-icon="i-logos-youtube-icon"
+                class="min-w-xl"
                 size="xl"
-                class="flex-1"
                 @keyup.enter="handleStart"
               />
               <UButton
-                label="Bắt đầu học"
+                label="Bắt đầu"
                 trailing-icon="i-lucide-play"
                 size="xl"
                 color="primary"
@@ -33,7 +33,7 @@
                 :disabled="!videoUrl"
                 @click="handleStart"
               />
-            </UFieldGroup>
+            </div>
           </template>
         </UPageHero>
       </UiBlurReveal>
