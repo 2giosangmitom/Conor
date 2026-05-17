@@ -95,10 +95,22 @@
         </template>
       </UPageSection>
     </UiBlurReveal>
+
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageSection
+        id="features"
+        headline="Tính năng"
+        title="Mọi thứ bạn cần để luyện nghe hiệu quả"
+        description="Công cụ luyện nghe chép chính tả tiếng Anh mạnh mẽ, giúp bạn cải thiện kỹ năng nghe một cách hiệu quả nhất"
+        :features="features"
+      />
+    </UiBlurReveal>
   </UMain>
 </template>
 
 <script setup lang="ts">
+import type { PageFeatureProps } from "@nuxt/ui";
+
 const videoUrl = ref("");
 const colorMode = useColorMode();
 
@@ -147,6 +159,39 @@ const stats: Stat[] = [
     label: "Thành viên hoạt động mỗi ngày",
     color: "text-primary",
     bgColor: "bg-primary/10",
+  },
+];
+
+const features: PageFeatureProps[] = [
+  {
+    icon: "lucide:youtube",
+    title: "Video YouTube yêu thích",
+    description: "Luyện nghe với bất kỳ video YouTube nào bạn thích",
+  },
+  {
+    icon: "lucide:sparkles",
+    title: "Transcription AI chính xác",
+    description: "AI tạo bản chép lời chính xác cao cho mọi video",
+  },
+  {
+    icon: "lucide:align-left",
+    title: "Luyện từng câu",
+    description: "Chia video thành từng câu để tập trung luyện nghe",
+  },
+  {
+    icon: "lucide:circle-check",
+    title: "Phản hồi tức thì",
+    description: "So sánh kết quả với bản gốc, xem lỗi sai ngay lập tức",
+  },
+  {
+    icon: "lucide:trending-up",
+    title: "Theo dõi tiến trình",
+    description: "Thống kê chi tiết giúp bạn cải thiện mỗi ngày",
+  },
+  {
+    icon: "lucide:gift",
+    title: "Hoàn toàn miễn phí",
+    description: "Không giới hạn, không phí ẩn, dùng thoải mái",
   },
 ];
 

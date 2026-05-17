@@ -24,7 +24,7 @@
     "@nuxt/scripts": "1.1.0",
     "@nuxt/ui": "^4.7.1",
     "@nuxthub/core": "0.10.7",
-    "@unhead/vue": "^2.1.15",
+    "@unhead/vue": "^3.1.0",
     "@upstash/redis": "^1.38.0",
     "@vercel/blob": "^2.3.3",
     "@vueuse/core": "^14.3.0",
@@ -52,7 +52,7 @@
     "@iconify-json/openmoji": "^1.2.27",
     "@iconify-json/simple-icons": "^1.2.82",
     "oxfmt": "^0.50.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vue-tsc": "^3.2.9"
   }
 }
