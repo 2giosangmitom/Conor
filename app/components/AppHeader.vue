@@ -4,10 +4,10 @@ import { useSession, signOut, authClient } from "~/utils/auth";
 
 const route = useRoute();
 const isAuthModalOpen = ref(false);
-const sessionState = useSession();
-const user = computed(() => sessionState.value?.data?.user ?? null);
+const { data: session } = await useSession(useFetch);
+const user = computed(() => session.value?.user);
 
-const navigationItems: NavigationMenuItem[] = [
+const navigationItems = computed<NavigationMenuItem[]>(() => [
   {
     label: "Cách sử dụng",
     to: "/#how-to-use",
@@ -23,7 +23,7 @@ const navigationItems: NavigationMenuItem[] = [
     to: "/#faq",
     active: route.path === "/" && route.hash === "#faq",
   },
-];
+]);
 
 const authProviders: ButtonProps[] = [
   {
@@ -36,7 +36,29 @@ const authProviders: ButtonProps[] = [
   },
 ];
 
-const dropdownItems: DropdownMenuItem[][] = [
+const dropdownItems = computed<DropdownMenuItem[][]>(() => [
+  [
+    {
+      type: "label",
+      label: user.value?.name,
+      avatar: {
+        src: user.value?.image ?? undefined,
+        alt: user.value?.name ?? "User Avatar",
+      },
+    },
+  ],
+  [
+    {
+      label: "Trang cá nhân",
+      icon: "i-lucide-user",
+      to: "/profile",
+    },
+    {
+      label: "Cài đặt",
+      icon: "i-lucide-settings",
+      to: "/settings",
+    },
+  ],
   [
     {
       label: "Đăng xuất",
@@ -47,7 +69,7 @@ const dropdownItems: DropdownMenuItem[][] = [
       },
     },
   ],
-];
+]);
 
 function openAuthModal() {
   isAuthModalOpen.value = true;
@@ -74,7 +96,6 @@ async function signInWithGoogle() {
         <UDropdownMenu :items="dropdownItems">
           <UButton variant="ghost" class="gap-2">
             <UAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
-            <span class="text-sm font-medium text-default">{{ user.name }}</span>
           </UButton>
         </UDropdownMenu>
       </template>

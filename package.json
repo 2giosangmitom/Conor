@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.108",
+    "@iconify-json/openmoji": "^1.2.27",
     "@iconify-json/simple-icons": "^1.2.82",
     "oxfmt": "^0.50.0",
     "typescript": "^5.9.3",
