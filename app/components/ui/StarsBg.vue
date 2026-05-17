@@ -8,6 +8,7 @@ interface StarsBackgroundProps {
   speed?: number;
   transition?: SpringOptions;
   starColor?: string;
+  starColorDark?: string;
   class?: string;
 }
 
@@ -15,9 +16,16 @@ const props = withDefaults(defineProps<StarsBackgroundProps>(), {
   factor: 0.05,
   speed: 50,
   transition: () => ({ stiffness: 50, damping: 20 }),
-  starColor: "#fff",
+  starColor: "var(--ui-primary)",
+  starColorDark: "var(--ui-primary)",
   class: "",
 });
+
+const colorMode = useColorMode();
+
+const activeStarColor = computed(() =>
+  colorMode.value === "dark" ? props.starColorDark : props.starColor,
+);
 
 // For slot content
 defineSlots();
@@ -52,14 +60,13 @@ const boxShadow2 = ref("");
 const boxShadow3 = ref("");
 
 onMounted(() => {
-  boxShadow1.value = generateStars(1000, props.starColor);
-  boxShadow2.value = generateStars(400, props.starColor);
-  boxShadow3.value = generateStars(200, props.starColor);
+  boxShadow1.value = generateStars(1000, activeStarColor.value);
+  boxShadow2.value = generateStars(400, activeStarColor.value);
+  boxShadow3.value = generateStars(200, activeStarColor.value);
 });
 
-// Watch for starColor changes
 watch(
-  () => props.starColor,
+  () => activeStarColor.value,
   (newColor) => {
     boxShadow1.value = generateStars(1000, newColor);
     boxShadow2.value = generateStars(400, newColor);
@@ -88,87 +95,84 @@ const starLayer3Transition = computed<Transition>(() => ({
 
 <template>
   <div
-    :class="
-      cn(
-        `relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,#262626_0%,#000_100%)]`,
-        props.class,
-      )
-    "
+    :class="cn(`relative size-full overflow-hidden bg-transparent`, props.class)"
     @mousemove="handleMouseMove"
   >
-    <motion.div :style="{ x: springX, y: springY }">
-      <!-- Star Layer 1 -->
-      <motion.div
-        class="absolute top-0 left-0 h-500 w-full"
-        :animate="{ y: [0, -2000] }"
-        :transition="starLayer1Transition"
-      >
-        <div
-          class="absolute rounded-full bg-transparent"
-          :style="{
-            width: '1px',
-            height: '1px',
-            boxShadow: boxShadow1,
-          }"
-        />
-        <div
-          class="absolute top-500 rounded-full bg-transparent"
-          :style="{
-            width: '1px',
-            height: '1px',
-            boxShadow: boxShadow1,
-          }"
-        />
-      </motion.div>
+    <div class="absolute inset-0">
+      <motion.div :style="{ x: springX, y: springY }">
+        <!-- Star Layer 1 -->
+        <motion.div
+          class="absolute top-0 left-0 h-500 w-full"
+          :animate="{ y: [0, -2000] }"
+          :transition="starLayer1Transition"
+        >
+          <div
+            class="absolute rounded-full bg-transparent"
+            :style="{
+              width: '1px',
+              height: '1px',
+              boxShadow: boxShadow1,
+            }"
+          />
+          <div
+            class="absolute top-500 rounded-full bg-transparent"
+            :style="{
+              width: '1px',
+              height: '1px',
+              boxShadow: boxShadow1,
+            }"
+          />
+        </motion.div>
 
-      <!-- Star Layer 2 -->
-      <motion.div
-        class="absolute top-0 left-0 h-500 w-full"
-        :animate="{ y: [0, -2000] }"
-        :transition="starLayer2Transition"
-      >
-        <div
-          class="absolute rounded-full bg-transparent"
-          :style="{
-            width: '2px',
-            height: '2px',
-            boxShadow: boxShadow2,
-          }"
-        />
-        <div
-          class="absolute top-500 rounded-full bg-transparent"
-          :style="{
-            width: '2px',
-            height: '2px',
-            boxShadow: boxShadow2,
-          }"
-        />
-      </motion.div>
+        <!-- Star Layer 2 -->
+        <motion.div
+          class="absolute top-0 left-0 h-500 w-full"
+          :animate="{ y: [0, -2000] }"
+          :transition="starLayer2Transition"
+        >
+          <div
+            class="absolute rounded-full bg-transparent"
+            :style="{
+              width: '2px',
+              height: '2px',
+              boxShadow: boxShadow2,
+            }"
+          />
+          <div
+            class="absolute top-500 rounded-full bg-transparent"
+            :style="{
+              width: '2px',
+              height: '2px',
+              boxShadow: boxShadow2,
+            }"
+          />
+        </motion.div>
 
-      <!-- Star Layer 3 -->
-      <motion.div
-        class="absolute top-0 left-0 h-500 w-full"
-        :animate="{ y: [0, -2000] }"
-        :transition="starLayer3Transition"
-      >
-        <div
-          class="absolute rounded-full bg-transparent"
-          :style="{
-            width: '3px',
-            height: '3px',
-            boxShadow: boxShadow3,
-          }"
-        />
-        <div
-          class="absolute top-500 rounded-full bg-transparent"
-          :style="{
-            width: '3px',
-            height: '3px',
-            boxShadow: boxShadow3,
-          }"
-        />
+        <!-- Star Layer 3 -->
+        <motion.div
+          class="absolute top-0 left-0 h-500 w-full"
+          :animate="{ y: [0, -2000] }"
+          :transition="starLayer3Transition"
+        >
+          <div
+            class="absolute rounded-full bg-transparent"
+            :style="{
+              width: '3px',
+              height: '3px',
+              boxShadow: boxShadow3,
+            }"
+          />
+          <div
+            class="absolute top-500 rounded-full bg-transparent"
+            :style="{
+              width: '3px',
+              height: '3px',
+              boxShadow: boxShadow3,
+            }"
+          />
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
 
     <!-- Slot for child content -->
     <slot />
