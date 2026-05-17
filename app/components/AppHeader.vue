@@ -93,11 +93,11 @@ async function signInWithGoogle() {
 
     <template #right>
       <template v-if="user">
-        <UDropdownMenu :items="dropdownItems" :content="{ align: 'end' }">
+        <LazyUDropdownMenu :items="dropdownItems" :content="{ align: 'end' }">
           <UButton variant="ghost" class="gap-2">
-            <UAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
+            <LazyUAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
           </UButton>
-        </UDropdownMenu>
+        </LazyUDropdownMenu>
       </template>
       <template v-else>
         <UButton color="primary" variant="solid" @click="openAuthModal">Đăng nhập</UButton>
@@ -116,7 +116,7 @@ async function signInWithGoogle() {
     description="Đăng nhập bằng tài khoản Google hoặc Facebook."
   >
     <template #body>
-      <UAuthForm
+      <LazyUAuthForm
         title="Đăng nhập"
         description="Đăng nhập bằng tài khoản Google."
         :fields="[]"

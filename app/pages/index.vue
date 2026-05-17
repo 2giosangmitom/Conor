@@ -1,197 +1,209 @@
 <template>
   <UMain>
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UPageHero
-        ref="heroRef"
-        description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
-      >
-        <template #title>
-          <span class="flex flex-col items-center gap-4">
-            <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
-              Hoàn toàn miễn phí
-            </UBadge>
-            <ClientOnly>
-              <UiAuroraText :colors="auroraColors">
-                Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
-              </UiAuroraText>
-              <template #fallback>
-                <span class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-                  Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
-                </span>
-              </template>
-            </ClientOnly>
-          </span>
-        </template>
-
-        <template #links>
-          <div class="flex flex-col items-center gap-2 sm:flex-row">
-            <UInput
-              v-model="videoUrl"
-              placeholder="https://www.youtube.com/watch?v=example"
-              aria-label="Dán link YouTube vào đây"
-              leading-icon="openmoji:youtube"
-              class="lg:min-w-md"
-              size="xl"
-              @keyup.enter="handleStart"
-            />
-            <UButton
-              label="Bắt đầu"
-              trailing-icon="lucide:play"
-              size="xl"
-              color="primary"
-              variant="solid"
-              :disabled="!videoUrl"
-              @click="handleStart"
-            />
-          </div>
-        </template>
-      </UPageHero>
-    </UiBlurReveal>
-
-    <div class="bg-muted">
+    <ClientOnly>
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-        <UPageSection
-          id="stats"
-          title="Được tin tưởng bởi cộng đồng người học"
-          description="Tham gia cùng hàng trăm người học đang cải thiện kỹ năng nghe tiếng Anh mỗi ngày"
+        <UPageHero
+          ref="heroRef"
+          description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
         >
-          <template #body>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <UPageCard
-                v-for="stat in stats"
-                :key="stat.label"
-                variant="outline"
-                spotlight
-                spotlight-color="primary"
-                class="group"
-                :ui="{ wrapper: 'items-center text-center', leading: 'mb-3' }"
-              >
-                <template #leading>
-                  <div
-                    class="size-10 rounded-lg flex items-center justify-center"
-                    :class="stat.bgColor"
-                  >
-                    <UIcon :name="stat.icon" :class="stat.color" class="size-5" />
-                  </div>
+          <template #title>
+            <span class="flex flex-col items-center gap-4">
+              <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
+                Hoàn toàn miễn phí
+              </UBadge>
+              <ClientOnly>
+                <UiAuroraText :colors="auroraColors">
+                  Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                </UiAuroraText>
+                <template #fallback>
+                  <span class="text-4xl font-bold sm:text-5xl lg:text-6xl">
+                    Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                  </span>
                 </template>
-                <template #title>
-                  <div class="flex items-center justify-center gap-1">
-                    <ClientOnly>
-                      <UiNumberTicker
-                        :value="stat.value"
-                        :decimal-places="0"
-                        class="text-2xl font-bold"
-                      />
-                      <template #fallback>
-                        <span class="text-2xl font-bold">{{ stat.value }}</span>
-                      </template>
-                    </ClientOnly>
-                    <span class="text-2xl font-bold">+</span>
-                  </div>
-                </template>
-                <template #description>
-                  {{ stat.label }}
-                </template>
-              </UPageCard>
+              </ClientOnly>
+            </span>
+          </template>
+
+          <template #links>
+            <div class="flex flex-col items-center gap-2 sm:flex-row">
+              <UInput
+                v-model="videoUrl"
+                placeholder="https://www.youtube.com/watch?v=example"
+                aria-label="Dán link YouTube vào đây"
+                leading-icon="openmoji:youtube"
+                class="lg:min-w-md"
+                size="xl"
+                @keyup.enter="handleStart"
+              />
+              <UButton
+                label="Bắt đầu"
+                trailing-icon="lucide:play"
+                size="xl"
+                color="primary"
+                variant="solid"
+                :disabled="!videoUrl"
+                @click="handleStart"
+              />
             </div>
           </template>
-        </UPageSection>
+        </UPageHero>
       </UiBlurReveal>
-    </div>
+    </ClientOnly>
 
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UiStarsBg>
-        <UPageSection
-          id="features"
-          headline="Tính năng"
-          title="Mọi thứ bạn cần để luyện nghe hiệu quả"
-          description="Công cụ luyện nghe chép chính tả tiếng Anh mạnh mẽ, giúp bạn cải thiện kỹ năng nghe một cách hiệu quả nhất"
-          :features="features"
-        />
-      </UiStarsBg>
-    </UiBlurReveal>
-
-    <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-        <UPageSection
-          id="how-to-use"
-          headline="Cách sử dụng"
-          title="Bắt đầu luyện nghe chỉ trong 5 bước"
-          description="Quy trình luyện nghe chép chính tả đơn giản, hiệu quả"
-        >
-          <template #body>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <UPageCard
-                v-for="(step, index) in howToUseSteps"
-                :key="step.title"
-                variant="outline"
-                class="group"
-                spotlight
-              >
-                <template #leading>
-                  <div class="flex items-center gap-3">
-                    <div
-                      class="flex items-center justify-center size-8 rounded-full border border-dashed border-primary text-primary text-sm font-bold"
-                    >
-                      {{ String(index + 1).padStart(2, "0") }}
-                    </div>
+    <ClientOnly>
+      <div class="bg-muted">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+          <UPageSection
+            id="stats"
+            title="Được tin tưởng bởi cộng đồng người học"
+            description="Tham gia cùng hàng trăm người học đang cải thiện kỹ năng nghe tiếng Anh mỗi ngày"
+          >
+            <template #body>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                <UPageCard
+                  v-for="stat in stats"
+                  :key="stat.label"
+                  variant="outline"
+                  spotlight
+                  spotlight-color="primary"
+                  class="group"
+                  :ui="{ wrapper: 'items-center text-center', leading: 'mb-3' }"
+                >
+                  <template #leading>
                     <div
                       class="size-10 rounded-lg flex items-center justify-center"
-                      :class="step.bgColor"
+                      :class="stat.bgColor"
                     >
-                      <UIcon :name="step.icon" :class="step.color" class="size-5" />
+                      <UIcon :name="stat.icon" :class="stat.color" class="size-5" />
                     </div>
-                  </div>
-                </template>
-                <template #title>{{ step.title }}</template>
-                <template #description>
-                  <p class="mb-3">{{ step.description }}</p>
-                  <ul class="space-y-1.5">
-                    <li
-                      v-for="point in step.points"
-                      :key="point"
-                      class="flex items-start gap-2 text-sm text-muted"
-                    >
-                      <UIcon name="lucide:check" class="size-4 text-primary shrink-0 mt-0.5" />
-                      <span>{{ point }}</span>
-                    </li>
-                  </ul>
-                </template>
-              </UPageCard>
-            </div>
+                  </template>
+                  <template #title>
+                    <div class="flex items-center justify-center gap-1">
+                      <ClientOnly>
+                        <UiNumberTicker
+                          :value="stat.value"
+                          :decimal-places="0"
+                          class="text-2xl font-bold"
+                        />
+                        <template #fallback>
+                          <span class="text-2xl font-bold">{{ stat.value }}</span>
+                        </template>
+                      </ClientOnly>
+                      <span class="text-2xl font-bold">+</span>
+                    </div>
+                  </template>
+                  <template #description>
+                    {{ stat.label }}
+                  </template>
+                </UPageCard>
+              </div>
+            </template>
+          </UPageSection>
+        </UiBlurReveal>
+      </div>
+    </ClientOnly>
+
+    <ClientOnly>
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UiStarsBg>
+          <UPageSection
+            id="features"
+            headline="Tính năng"
+            title="Mọi thứ bạn cần để luyện nghe hiệu quả"
+            description="Công cụ luyện nghe chép chính tả tiếng Anh mạnh mẽ, giúp bạn cải thiện kỹ năng nghe một cách hiệu quả nhất"
+            :features="features"
+          />
+        </UiStarsBg>
+      </UiBlurReveal>
+    </ClientOnly>
+
+    <ClientOnly>
+      <div class="bg-muted">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+          <UPageSection
+            id="how-to-use"
+            headline="Cách sử dụng"
+            title="Bắt đầu luyện nghe chỉ trong 5 bước"
+            description="Quy trình luyện nghe chép chính tả đơn giản, hiệu quả"
+          >
+            <template #body>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <UPageCard
+                  v-for="(step, index) in howToUseSteps"
+                  :key="step.title"
+                  variant="outline"
+                  class="group"
+                  spotlight
+                >
+                  <template #leading>
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="flex items-center justify-center size-8 rounded-full border border-dashed border-primary text-primary text-sm font-bold"
+                      >
+                        {{ String(index + 1).padStart(2, "0") }}
+                      </div>
+                      <div
+                        class="size-10 rounded-lg flex items-center justify-center"
+                        :class="step.bgColor"
+                      >
+                        <UIcon :name="step.icon" :class="step.color" class="size-5" />
+                      </div>
+                    </div>
+                  </template>
+                  <template #title>{{ step.title }}</template>
+                  <template #description>
+                    <p class="mb-3">{{ step.description }}</p>
+                    <ul class="space-y-1.5">
+                      <li
+                        v-for="point in step.points"
+                        :key="point"
+                        class="flex items-start gap-2 text-sm text-muted"
+                      >
+                        <UIcon name="lucide:check" class="size-4 text-primary shrink-0 mt-0.5" />
+                        <span>{{ point }}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </UPageCard>
+              </div>
+            </template>
+          </UPageSection>
+        </UiBlurReveal>
+      </div>
+    </ClientOnly>
+
+    <ClientOnly>
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UPageSection
+          id="faq"
+          headline="FAQ"
+          title="Câu hỏi thường gặp"
+          description="Giải đáp các thắc mắc thường gặp về NgheGo"
+        >
+          <template #body>
+            <UAccordion :items="faqItems" class="max-w-3xl mx-auto" />
           </template>
         </UPageSection>
       </UiBlurReveal>
-    </div>
+    </ClientOnly>
 
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UPageSection
-        id="faq"
-        headline="FAQ"
-        title="Câu hỏi thường gặp"
-        description="Giải đáp các thắc mắc thường gặp về NgheGo"
-      >
-        <template #body>
-          <UAccordion :items="faqItems" class="max-w-3xl mx-auto" />
-        </template>
-      </UPageSection>
-    </UiBlurReveal>
-
-    <UiStarsBg>
-      <div class="light:bg-primary-200/20 dark:bg-primary-950/50">
-        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-          <div class="relative overflow-hidden">
-            <UPageCTA
-              title="Sẵn sàng luyện nghe ngay?"
-              description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
-              variant="naked"
-              :links="ctaLinks"
-              class="relative z-10"
-            />
-          </div>
-        </UiBlurReveal>
-      </div>
-    </UiStarsBg>
+    <ClientOnly>
+      <UiStarsBg>
+        <div class="light:bg-primary-200/20 dark:bg-primary-950/50">
+          <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+            <div class="relative overflow-hidden">
+              <UPageCTA
+                title="Sẵn sàng luyện nghe ngay?"
+                description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
+                variant="naked"
+                :links="ctaLinks"
+                class="relative z-10"
+              />
+            </div>
+          </UiBlurReveal>
+        </div>
+      </UiStarsBg>
+    </ClientOnly>
   </UMain>
 </template>
 

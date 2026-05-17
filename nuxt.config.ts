@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   ],
   hints: {
     features: {
-      lazyLoad: false,
+      htmlValidate: false,
     },
   },
   hub: {
