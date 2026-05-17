@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import type { ButtonProps, NavigationMenuItem } from "@nuxt/ui";
+import type { ButtonProps, DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
+import { useSession, signOut, authClient } from "~/utils/auth";
 
 const route = useRoute();
 const isAuthModalOpen = ref(false);
+const sessionState = useSession();
+const user = computed(() => sessionState.value?.data?.user ?? null);
 
 const navigationItems: NavigationMenuItem[] = [
   {
@@ -33,6 +36,19 @@ const authProviders: ButtonProps[] = [
   },
 ];
 
+const dropdownItems: DropdownMenuItem[][] = [
+  [
+    {
+      label: "Đăng xuất",
+      icon: "i-lucide-log-out",
+      color: "error",
+      onSelect: async () => {
+        await signOut();
+      },
+    },
+  ],
+];
+
 function openAuthModal() {
   isAuthModalOpen.value = true;
 }
@@ -54,7 +70,17 @@ async function signInWithGoogle() {
     <UNavigationMenu :items="navigationItems" />
 
     <template #right>
-      <UButton color="primary" variant="solid" @click="openAuthModal">Đăng nhập</UButton>
+      <template v-if="user">
+        <UDropdownMenu :items="dropdownItems">
+          <UButton variant="ghost" class="gap-2">
+            <UAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
+            <span class="text-sm font-medium text-default">{{ user.name }}</span>
+          </UButton>
+        </UDropdownMenu>
+      </template>
+      <template v-else>
+        <UButton color="primary" variant="solid" @click="openAuthModal">Đăng nhập</UButton>
+      </template>
       <UColorModeButton />
     </template>
 

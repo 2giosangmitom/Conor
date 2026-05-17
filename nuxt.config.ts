@@ -15,11 +15,6 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "motion-v/nuxt",
   ],
-  hints: {
-    features: {
-      lazyLoad: false,
-    },
-  },
   hub: {
     db: {
       dialect: "postgresql",
@@ -33,6 +28,11 @@ export default defineNuxtConfig({
   ui: {
     experimental: {
       componentDetection: true,
+    },
+  },
+  vite: {
+    optimizeDeps: {
+      include: ["@vue/devtools-core", "@vue/devtools-kit", "better-auth/vue"],
     },
   },
 });
