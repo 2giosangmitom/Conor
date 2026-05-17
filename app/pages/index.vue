@@ -6,12 +6,17 @@
           description="Tạm biệt sách giáo khoa nhàm chán. Đắm chìm vào nội dung thực tế, luyện nghe chép chính tả và theo dõi tiến bộ với phản hồi chi tiết để chinh phục Tiếng Anh."
         >
           <template #title>
-            <span class="font-heading">Luyện nghe chép chính tả Tiếng Anh với các video bạn</span>
-            <UiFlipWords
-              :words="['yêu thích', 'đam mê', 'hứng thú']"
-              :duration="3000"
-              class="whitespace-nowrap font-heading"
-            />
+            <div class="flex flex-col items-center gap-4">
+              <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
+                Không cần đăng nhập
+              </UBadge>
+              <span class="font-heading">Luyện nghe chép chính tả Tiếng Anh với các video bạn</span>
+              <UiFlipWords
+                :words="['yêu thích', 'đam mê', 'hứng thú']"
+                :duration="3000"
+                class="whitespace-nowrap font-heading"
+              />
+            </div>
           </template>
           <template #links>
             <div class="mt-6 flex flex-col items-center gap-4 sm:flex-row">
@@ -20,7 +25,7 @@
                 placeholder="https://www.youtube.com/watch?v=example"
                 aria-label="Dán link YouTube vào đây"
                 leading-icon="simple-icons:youtube"
-                class="min-w-xl"
+                class="min-w-md"
                 size="xl"
                 @keyup.enter="handleStart"
               />
