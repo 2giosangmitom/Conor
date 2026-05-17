@@ -19,7 +19,7 @@
                 v-model="videoUrl"
                 placeholder="https://www.youtube.com/watch?v=example"
                 aria-label="Dán link YouTube vào đây"
-                leading-icon="i-logos-youtube-icon"
+                leading-icon="simple-icons:youtube"
                 class="min-w-xl"
                 size="xl"
                 @keyup.enter="handleStart"
