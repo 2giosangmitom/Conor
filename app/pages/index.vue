@@ -5,7 +5,7 @@
         description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
       >
         <template #title>
-          <div class="flex flex-col items-center gap-4">
+          <span class="flex flex-col items-center gap-4">
             <UBadge class="tracking-normal" variant="soft" icon="lucide:badge-check">
               Hoàn toàn miễn phí
             </UBadge>
@@ -13,8 +13,13 @@
               <UiAuroraText :colors="auroraColors">
                 Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
               </UiAuroraText>
+              <template #fallback>
+                <span class="text-4xl font-bold sm:text-5xl lg:text-6xl">
+                  Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                </span>
+              </template>
             </ClientOnly>
-          </div>
+          </span>
         </template>
 
         <template #links>
@@ -75,6 +80,9 @@
                       :decimal-places="0"
                       class="text-2xl font-bold"
                     />
+                    <template #fallback>
+                      <span class="text-2xl font-bold">{{ stat.value }}</span>
+                    </template>
                   </ClientOnly>
                   <span class="text-2xl font-bold">+</span>
                 </div>
