@@ -86,14 +86,22 @@ async function signInWithGoogle() {
 <template>
   <UHeader title="NgheGo" to="/">
     <template #title>
-      <span class="font-semibold text-highlighted">NgheGo</span>
+      <span
+        aria-hidden="true"
+        class="inline-block size-7.5 shrink-0 bg-current"
+        :style="{
+          WebkitMask: 'url(/images/logo.svg) no-repeat center / contain',
+          mask: 'url(/images/logo.svg) no-repeat center / contain',
+        }"
+      />
+      <span>NgheGo</span>
     </template>
 
     <UNavigationMenu :items="navigationItems" />
 
     <template #right>
       <template v-if="user">
-        <UDropdownMenu :items="dropdownItems">
+        <UDropdownMenu :items="dropdownItems" :content="{ align: 'end' }">
           <UButton variant="ghost" class="gap-2">
             <UAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
           </UButton>

@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   css: ["~/assets/css/main.css"],
   modules: [
     "@nuxthub/core",
@@ -15,6 +15,11 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "motion-v/nuxt",
   ],
+  hints: {
+    features: {
+      lazyLoad: false,
+    },
+  },
   hub: {
     db: {
       dialect: "postgresql",
@@ -32,7 +37,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@vue/devtools-core", "@vue/devtools-kit", "better-auth/vue"],
+      include: ["better-auth/vue", "shaders/vue"],
     },
   },
 });

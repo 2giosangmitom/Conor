@@ -17,6 +17,7 @@
               </ClientOnly>
             </div>
           </template>
+
           <template #links>
             <div class="flex flex-col items-center gap-2 sm:flex-row">
               <UInput
