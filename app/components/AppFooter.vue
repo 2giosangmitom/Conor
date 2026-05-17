@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import type { FooterColumnLink, FooterColumn } from "@nuxt/ui";
+import type { FooterColumn } from "@nuxt/ui";
 
-const columns = computed<FooterColumn<FooterColumnLink>[]>(() => [
+const columns: FooterColumn[] = [
   {
     label: "Sản phẩm",
     children: [
       {
         label: "Tính năng",
-        to: "/#features",
       },
       {
         label: "Cách sử dụng",
-        to: "/#how-to-use",
       },
     ],
   },
@@ -32,43 +30,43 @@ const columns = computed<FooterColumn<FooterColumnLink>[]>(() => [
       },
     ],
   },
-]);
+];
 </script>
 
 <template>
-  <UFooter class="bg-muted">
+  <USeparator class="h-px"><AppLogo size="sm" /></USeparator>
+
+  <UFooter :ui="{ top: 'border-b border-default' }">
     <template #top>
       <UContainer>
-        <UFooterColumns :columns="columns">
-          <template #left>
-            <div class="flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                class="size-6 bg-current"
-                :style="{
-                  WebkitMask: 'url(/images/logo.svg) no-repeat center / contain',
-                  mask: 'url(/images/logo.svg) no-repeat center / contain',
-                }"
-              />
-              <span class="text-sm font-semibold">NgheGo</span>
-            </div>
+        <UFooterColumns
+          :columns="columns"
+          :ui="{
+            right: 'flex items-start xl:justify-end',
+            root: 'xl:grid-cols-3',
+          }"
+        >
+          <template #right>
+            <AppLogo with-text />
           </template>
         </UFooterColumns>
       </UContainer>
     </template>
 
     <template #left>
-      <p class="text-muted text-sm">&copy; {{ new Date().getFullYear() }} NgheGo</p>
+      <p class="text-muted text-sm">
+        &copy; {{ new Date().getFullYear() }} NgheGo. All rights reserved.
+      </p>
     </template>
 
     <template #right>
       <UButton
+        to="https://github.com/2giosangmitom/NgheGo"
+        target="_blank"
         icon="i-simple-icons-github"
+        aria-label="NgheGo on GitHub"
         color="neutral"
         variant="ghost"
-        to="https://github.com/nghengo"
-        target="_blank"
-        aria-label="GitHub"
       />
     </template>
   </UFooter>

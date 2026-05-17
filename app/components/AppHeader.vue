@@ -86,15 +86,7 @@ async function signInWithGoogle() {
 <template>
   <UHeader title="NgheGo" to="/">
     <template #title>
-      <span
-        aria-hidden="true"
-        class="inline-block size-7.5 shrink-0 bg-current"
-        :style="{
-          WebkitMask: 'url(/images/logo.svg) no-repeat center / contain',
-          mask: 'url(/images/logo.svg) no-repeat center / contain',
-        }"
-      />
-      <span>NgheGo</span>
+      <AppLogo with-text />
     </template>
 
     <UNavigationMenu :items="navigationItems" />
