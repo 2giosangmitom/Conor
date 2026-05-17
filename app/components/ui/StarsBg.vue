@@ -31,27 +31,27 @@ const activeStarColor = computed(() =>
 defineSlots();
 
 function resolveColor(color: string): string {
-  if (!color.startsWith("var(")) return color
+  if (!color.startsWith("var(")) return color;
 
-  const match = color.match(/var\(--([^,)]+)(?:,\s*([^)]+))?\)/)
-  if (!match) return color
+  const match = color.match(/var\(--([^,)]+)(?:,\s*([^)]+))?\)/);
+  if (!match) return color;
 
-  const varName = `--${match[1]}`
-  const fallback = match[2]
+  const varName = `--${match[1]}`;
+  const fallback = match[2];
 
-  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-  return value || fallback || color
+  const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return value || fallback || color;
 }
 
 function generateStars(count: number, starColor: string) {
-  const resolvedColor = resolveColor(starColor)
-  const shadows: string[] = []
+  const resolvedColor = resolveColor(starColor);
+  const shadows: string[] = [];
   for (let i = 0; i < count; i++) {
-    const x = Math.floor(Math.random() * 4000) - 2000
-    const y = Math.floor(Math.random() * 4000) - 2000
-    shadows.push(`${x}px ${y}px ${resolvedColor}`)
+    const x = Math.floor(Math.random() * 4000) - 2000;
+    const y = Math.floor(Math.random() * 4000) - 2000;
+    shadows.push(`${x}px ${y}px ${resolvedColor}`);
   }
-  return shadows.join(", ")
+  return shadows.join(", ");
 }
 
 const offsetX = useMotionValue(1);
