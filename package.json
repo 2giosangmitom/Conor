@@ -29,6 +29,7 @@
     "@vercel/blob": "^2.3.3",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "14.3.0",
+    "@workflow/nitro": "^4.0.5",
     "better-auth": "^1.6.11",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
