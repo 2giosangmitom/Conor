@@ -1,5 +1,5 @@
 import { getYouTubeVideoInfo } from "../../utils/youtube";
-import { FatalError, getWritable } from "workflow";
+import { getWritable } from "workflow";
 import { parseSync, type Node } from "subtitle";
 import type { ReadabilityApi } from "text-readability";
 import natural from "natural";
@@ -7,10 +7,7 @@ import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { kv } from "@nuxthub/kv";
-import {
-  VideoIndexingEventCode,
-  type VideoIndexingLog,
-} from "../../../shared/types/video-indexing";
+import { VideoIndexingStepCode, type VideoIndexingLog } from "../../../shared/types/video-indexing";
 
 const { TfIdf } = natural;
 
@@ -49,15 +46,17 @@ const KEYWORD_BOOST_WEIGHT = 3.0;
 const TITLE_BOOST_WEIGHT = 2.0;
 const TAG_BOOST_WEIGHT = 1.5;
 
+export function workflowStateKey(runId: string): string {
+  return `workflow:${runId}`;
+}
+
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+  const log: VideoIndexingLog = { ...entry, timestamp: new Date().toISOString() };
+
   const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
   const writer = writable.getWriter();
-
   try {
-    await writer.write({
-      ...entry,
-      timestamp: new Date().toISOString(),
-    });
+    await writer.write(log);
   } finally {
     writer.releaseLock();
   }
@@ -83,12 +82,11 @@ export enum VideoIndexingErrors {
 export async function getInfo(youtubeId: string): Promise<VideoInfo> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.FetchingMetadata,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataStart });
 
   const info = await getYouTubeVideoInfo(youtubeId);
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataComplete });
 
   return {
     title: info.title,
@@ -103,46 +101,60 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
   };
 }
 
-export async function checkDuration(videoInfo: VideoInfo): Promise<void> {
+export async function checkDuration(videoInfo: VideoInfo): Promise<string | null> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.CheckingDuration,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationStart });
 
   if (videoInfo.duration > MAX_DURATION) {
-    throw new FatalError(VideoIndexingErrors.VIDEO_TOO_LONG);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.CheckDurationFailed,
+      reason: VideoIndexingErrors.VIDEO_TOO_LONG,
+    });
+    return VideoIndexingErrors.VIDEO_TOO_LONG;
   }
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationComplete });
+  return null;
 }
 
-export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
+export async function checkLanguage(videoInfo: VideoInfo): Promise<string | null> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.CheckingLanguage,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageStart });
 
   if (!/^en(-.*)?$/i.test(videoInfo.language)) {
-    throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.CheckLanguageFailed,
+      reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+    });
+    return VideoIndexingErrors.UNSUPPORTED_LANGUAGE;
   }
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageComplete });
+  return null;
 }
 
-export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[]> {
+export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[] | string> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.GeneratingTranscript,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptStart });
 
   if (!videoInfo.subtitlesUrl) {
-    throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.GenerateTranscriptFailed,
+      reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+    });
+    return VideoIndexingErrors.UNSUPPORTED_LANGUAGE;
   }
 
   const subtitles = await $fetch<string>(videoInfo.subtitlesUrl);
   const nodes = parseSync(subtitles);
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptComplete });
 
   return nodes
     .filter((node): node is Node & { type: "cue" } => node.type === "cue")
@@ -153,20 +165,13 @@ export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSub
     }));
 }
 
-// Analyze the subtitles with AI to determine the topic and difficulty level of the video.
 export async function analyzeVideo(
   subtitles: VideoSubtitle[],
-  metadata: {
-    title: string;
-    tags: string[];
-  },
+  metadata: { title: string; tags: string[] },
 ): Promise<VideoAnalysis> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.AnalyzingVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.AnalyzeVideoStart });
 
   const transcript = subtitles
     .map((subtitle) => subtitle.text)
@@ -178,10 +183,9 @@ export async function analyzeVideo(
   const level = await getEnglishLevel(transcript);
   const topic = await labelTopic(transcript, metadata);
 
-  return {
-    topic,
-    level,
-  };
+  await writeLog({ level: "info", code: VideoIndexingStepCode.AnalyzeVideoComplete });
+
+  return { topic, level };
 }
 
 async function labelTopic(
@@ -335,10 +339,7 @@ export async function persistVideoIndex(params: {
 }): Promise<typeof schema.video.$inferSelect> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.PersistingVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.PersistVideoStart });
 
   const { youtubeId, info, analysis, subtitles } = params;
 
@@ -352,9 +353,7 @@ export async function persistVideoIndex(params: {
       level: analysis.level,
       thumbnailUrl: info.thumbnailUrl,
     })
-    .onConflictDoNothing({
-      target: schema.video.youtubeId,
-    })
+    .onConflictDoNothing({ target: schema.video.youtubeId })
     .returning();
 
   const [existing] = inserted
@@ -362,7 +361,7 @@ export async function persistVideoIndex(params: {
     : await db.select().from(schema.video).where(eq(schema.video.youtubeId, youtubeId));
 
   if (!existing) {
-    throw new FatalError("VIDEO_NOT_SAVED");
+    throw new Error("VIDEO_NOT_SAVED");
   }
 
   if (inserted) {
@@ -379,24 +378,33 @@ export async function persistVideoIndex(params: {
     }
   }
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.PersistedVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.PersistVideoComplete });
 
   return existing;
 }
 
-export async function logIndexing(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+export async function logIndexStart(): Promise<void> {
   "use step";
 
-  await writeLog(entry);
+  await writeLog({ level: "info", code: VideoIndexingStepCode.IndexStart });
 }
 
-export async function clearIndexingRun(youtubeId: string): Promise<void> {
+export async function logIndexComplete(): Promise<void> {
   "use step";
 
-  await kv.del(`video-indexing:${youtubeId}`);
+  await writeLog({ level: "info", code: VideoIndexingStepCode.IndexComplete });
+}
+
+export async function logIndexFailed(reason: string): Promise<void> {
+  "use step";
+
+  await writeLog({ level: "error", code: VideoIndexingStepCode.IndexFailed, reason });
+}
+
+export async function clearWorkflowState(youtubeId: string, runId: string): Promise<void> {
+  "use step";
+
+  await Promise.all([kv.del(workflowStateKey(runId)), kv.del(`video-indexing:${youtubeId}`)]);
 }
 
 export async function finalizeIndexing(): Promise<void> {
@@ -404,6 +412,7 @@ export async function finalizeIndexing(): Promise<void> {
 
   await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
 }
+
 async function getReadabilityApi(): Promise<ReadabilityApi> {
   if (readabilityApi) {
     return readabilityApi;
