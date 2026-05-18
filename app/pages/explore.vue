@@ -200,7 +200,9 @@
                         <div class="flex min-h-16 flex-wrap items-center gap-2">
                           <UBadge variant="soft">{{ video.level }}</UBadge>
                           <UBadge variant="soft">{{ video.topic }}</UBadge>
-                          <UBadge variant="soft">{{ formatDuration(video.duration) }}</UBadge>
+                          <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
+                            {{ formatDuration(video.duration) }}
+                          </UBadge>
                         </div>
                       </template>
                       <template #footer>
