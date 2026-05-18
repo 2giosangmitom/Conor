@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { and, count, desc, eq, gte, ilike } from "drizzle-orm";
+import { and, count, desc, eq, gte, ilike, lte } from "drizzle-orm";
 import { z } from "zod";
 
 const querySchema = z.object({
@@ -8,6 +8,8 @@ const querySchema = z.object({
   level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).optional(),
   topic: z.string().min(1).optional(),
   q: z.string().min(1).optional(),
+  minDuration: z.coerce.number().min(0).optional(),
+  maxDuration: z.coerce.number().min(0).optional(),
   limit: z.coerce.number().min(1).max(50).default(10),
   offset: z.coerce.number().min(0).default(0),
 });
@@ -33,6 +35,14 @@ export default defineEventHandler(async (event) => {
 
   if (query.q) {
     conditions.push(ilike(schema.video.title, `%${query.q}%`));
+  }
+
+  if (query.minDuration !== undefined) {
+    conditions.push(gte(schema.video.duration, query.minDuration));
+  }
+
+  if (query.maxDuration !== undefined) {
+    conditions.push(lte(schema.video.duration, query.maxDuration));
   }
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
