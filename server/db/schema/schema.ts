@@ -12,7 +12,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { schema } from "@nuxthub/db";
+import { user } from "./auth-schema";
 
 export const englishLevel = pgEnum("english_level", ["A1", "A2", "B1", "B2", "C1", "C2"]);
 
@@ -67,7 +67,7 @@ export const practiceSession = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     userId: text("user_id")
-      .references(() => schema.user.id, {
+      .references(() => user.id, {
         onDelete: "cascade",
       })
       .notNull(),
@@ -158,14 +158,14 @@ export const videoTranscriptSentenceRelations = relations(
   }),
 );
 
-export const userRelations = relations(schema.user, ({ many }) => ({
+export const userRelations = relations(user, ({ many }) => ({
   practiceSessions: many(practiceSession),
 }));
 
 export const practiceSessionRelations = relations(practiceSession, ({ one, many }) => ({
-  user: one(schema.user, {
+  user: one(user, {
     fields: [practiceSession.userId],
-    references: [schema.user.id],
+    references: [user.id],
   }),
   video: one(video, {
     fields: [practiceSession.videoId],
