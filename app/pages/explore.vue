@@ -116,139 +116,147 @@
     </ClientOnly>
 
     <ClientOnly>
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
-        <UPageSection
-          id="all-videos"
-          headline=""
-          title="Tất cả Video"
-          description="Lọc theo mức độ, thời lượng, chủ đề và tìm kiếm nhanh"
-          :ui="{
-            wrapper: 'text-left',
-            headline: 'justify-start',
-            title: 'text-left',
-            description: 'text-left',
-          }"
-        >
-          <template #body>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div class="flex flex-wrap items-center gap-2">
-                <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
-                  <UButton
-                    variant="outline"
-                    size="sm"
-                    trailing-icon="lucide:chevron-down"
-                    :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
-                  />
-                </UDropdownMenu>
-                <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
-                  <UButton
-                    variant="outline"
-                    size="sm"
-                    trailing-icon="lucide:chevron-down"
-                    :label="selectedDuration ? `Thoi luong: ${selectedDuration}` : 'Thoi luong'"
-                  />
-                </UDropdownMenu>
-                <UDropdownMenu :items="topicMenuItems" :content="{ align: 'start' }">
-                  <UButton
-                    variant="outline"
-                    size="sm"
-                    trailing-icon="lucide:chevron-down"
-                    :label="selectedTopic ? `Chu de: ${selectedTopic}` : 'Chu de'"
-                  />
-                </UDropdownMenu>
+      <div ref="allVideosSectionRef">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
+          <UPageSection
+            id="all-videos"
+            headline=""
+            title="Tất cả Video"
+            description="Lọc theo mức độ, thời lượng, chủ đề và tìm kiếm nhanh"
+            :ui="{
+              wrapper: 'text-left',
+              headline: 'justify-start',
+              title: 'text-left',
+              description: 'text-left',
+            }"
+          >
+            <template #body>
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex flex-wrap items-center gap-2">
+                  <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
+                    <UButton
+                      variant="outline"
+                      size="sm"
+                      trailing-icon="lucide:chevron-down"
+                      :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
+                    />
+                  </UDropdownMenu>
+                  <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
+                    <UButton
+                      variant="outline"
+                      size="sm"
+                      trailing-icon="lucide:chevron-down"
+                      :label="selectedDuration ? `Thời lượng: ${selectedDuration}` : 'Thời lượng'"
+                    />
+                  </UDropdownMenu>
+                  <UDropdownMenu :items="topicMenuItems" :content="{ align: 'start' }">
+                    <UButton
+                      variant="outline"
+                      size="sm"
+                      trailing-icon="lucide:chevron-down"
+                      :label="selectedTopic ? `Chủ đề: ${selectedTopic}` : 'Chủ đề'"
+                    />
+                  </UDropdownMenu>
+                </div>
+                <UInput
+                  v-model="searchQuery"
+                  placeholder="Tìm kiếm video"
+                  aria-label="Tìm kiếm video"
+                  leading-icon="lucide:search"
+                  class="w-full lg:w-72"
+                  size="lg"
+                />
               </div>
-              <UInput
-                v-model="searchQuery"
-                placeholder="Tim kiem video"
-                aria-label="Tim kiem video"
-                leading-icon="lucide:search"
-                class="w-full lg:w-72"
-                size="lg"
-              />
-            </div>
 
-            <div class="mt-6">
-              <UiBlurReveal :duration="0.45" :stagger-delay="0.08" blur="6px">
-                <div v-if="pagedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                  <UPageCard
-                    v-for="video in pagedVideos"
-                    :key="video.youtubeId"
-                    variant="outline"
-                    class="group h-full"
-                  >
-                    <template #leading>
-                      <div class="overflow-hidden rounded-lg bg-muted">
-                        <img
-                          :src="video.thumbnailUrl"
-                          :alt="video.title"
-                          class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                          loading="lazy"
-                        />
-                      </div>
-                    </template>
-                    <template #title>
-                      <span class="line-clamp-2">{{ video.title }}</span>
-                    </template>
-                    <template #description>
-                      <div class="flex min-h-24 flex-col gap-4">
-                        <div class="flex flex-wrap items-center gap-2">
-                          <UBadge variant="soft">{{ video.topic }}</UBadge>
-                          <UBadge variant="soft">{{ video.level }}</UBadge>
-                          <UBadge variant="soft">{{ video.duration }}</UBadge>
-                        </div>
-                        <div>
-                          <div class="flex items-center justify-between text-xs text-muted">
-                            <span>Tiến độ</span>
-                            <span>{{ video.progress }}%</span>
-                          </div>
-                          <div class="mt-2 h-2 rounded-full bg-muted">
-                            <div
-                              class="h-2 rounded-full bg-primary transition-all"
-                              :style="{ width: `${video.progress}%` }"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                    <template #footer>
-                      <UButton
-                        :to="`/practice/${video.youtubeId}`"
-                        label="Bắt đầu"
-                        trailing-icon="lucide:arrow-right"
-                        size="sm"
-                        color="primary"
-                        variant="solid"
-                      />
-                    </template>
-                  </UPageCard>
-                </div>
-                <div
-                  v-else
-                  class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+              <div class="mt-6">
+                <UiBlurReveal
+                  :key="currentPage"
+                  :duration="0.5"
+                  :stagger-delay="0.12"
+                  blur="6px"
+                  :y-offset="14"
                 >
-                  <UIcon name="lucide:search-x" class="size-6 text-muted" />
-                  <div>
-                    <p class="text-sm font-semibold">Không tìm thấy Video</p>
-                    <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
+                  <div v-if="pagedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <UPageCard
+                      v-for="video in pagedVideos"
+                      :key="video.youtubeId"
+                      variant="outline"
+                      class="group h-full"
+                    >
+                      <template #leading>
+                        <div class="overflow-hidden rounded-lg bg-muted">
+                          <img
+                            :src="video.thumbnailUrl"
+                            :alt="video.title"
+                            class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                            loading="lazy"
+                          />
+                        </div>
+                      </template>
+                      <template #title>
+                        <span class="line-clamp-2">{{ video.title }}</span>
+                      </template>
+                      <template #description>
+                        <div class="flex min-h-24 flex-col gap-4">
+                          <div class="flex flex-wrap items-center gap-2">
+                            <UBadge variant="soft">{{ video.topic }}</UBadge>
+                            <UBadge variant="soft">{{ video.level }}</UBadge>
+                            <UBadge variant="soft">{{ video.duration }}</UBadge>
+                          </div>
+                          <div>
+                            <div class="flex items-center justify-between text-xs text-muted">
+                              <span>Tiến độ</span>
+                              <span>{{ video.progress }}%</span>
+                            </div>
+                            <div class="mt-2 h-2 rounded-full bg-muted">
+                              <div
+                                class="h-2 rounded-full bg-primary transition-all"
+                                :style="{ width: `${video.progress}%` }"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                      <template #footer>
+                        <UButton
+                          :to="`/practice/${video.youtubeId}`"
+                          label="Bắt đầu"
+                          trailing-icon="lucide:arrow-right"
+                          size="sm"
+                          color="primary"
+                          variant="solid"
+                        />
+                      </template>
+                    </UPageCard>
                   </div>
-                  <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
-                </div>
-              </UiBlurReveal>
-            </div>
+                  <div
+                    v-else
+                    class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+                  >
+                    <UIcon name="lucide:search-x" class="size-6 text-muted" />
+                    <div>
+                      <p class="text-sm font-semibold">Không tìm thấy Video</p>
+                      <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
+                    </div>
+                    <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
+                  </div>
+                </UiBlurReveal>
+              </div>
 
-            <div class="mt-6 flex flex-col items-center gap-3">
-              <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
-              <UPagination
-                v-model:page="currentPage"
-                :total="filteredVideos.length"
-                :items-per-page="pageSize"
-                size="lg"
-                class="scale-110"
-              />
-            </div>
-          </template>
-        </UPageSection>
-      </UiBlurReveal>
+              <div class="mt-6 flex flex-col items-center gap-3">
+                <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
+                <UPagination
+                  v-model:page="currentPage"
+                  :total="filteredVideos.length"
+                  :items-per-page="pageSize"
+                  size="lg"
+                  class="scale-110"
+                />
+              </div>
+            </template>
+          </UPageSection>
+        </UiBlurReveal>
+      </div>
     </ClientOnly>
   </UMain>
 </template>
@@ -940,33 +948,156 @@ const selectedDuration = ref<string | null>(null);
 const selectedTopic = ref<string | null>(null);
 const pageIndex = ref(0);
 const pageSize = 8;
+const allVideosSectionRef = ref<HTMLElement | null>(null);
+
+async function scrollToSection() {
+  if (!allVideosSectionRef.value) return;
+
+  await nextTick();
+  const top = allVideosSectionRef.value.offsetTop;
+  window.scrollTo({ top, behavior: "smooth" });
+}
 
 const levelMenuItems = computed(() => [
-  { label: "Tat ca", onSelect: () => (selectedLevel.value = null) },
-  { label: "A1", onSelect: () => (selectedLevel.value = "A1") },
-  { label: "A2", onSelect: () => (selectedLevel.value = "A2") },
-  { label: "B1", onSelect: () => (selectedLevel.value = "B1") },
-  { label: "B2", onSelect: () => (selectedLevel.value = "B2") },
-  { label: "C1", onSelect: () => (selectedLevel.value = "C1") },
+  {
+    label: "Tất cả",
+    onSelect: () => {
+      selectedLevel.value = null;
+      scrollToSection();
+    },
+  },
+  {
+    label: "A1",
+    onSelect: () => {
+      selectedLevel.value = "A1";
+      scrollToSection();
+    },
+  },
+  {
+    label: "A2",
+    onSelect: () => {
+      selectedLevel.value = "A2";
+      scrollToSection();
+    },
+  },
+  {
+    label: "B1",
+    onSelect: () => {
+      selectedLevel.value = "B1";
+      scrollToSection();
+    },
+  },
+  {
+    label: "B2",
+    onSelect: () => {
+      selectedLevel.value = "B2";
+      scrollToSection();
+    },
+  },
+  {
+    label: "C1",
+    onSelect: () => {
+      selectedLevel.value = "C1";
+      scrollToSection();
+    },
+  },
 ]);
 
 const durationMenuItems = computed(() => [
-  { label: "Tat ca", onSelect: () => (selectedDuration.value = null) },
-  { label: "Duoi 10 phut", onSelect: () => (selectedDuration.value = "short") },
-  { label: "10-15 phut", onSelect: () => (selectedDuration.value = "medium") },
-  { label: "Tren 15 phut", onSelect: () => (selectedDuration.value = "long") },
+  {
+    label: "Tất cả",
+    onSelect: () => {
+      selectedDuration.value = null;
+      scrollToSection();
+    },
+  },
+  {
+    label: "Dưới 10 phút",
+    onSelect: () => {
+      selectedDuration.value = "short";
+      scrollToSection();
+    },
+  },
+  {
+    label: "10-15 phút",
+    onSelect: () => {
+      selectedDuration.value = "medium";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Trên 15 phút",
+    onSelect: () => {
+      selectedDuration.value = "long";
+      scrollToSection();
+    },
+  },
 ]);
 
 const topicMenuItems = computed(() => [
-  { label: "Tat ca", onSelect: () => (selectedTopic.value = null) },
-  { label: "Conversation", onSelect: () => (selectedTopic.value = "Conversation") },
-  { label: "Business", onSelect: () => (selectedTopic.value = "Business") },
-  { label: "IELTS", onSelect: () => (selectedTopic.value = "IELTS") },
-  { label: "News", onSelect: () => (selectedTopic.value = "News") },
-  { label: "Travel", onSelect: () => (selectedTopic.value = "Travel") },
-  { label: "Entertainment", onSelect: () => (selectedTopic.value = "Entertainment") },
-  { label: "Basics", onSelect: () => (selectedTopic.value = "Basics") },
-  { label: "Technology", onSelect: () => (selectedTopic.value = "Technology") },
+  {
+    label: "Tất cả",
+    onSelect: () => {
+      selectedTopic.value = null;
+      scrollToSection();
+    },
+  },
+  {
+    label: "Conversation",
+    onSelect: () => {
+      selectedTopic.value = "Conversation";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Business",
+    onSelect: () => {
+      selectedTopic.value = "Business";
+      scrollToSection();
+    },
+  },
+  {
+    label: "IELTS",
+    onSelect: () => {
+      selectedTopic.value = "IELTS";
+      scrollToSection();
+    },
+  },
+  {
+    label: "News",
+    onSelect: () => {
+      selectedTopic.value = "News";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Travel",
+    onSelect: () => {
+      selectedTopic.value = "Travel";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Entertainment",
+    onSelect: () => {
+      selectedTopic.value = "Entertainment";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Basics",
+    onSelect: () => {
+      selectedTopic.value = "Basics";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Technology",
+    onSelect: () => {
+      selectedTopic.value = "Technology";
+      scrollToGrid();
+    },
+  },
 ]);
 
 const normalizedQuery = computed(() => searchQuery.value.trim().toLowerCase());
@@ -1021,4 +1152,12 @@ function clearFilters() {
 watch([selectedLevel, selectedDuration, selectedTopic, searchQuery], () => {
   pageIndex.value = 0;
 });
+
+watch(
+  currentPage,
+  async () => {
+    await scrollToSection();
+  },
+  { flush: "post" },
+);
 </script>
