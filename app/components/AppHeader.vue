@@ -9,9 +9,9 @@ const user = computed(() => session.value?.user);
 
 const navigationItems = computed<NavigationMenuItem[]>(() => [
   {
-    label: "Cách sử dụng",
-    to: "/#how-to-use",
-    active: route.path === "/" && route.hash === "#how-to-use",
+    to: "/explore",
+    active: route.path === "/explore",
+    label: "Khám phá",
   },
   {
     label: "Tính năng",
@@ -19,14 +19,14 @@ const navigationItems = computed<NavigationMenuItem[]>(() => [
     active: route.path === "/" && route.hash === "#features",
   },
   {
+    label: "Cách sử dụng",
+    to: "/#how-to-use",
+    active: route.path === "/" && route.hash === "#how-to-use",
+  },
+  {
     label: "Câu hỏi thường gặp",
     to: "/#faq",
     active: route.path === "/" && route.hash === "#faq",
-  },
-  {
-    label: "Khám phá",
-    to: "/explore",
-    active: route.path === "/explore",
   },
 ]);
 
