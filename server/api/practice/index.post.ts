@@ -38,16 +38,19 @@ export default defineProtectedEventHandler(async (event, session) => {
     );
 
   // Create new practice session
-  const newSession = (
-    await db
-      .insert(schema.practiceSession)
-      .values({
-        userId: session.user.id,
-        videoId: videoId,
-        lastPracticedAt: new Date(),
-      })
-      .returning()
-  )[0]!;
+  const [newSession] = await db
+    .insert(schema.practiceSession)
+    .values({
+      userId: session.user.id,
+      videoId: videoId,
+      lastPracticedAt: new Date(),
+    })
+    .returning();
 
+  if (!newSession) {
+    throw createError({ statusCode: 500, statusMessage: "PRACTICE_SESSION_CREATION_FAILED" });
+  }
+
+  setResponseStatus(event, 201);
   return newSession;
 });
