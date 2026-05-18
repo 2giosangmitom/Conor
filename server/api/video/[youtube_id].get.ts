@@ -3,12 +3,18 @@ import { eq } from "drizzle-orm";
 import { start, getRun } from "workflow/api";
 import { kv } from "@nuxthub/kv";
 import { handleIndexVideo } from "~~/server/workflows/video-indexing";
+import { z } from "zod";
 
 const INDEXING_KEY_PREFIX = "video-indexing:";
 const STREAM_NAMESPACE = "logs";
 
+const paramSchema = z.object({
+  youtube_id: z.string().min(1).max(20),
+});
+
 export default defineEventHandler(async (event) => {
-  const youtubeId = getRouterParam(event, "youtube_id")!;
+  const { youtube_id: youtubeId } = await getValidatedRouterParams(event, paramSchema.parse);
+
   const video = await db.select().from(schema.video).where(eq(schema.video.youtubeId, youtubeId));
 
   if (video.length === 0) {
