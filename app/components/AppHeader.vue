@@ -23,6 +23,11 @@ const navigationItems = computed<NavigationMenuItem[]>(() => [
     to: "/#faq",
     active: route.path === "/" && route.hash === "#faq",
   },
+  {
+    label: "Khám phá",
+    to: "/explore",
+    active: route.path === "/explore",
+  },
 ]);
 
 const authProviders: ButtonProps[] = [
