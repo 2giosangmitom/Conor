@@ -4,7 +4,7 @@
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
         <UPageHero
           ref="heroRef"
-          description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh đời thực với độ chính xác cao."
+          description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh với độ chính xác cao."
         >
           <template #title>
             <span class="flex flex-col items-center gap-4">
@@ -13,11 +13,11 @@
               </UBadge>
               <ClientOnly>
                 <UiAuroraText :colors="auroraColors">
-                  Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                  Luyện nghe gõ chính tả Tiếng Anh với video bạn yêu thích
                 </UiAuroraText>
                 <template #fallback>
                   <span class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-                    Luyện nghe chép chính tả Tiếng Anh với video bạn yêu thích
+                    Luyện nghe gõ chính tả Tiếng Anh với video bạn yêu thích
                   </span>
                 </template>
               </ClientOnly>
