@@ -103,6 +103,59 @@
       </div>
     </ClientOnly>
 
+    <ClientOnly v-if="trendingVideos.length">
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UPageSection
+          id="trending"
+          headline="Thịnh hành"
+          title="Video được luyện tập nhiều nhất"
+          description="Khám phá những video YouTube đang được cộng đồng luyện nghe nhiều nhất trong 30 ngày qua"
+        >
+          <template #body>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <UPageCard
+                v-for="video in trendingVideos"
+                :key="video.id"
+                :to="`/practice/${video.youtubeId}`"
+                variant="outline"
+                spotlight
+                spotlight-color="primary"
+                class="group cursor-pointer"
+              >
+                <template #header>
+                  <div class="relative overflow-hidden rounded-t-lg">
+                    <NuxtImg
+                      :src="video.thumbnailUrl"
+                      :alt="video.title"
+                      class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div
+                      class="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded"
+                    >
+                      {{ formatDuration(video.duration) }}
+                    </div>
+                  </div>
+                </template>
+                <template #title>
+                  <span class="line-clamp-2">{{ video.title }}</span>
+                </template>
+                <template #description>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <UBadge variant="soft" size="sm">{{ video.topic }}</UBadge>
+                    <UBadge variant="outline" size="sm">{{ video.level }}</UBadge>
+                    <span class="flex items-center gap-1 text-xs text-muted ml-auto">
+                      <UIcon name="lucide:headphones" class="size-3.5" />
+                      {{ video.practiceCount }} lượt luyện
+                    </span>
+                  </div>
+                </template>
+              </UPageCard>
+            </div>
+          </template>
+        </UPageSection>
+      </UiBlurReveal>
+    </ClientOnly>
+
     <ClientOnly>
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
         <UiStarsBg>
@@ -210,9 +263,38 @@
 <script setup lang="ts">
 import type { PageFeatureProps, AccordionItem } from "@nuxt/ui";
 
+interface TrendingVideo {
+  id: string;
+  title: string;
+  youtubeId: string;
+  duration: number;
+  topic: string;
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  thumbnailUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  practiceCount: number;
+}
+
 const videoUrl = ref("");
 const heroRef = useTemplateRef("heroRef");
 const colorMode = useColorMode();
+
+const { data: trendingData } = await useFetch<{ videos: TrendingVideo[] }>("/api/video", {
+  query: {
+    sort: "trending",
+    period: "30d",
+    limit: 6,
+  },
+});
+
+const trendingVideos = computed(() => trendingData.value?.videos ?? []);
+
+function formatDuration(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
 
 const auroraColors = computed(() => {
   return colorMode.value === "dark"
