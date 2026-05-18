@@ -22,31 +22,6 @@
               </ClientOnly>
             </span>
           </template>
-
-          <template #links>
-            <div class="flex flex-col items-center gap-4 w-full">
-              <div class="flex flex-col items-center gap-2 sm:flex-row w-full max-w-xl">
-                <UInput
-                  v-model="videoUrl"
-                  placeholder="https://www.youtube.com/watch?v=example"
-                  aria-label="Dán link YouTube vào đây"
-                  leading-icon="lucide:youtube"
-                  class="flex-1"
-                  size="xl"
-                  @keyup.enter="handleStart"
-                />
-                <UButton
-                  label="Bắt đầu"
-                  trailing-icon="lucide:play"
-                  size="xl"
-                  color="primary"
-                  variant="solid"
-                  :disabled="!videoUrl"
-                  @click="handleStart"
-                />
-              </div>
-            </div>
-          </template>
         </UPageHero>
       </UiBlurReveal>
     </ClientOnly>
@@ -143,7 +118,6 @@
 </template>
 
 <script setup lang="ts">
-const videoUrl = ref("");
 const colorMode = useColorMode();
 
 const auroraColors = computed(() => {
@@ -207,14 +181,4 @@ const recentlyWatched = ref<RecentVideo[]>([
 ]);
 
 const hasRecent = computed(() => recentlyWatched.value.length > 0);
-
-function handleStart() {
-  if (!videoUrl.value) return;
-
-  const youtubeId = new URL(videoUrl.value).searchParams.get("v");
-
-  if (youtubeId) {
-    navigateTo(`/practice/${youtubeId}`);
-  }
-}
 </script>
