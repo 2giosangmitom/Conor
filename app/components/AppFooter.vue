@@ -46,6 +46,7 @@ const columns: FooterColumn[] = [
           :ui="{
             right: 'flex items-start xl:justify-end',
             root: 'xl:grid-cols-3',
+            link: 'w-fit',
           }"
         >
           <template #right>
