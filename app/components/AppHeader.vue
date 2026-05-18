@@ -89,7 +89,7 @@ async function signInWithGoogle() {
       <AppLogo with-text />
     </template>
 
-    <UNavigationMenu :items="navigationItems" />
+    <UNavigationMenu :items="navigationItems" aria-label="Main navigation" />
 
     <template #right>
       <template v-if="user">
@@ -106,7 +106,12 @@ async function signInWithGoogle() {
     </template>
 
     <template #body>
-      <UNavigationMenu :items="navigationItems" orientation="vertical" class="-mx-2.5" />
+      <UNavigationMenu
+        :items="navigationItems"
+        orientation="vertical"
+        class="-mx-2.5"
+        aria-label="Mobile navigation"
+      />
     </template>
   </UHeader>
 
