@@ -146,17 +146,17 @@
                       variant="outline"
                       size="sm"
                       trailing-icon="lucide:chevron-down"
-                      :label="selectedDuration ? `Thời lượng: ${selectedDuration}` : 'Thời lượng'"
+                      :label="durationFilterLabel"
                     />
                   </UDropdownMenu>
-                  <UDropdownMenu :items="topicMenuItems" :content="{ align: 'start' }">
+                  <!-- <UDropdownMenu :items="topicMenuItems" :content="{ align: 'start' }">
                     <UButton
                       variant="outline"
                       size="sm"
                       trailing-icon="lucide:chevron-down"
                       :label="selectedTopic ? `Chủ đề: ${selectedTopic}` : 'Chủ đề'"
                     />
-                  </UDropdownMenu>
+                  </UDropdownMenu> -->
                 </div>
                 <UInput
                   v-model="searchQuery"
@@ -388,6 +388,13 @@ const levelMenuItems = computed(() => [
       scrollToSection();
     },
   },
+  {
+    label: "C2",
+    onSelect: () => {
+      selectedLevel.value = "C2";
+      scrollToSection();
+    },
+  },
 ]);
 
 const durationMenuItems = computed(() => [
@@ -399,21 +406,21 @@ const durationMenuItems = computed(() => [
     },
   },
   {
-    label: "Dưới 5 phút",
+    label: "Ngắn (< 5 phút)",
     onSelect: () => {
       selectedDuration.value = "short";
       scrollToSection();
     },
   },
   {
-    label: "5-10 phút",
+    label: "Trung bình (5-10 phút)",
     onSelect: () => {
       selectedDuration.value = "medium";
       scrollToSection();
     },
   },
   {
-    label: "Trên 10 phút",
+    label: "Dài (> 10 phút)",
     onSelect: () => {
       selectedDuration.value = "long";
       scrollToSection();
@@ -421,71 +428,57 @@ const durationMenuItems = computed(() => [
   },
 ]);
 
-const topicMenuItems = computed(() => [
-  {
-    label: "Tất cả",
-    onSelect: () => {
-      selectedTopic.value = null;
-      scrollToSection();
-    },
-  },
-  {
-    label: "Conversation",
-    onSelect: () => {
-      selectedTopic.value = "Conversation";
-      scrollToSection();
-    },
-  },
-  {
-    label: "Business",
-    onSelect: () => {
-      selectedTopic.value = "Business";
-      scrollToSection();
-    },
-  },
-  {
-    label: "IELTS",
-    onSelect: () => {
-      selectedTopic.value = "IELTS";
-      scrollToSection();
-    },
-  },
-  {
-    label: "News",
-    onSelect: () => {
-      selectedTopic.value = "News";
-      scrollToSection();
-    },
-  },
-  {
-    label: "Travel",
-    onSelect: () => {
-      selectedTopic.value = "Travel";
-      scrollToSection();
-    },
-  },
-  {
-    label: "Entertainment",
-    onSelect: () => {
-      selectedTopic.value = "Entertainment";
-      scrollToSection();
-    },
-  },
-  {
-    label: "Basics",
-    onSelect: () => {
-      selectedTopic.value = "Basics";
-      scrollToSection();
-    },
-  },
-  {
-    label: "Technology",
-    onSelect: () => {
-      selectedTopic.value = "Technology";
-      scrollToSection();
-    },
-  },
-]);
+const durationFilterLabel = computed(() => {
+  if (selectedDuration.value === "short") return "Thời lượng: Ngắn";
+  if (selectedDuration.value === "medium") return "Thời lượng: Trung bình";
+  if (selectedDuration.value === "long") return "Thời lượng: Dài";
+  return "Thời lượng";
+});
+
+// const topicMenuItems = computed(() => [
+//   {
+//     label: "Tất cả",
+//     onSelect: () => {
+//       selectedTopic.value = null;
+//       scrollToSection();
+//     },
+//   },
+//   {
+//     label: "Conversation",
+//     onSelect: () => {
+//       selectedTopic.value = "Conversation";
+//       scrollToSection();
+//     },
+//   },
+//   {
+//     label: "Business",
+//     onSelect: () => {
+//       selectedTopic.value = "Business";
+//       scrollToSection();
+//     },
+//   },
+//   {
+//     label: "Travel",
+//     onSelect: () => {
+//       selectedTopic.value = "Travel";
+//       scrollToSection();
+//     },
+//   },
+//   {
+//     label: "Entertainment",
+//     onSelect: () => {
+//       selectedTopic.value = "Entertainment";
+//       scrollToSection();
+//     },
+//   },
+//   {
+//     label: "Technology",
+//     onSelect: () => {
+//       selectedTopic.value = "Technology";
+//       scrollToSection();
+//     },
+//   },
+// ]);
 
 const normalizedQuery = computed(() => searchQuery.value.trim().toLowerCase());
 
