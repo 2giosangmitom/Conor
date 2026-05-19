@@ -6,6 +6,7 @@ import {
   persistVideoIndex,
   closeLogStream,
   emitLogEntry,
+  clearIndexingKey,
 } from "./steps";
 import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 
@@ -54,5 +55,7 @@ export async function handleIndexVideo(youtubeId: string) {
     });
     await closeLogStream();
     throw error;
+  } finally {
+    await clearIndexingKey(youtubeId);
   }
 }

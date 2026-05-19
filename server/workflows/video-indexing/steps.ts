@@ -7,6 +7,7 @@ import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
+import { kv } from "@nuxthub/kv";
 
 const { TfIdf } = natural;
 
@@ -36,6 +37,8 @@ const MAX_DURATION = 60 * 60;
 
 const STREAM_NAMESPACE = "logs";
 
+const INDEXING_KEY_PREFIX = "video-indexing:";
+
 const MAX_TRANSCRIPT_LENGTH = 15000;
 const RS_MODULE = "text-readability";
 let readabilityApi: ReadabilityApi | undefined;
@@ -58,14 +61,20 @@ async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<voi
 }
 
 function findEnglishCaptionUrl(
-  captions: Record<string, Array<{ ext: string; url: string }>>,
+  subtitles: Record<string, Array<{ ext: string; url: string }>>,
+  automaticCaptions: Record<string, Array<{ ext: string; url: string }>>,
 ): string {
-  for (const key of Object.keys(captions)) {
-    if (/^en(-.*)?$/i.test(key)) {
-      const vtt = captions[key]?.find((c) => c.ext === "vtt");
-      if (vtt) return vtt.url;
+  const sources = [subtitles, automaticCaptions];
+
+  for (const source of sources) {
+    for (const key of Object.keys(source ?? {})) {
+      if (/^en(-.*)?$/i.test(key)) {
+        const vtt = source[key]?.find((c) => c.ext === "vtt");
+        if (vtt) return vtt.url;
+      }
     }
   }
+
   return "";
 }
 
@@ -92,7 +101,7 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
         ?.url,
     tags: info.tags,
     language: info.language,
-    subtitlesUrl: findEnglishCaptionUrl(info.automatic_captions),
+    subtitlesUrl: findEnglishCaptionUrl(info.subtitles ?? {}, info.automatic_captions ?? {}),
   };
 }
 
@@ -390,6 +399,12 @@ export async function closeLogStream(): Promise<void> {
   "use step";
 
   await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
+}
+
+export async function clearIndexingKey(youtubeId: string): Promise<void> {
+  "use step";
+
+  await kv.del(`${INDEXING_KEY_PREFIX}${youtubeId}`);
 }
 
 async function getReadabilityApi(): Promise<ReadabilityApi> {
