@@ -1,95 +1,93 @@
 # AGENTS.md
 
-This document provides project context and contribution guidelines for AI agents and human developers. All contributors must follow the rules outlined here to ensure consistency and quality.
+YouTube dictation/practice app — transcribe videos, let users practice typing along.
 
----
-
-## Project Overview
-
-A modern YouTube dictation application that transcribes YouTube videos in real-time.
-
-**Stack:**
-
-- **Framework:** Nuxt 4
-- **UI:** Nuxt UI 4
-- **Styling:** TailwindCSS v4
-- **Package Manager:** pnpm
+**Stack:** Nuxt 4 · Nuxt UI 4 · TailwindCSS v4 · pnpm · TypeScript
 
 ---
 
 ## Commands
 
 ```bash
-# Install dependencies
-pnpm install
+pnpm install          # deps + nuxt prepare (postinstall)
+pnpm dev              # dev server
+pnpm build            # production build
+pnpm generate         # static output
+pnpm preview          # preview production build
 
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Generate static output
-pnpm generate
-
-# Preview production build
-pnpm preview
-
-# Lint the codebase
-pnpm lint
-
-# Fix lint issues
-pnpm lint:fix
-
-# Check formatting
-pnpm fmt:check
-
-# Format the codebase
-pnpm fmt:fix
-
-# Typecheck
-pnpm typecheck
-
-# Run tests
-pnpm test
+pnpm lint && pnpm lint:fix   # ESLint
+pnpm fmt:check && pnpm fmt:fix  # oxfmt formatter
+pnpm typecheck        # nuxt typecheck
+pnpm test             # vitest run (all projects)
 ```
+
+**CI order (Node 25, pnpm 10):** `typecheck → lint → fmt:check → test`
+
+---
+
+## Architecture
+
+```
+app/            — Vue pages, components, layouts, assets
+server/
+  api/          — API routes (auth/, video/, practice/, workflow/)
+  db/           — Drizzle schema + migrations (PostgreSQL via NuxtHub/Neon)
+  utils/        — Server utilities (auth.ts, youtube.ts)
+  workflows/    — Vercel Workflow SDK (video-indexing/)
+shared/
+  types/        — Shared TypeScript types
+  utils/        — Shared logic (client + server)
+test/unit/      — Vitest unit tests (node environment)
+```
+
+- **Entry point:** `app/app.vue` wraps `<UApp>` + `<NuxtLayout>` + `<NuxtPage>`
+- **Primary language:** Vietnamese (`htmlAttrs: { lang: "vi" }`)
+- **Two layouts:** `default.vue` and `practice.vue`
+
+---
+
+## Auth (Better Auth)
+
+- Google OAuth only — email/password is **disabled** (`emailAndPassword.enabled: false`)
+- Drizzle adapter → PostgreSQL (Neon HTTP driver via NuxtHub)
+- Rate limiting via NuxtHub KV (`secondaryStorage`)
+- Auth catch-all route: `server/api/auth/[...all].ts`
+- **Protected routes:** use `defineProtectedEventHandler()` from `server/utils/auth.ts` — it validates session and injects `session.user` into the handler
+- Client-side: use Better Auth Vue client (auto-imported from `~/lib/auth-client` or similar)
+
+**Required env vars** (see `.env.example`): `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+
+---
+
+## Database (Drizzle ORM)
+
+- Schema: `server/db/schema/schema.ts` + `auth-schema.ts`
+- Migrations: `server/db/migrations/`
+- Applied during build in production (`applyMigrationsDuringBuild: true` when `NODE_ENV=production`)
+- Tables: `video`, `video_transcript_sentence`, `practice_session`, `practice_attempt`, `word_mistake`
+- Access via `@nuxthub/db` — import as `import { db, schema } from "@nuxthub/db"`
+
+---
+
+## Key Patterns
+
+- **Composables:** `use*` prefix, place in `app/composables/` (create dir if needed)
+- **Server-only code** in `server/` — never import in client components
+- **Shared logic** in `shared/utils/` — runs on both client and server
+- **Data fetching:** `useFetch`/`useAsyncData` in pages, `$fetch` in handlers/server routes
+- **State:** `useState` for SSR-safe shared state
 
 ---
 
 ## Rules
 
-### General
-
-1. **Never install new dependencies** without explicit user approval. Prefer built-in Nuxt and Nuxt UI features first.
-2. **Prefer TypeScript** for all new files. Avoid `any` types; use proper interfaces or `unknown`.
-3. **Do not modify** `nuxt.config.ts`, `tailwind.config.ts`, or `package.json` unless the task explicitly requires it.
-
-### Vue and Nuxt Conventions (aligned with Vue and Nuxt skills)
-
-4. Use the **Composition API with `<script setup lang="ts">`** for all components. Never use Options API.
-5. Use **auto-imports** for Vue and Nuxt composables; do not manually import `ref`, `computed`, `useRoute`, etc.
-6. Use script setup macros (`defineProps`, `defineEmits`, `defineModel`, `defineExpose`, `defineOptions`, `defineSlots`) with explicit types.
-7. Avoid reactive props destructuring; access props via `props` or `toRefs`.
-8. Prefer `shallowRef` over `ref` when deep reactivity is not required.
-9. Name composables with the `use` prefix (for example `useTranscription.ts`) and place them in `app/composables/`.
-10. Place **server-only logic** in `server/` (API routes, DB calls). Never import server utilities in client components.
-11. Use `shared/utils/` for logic that runs on both client and server.
-12. Prefer `useFetch` or `useAsyncData` for data fetching in pages; use `$fetch` inside event handlers and server routes.
-13. Use Nuxt built-in components (`NuxtLink`, `NuxtPage`, `NuxtLayout`, `ClientOnly`) and Vue built-ins (`Transition`, `Teleport`, `Suspense`, `KeepAlive`) when appropriate.
-14. Use `useState` for SSR-safe shared state when state must persist across requests.
-
-### UI and Styling
-
-15. **Always use Nuxt UI components** for UI elements (buttons, inputs, modals, etc.). Do not create custom alternatives to components already in Nuxt UI.
-16. Style with **TailwindCSS utility classes**. Avoid scoped `<style>` blocks unless necessary for complex animations or third-party overrides.
-17. Use **CSS variables and Tailwind tokens** for colors and spacing; no hardcoded hex values in templates.
-18. Ensure all interactive elements are **keyboard accessible** and include appropriate ARIA attributes.
-
-### Code Quality
-
-19. Run `pnpm lint`, `pnpm fmt:check`, and `pnpm typecheck` before considering any task complete. Fix all errors; do not suppress them.
-20. Keep components **focused and small**. Extract reusable logic into composables and reusable UI into components.
-21. Write **self-documenting code**. Add JSDoc comments only for non-obvious functions or public composable APIs.
-22. Use `pnpm lint:fix` and `pnpm fmt:fix` to remediate issues when possible.
-23. Write **unit tests** for all new composables and critical components. Place tests in `tests/unit/` with clear naming.
-24. Run tests with `pnpm test` and ensure all tests pass before marking a task as complete.
+1. **Never install new dependencies** without explicit approval. Prefer built-in Nuxt/Nuxt UI features.
+2. **TypeScript always** — no `any`; use interfaces or `unknown`.
+3. **Do not modify** `nuxt.config.ts`, `tailwind.config.ts`, or `package.json` unless the task requires it.
+4. **Composition API with `<script setup lang="ts">`** only — never Options API.
+5. **Use auto-imports** — do not manually import `ref`, `computed`, `useRoute`, etc.
+6. **Always use Nuxt UI components** for UI elements. No custom buttons/inputs/modals.
+7. **TailwindCSS utility classes** only — no scoped `<style>` unless overriding third-party.
+8. **No hardcoded hex colors** — use CSS variables and Tailwind tokens.
+9. **Run `pnpm lint`, `pnpm fmt:check`, `pnpm typecheck`** before marking tasks complete.
+10. **Tests** go in `test/unit/*.test.ts`. Run with `pnpm test`.
