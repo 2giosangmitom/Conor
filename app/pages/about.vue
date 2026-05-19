@@ -120,10 +120,10 @@
                 :ui="{ wrapper: 'items-center text-center', leading: 'mb-5' }"
               >
                 <template #leading>
-                  <img
+                  <NuxtImg
                     :src="member.avatar"
                     :alt="member.name"
-                    class="size-32 rounded-full mx-auto object-cover ring-4 ring-primary/20"
+                    class="size-40 rounded-full object-cover object-center ring-4 ring-primary/20"
                   />
                 </template>
                 <template #title>
@@ -191,6 +191,8 @@ interface TeamMember {
   github?: string;
   facebook?: string;
 }
+
+const colorMode = useColorMode();
 
 useSeoMeta({
   title: "Về chúng tôi — NgheGo",
@@ -260,7 +262,7 @@ const methodology: MethodItem[] = [
   },
 ];
 
-const teamMembers: TeamMember[] = [
+const teamMembers = computed<TeamMember[]>(() => [
   {
     name: "Võ Văn Duy",
     role: "UI/UX Designer",
@@ -289,7 +291,7 @@ const teamMembers: TeamMember[] = [
     name: "GitHub Copilot",
     role: "AI Coding Assistant",
     bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển NgheGo.",
-    avatar: "/images/copilot.png",
+    avatar: colorMode.value === "dark" ? "/images/copilot-dark.png" : "/images/copilot.png",
     github: "https://github.com/github/copilot-docs",
   },
   {
@@ -303,8 +305,8 @@ const teamMembers: TeamMember[] = [
     name: "OpenCode",
     role: "Open-source AI Agent",
     bio: "Coding agent mã nguồn mở chạy trên terminal, hỗ trợ nhiều model AI khác nhau, giúp tự động hóa các tác vụ lập trình lặp đi lặp lại.",
-    avatar: "/images/opencode.png",
+    avatar: colorMode.value === "dark" ? "/images/opencode-dark.png" : "/images/opencode.png",
     github: "https://github.com/anomalyco/opencode",
   },
-];
+]);
 </script>

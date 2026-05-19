@@ -2,10 +2,7 @@
   "mcpServers": {
     "nuxt-ui": {
       "url": "https://ui.nuxt.com/mcp",
-      "autoApprove": [
-        "search-icons",
-        "search-icons"
-      ]
+      "autoApprove": ["search-icons", "search-icons"]
     },
     "nuxt": {
       "url": "https://nuxt.com/mcp"
