@@ -23,10 +23,6 @@ const columns: FooterColumn[] = [
         to: "/about",
       },
       {
-        label: "Đội ngũ",
-        to: "/team",
-      },
-      {
         label: "Blog",
         to: "/blog",
       },
