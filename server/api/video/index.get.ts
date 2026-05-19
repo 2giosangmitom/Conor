@@ -6,7 +6,6 @@ const querySchema = z.object({
   sort: z.enum(["trending", "newest"]).default("newest"),
   period: z.enum(["7d", "30d", "90d", "all"]).default("all"),
   level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).optional(),
-  topic: z.string().min(1).optional(),
   q: z.string().min(1).optional(),
   minDuration: z.coerce.number().min(0).optional(),
   maxDuration: z.coerce.number().min(0).optional(),
@@ -27,10 +26,6 @@ export default defineEventHandler(async (event) => {
 
   if (query.level) {
     conditions.push(eq(schema.video.level, query.level));
-  }
-
-  if (query.topic) {
-    conditions.push(eq(schema.video.topic, query.topic));
   }
 
   if (query.q) {

@@ -60,14 +60,6 @@
                       :label="durationFilterLabel"
                     />
                   </UDropdownMenu>
-                  <!-- <UDropdownMenu :items="topicMenuItems" :content="{ align: 'start' }">
-                    <UButton
-                      variant="outline"
-                      size="sm"
-                      trailing-icon="lucide:chevron-down"
-                      :label="selectedTopic ? `Chủ đề: ${selectedTopic}` : 'Chủ đề'"
-                    />
-                  </UDropdownMenu> -->
                 </div>
                 <UInput
                   v-model="searchQuery"
@@ -199,7 +191,6 @@ interface VideoIndexResponse {
 const searchQuery = ref("");
 const selectedLevel = ref<string | null>(null);
 const selectedDuration = ref<string | null>(null);
-const selectedTopic = ref<string | null>(null);
 const pageIndex = ref(0);
 const pageSize = 8;
 const allVideosSectionRef = ref<HTMLElement | null>(null);
@@ -319,7 +310,6 @@ const { data: videoResponse } = await useFetch<VideoIndexResponse>("/api/video",
       sort: "newest",
       period: "all",
       level: selectedLevel.value ?? undefined,
-      topic: selectedTopic.value ?? undefined,
       q: normalizedQuery.value || undefined,
       limit: pageSize,
       offset: pageIndex.value * pageSize,
@@ -349,12 +339,11 @@ function formatDuration(durationSeconds: number) {
 function clearFilters() {
   selectedLevel.value = null;
   selectedDuration.value = null;
-  selectedTopic.value = null;
   searchQuery.value = "";
   pageIndex.value = 0;
 }
 
-watch([selectedLevel, selectedDuration, selectedTopic, searchQuery], () => {
+watch([selectedLevel, selectedDuration, searchQuery], () => {
   pageIndex.value = 0;
 });
 
