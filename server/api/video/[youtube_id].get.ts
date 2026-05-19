@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { start, getRun } from "workflow/api";
 import { kv } from "@nuxthub/kv";
 import { handleIndexVideo } from "~~/server/workflows/video-indexing";
@@ -16,19 +16,23 @@ export default defineEventHandler(async (event) => {
   const { youtube_id: youtubeId } = await getValidatedRouterParams(event, paramSchema.parse);
 
   // Check if video is already indexed
-  const [video] = await db
+  const rows = await db
     .select()
     .from(schema.video)
     .innerJoin(
       schema.videoTranscriptSentence,
       eq(schema.video.id, schema.videoTranscriptSentence.videoId),
     )
-    .where(eq(schema.video.youtubeId, youtubeId));
+    .where(eq(schema.video.youtubeId, youtubeId))
+    .orderBy(asc(schema.videoTranscriptSentence.sentenceIndex));
+
+  const firstRow = rows[0];
 
   // Return video if found with transcript sentences, ensuring it's fully indexed
-  if (video) {
+  if (firstRow) {
+    const sentences = rows.map((row) => row.video_transcript_sentence);
     setResponseStatus(event, 200);
-    return { video };
+    return { video: firstRow.video, sentences };
   }
 
   // Video not indexed, check if there's an ongoing indexing run for this YouTube ID
