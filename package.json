@@ -51,12 +51,12 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.108",
     "@iconify-json/openmoji": "^1.2.27",
-    "@iconify-json/simple-icons": "^1.2.82",
+    "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/test-utils": "^4.0.3",
     "@types/youtube": "^0.2.0",
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
-    "oxfmt": "^0.50.0",
+    "oxfmt": "^0.51.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.6",
     "vue-tsc": "^3.3.0"
