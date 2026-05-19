@@ -50,7 +50,18 @@ interface Props {
 interface Emits {
   (e: "update:answerInput", value: string): void;
   (e: "update:resumeModalOpen", value: boolean): void;
-  (e: "checkAnswer" | "nextSentence" | "prevSentence" | "replaySentence" | "hint" | "skip" | "resumeSession" | "startNewSession" | "playerReady"): void;
+  (
+    e:
+      | "checkAnswer"
+      | "nextSentence"
+      | "prevSentence"
+      | "replaySentence"
+      | "hint"
+      | "skip"
+      | "resumeSession"
+      | "startNewSession"
+      | "playerReady",
+  ): void;
   (e: "moveToSentence", index: number): void;
   (e: "playerStateChange", event: { data: number }): void;
 }
@@ -85,7 +96,9 @@ function formatMs(ms: number) {
               <h1 class="text-xl font-semibold">{{ props.video?.title }}</h1>
               <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
                 <UBadge variant="soft" color="primary">{{ props.video?.topic }}</UBadge>
-                <span>Segment {{ props.activeSentenceIndex + 1 }} / {{ props.totalSentences }}</span>
+                <span
+                  >Segment {{ props.activeSentenceIndex + 1 }} / {{ props.totalSentences }}</span
+                >
                 <span>{{ props.formattedTimeRange }}</span>
               </div>
             </div>
@@ -302,7 +315,11 @@ function formatMs(ms: number) {
     </div>
   </div>
 
-  <UModal :open="props.resumeModalOpen" title="Tiếp tục luyện tập?" @update:open="emit('update:resumeModalOpen', $event)">
+  <UModal
+    :open="props.resumeModalOpen"
+    title="Tiếp tục luyện tập?"
+    @update:open="emit('update:resumeModalOpen', $event)"
+  >
     <template #body>
       <div class="space-y-4">
         <p class="text-sm text-muted">

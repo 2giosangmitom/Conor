@@ -3,6 +3,7 @@ import Dexie, { type Table } from "dexie";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
 import type { LoaderStep } from "~/components/practice/PracticeLoader.vue";
+import { formatMs, normalizeText, splitWords, calculateAccuracy } from "~~/shared/utils/practice";
 
 definePageMeta({
   layout: "practice",
@@ -170,13 +171,6 @@ const showLoader = computed(() => isIndexing.value || isFailed.value || connecti
 const showPractice = computed(
   () => isReady.value && Boolean(video.value) && sentences.value.length > 0,
 );
-
-function formatMs(ms: number) {
-  const seconds = Math.floor(ms / 1000);
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
 
 function resetLoader() {
   steps.value = stepTemplate.map((step) => ({ ...step }));
@@ -512,39 +506,6 @@ async function persistAttempt(accuracyValue: number, userText: string) {
   }
 }
 
-function normalizeText(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/[.,!?;:]/g, "");
-}
-
-function splitWords(text: string) {
-  if (!text) return [];
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/[.,!?;:]/g, "")
-    .split(" ")
-    .filter((word) => word.length > 0);
-}
-
-function calculateAccuracy(expected: string, actual: string) {
-  if (!expected) return 0;
-  const expectedWords = expected.split(" ");
-  const actualWords = actual.split(" ");
-  let matchCount = 0;
-
-  expectedWords.forEach((word, index) => {
-    if (actualWords[index] === word) {
-      matchCount += 1;
-    }
-  });
-
-  return Math.round((matchCount / expectedWords.length) * 100);
-}
-
 async function checkAnswer() {
   if (!currentSentence.value) return;
   answerStatus.value = "checking";
@@ -699,7 +660,14 @@ watch(
   },
 );
 
-const playerRef = ref<{ player?: { playVideo: () => void; pauseVideo: () => void; seekTo: (seconds: number, allowSeekAhead: boolean) => void; getCurrentTime: () => number } } | null>(null);
+const playerRef = ref<{
+  player?: {
+    playVideo: () => void;
+    pauseVideo: () => void;
+    seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+    getCurrentTime: () => number;
+  };
+} | null>(null);
 const isPlayingSegment = ref(false);
 const PLAYER_STATE_PLAYING = 1;
 const PLAYER_STATE_PAUSED = 2;

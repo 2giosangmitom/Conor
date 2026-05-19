@@ -49,9 +49,7 @@ const statusIcon: Record<string, string> = {
   <UCard class="border-muted/40 backdrop-blur">
     <template #header>
       <div class="flex flex-col gap-2">
-        <UBadge variant="soft" color="primary" class="w-fit">
-          Luyện tập với video YouTube
-        </UBadge>
+        <UBadge variant="soft" color="primary" class="w-fit"> Luyện tập với video YouTube </UBadge>
         <h1 class="text-2xl font-semibold">Chuẩn bị bài luyện tập</h1>
         <p class="text-sm text-muted">
           Video ID: <span class="font-medium text-foreground">{{ props.youtubeId }}</span>
@@ -78,18 +76,11 @@ const statusIcon: Record<string, string> = {
             <UIcon
               :name="statusIcon[step.status]"
               class="size-5"
-              :class="[
-                statusColor[step.status],
-                step.status === 'running' ? 'animate-spin' : '',
-              ]"
+              :class="[statusColor[step.status], step.status === 'running' ? 'animate-spin' : '']"
             />
             <span class="text-sm font-medium">{{ step.label }}</span>
           </div>
-          <UBadge
-            variant="soft"
-            size="sm"
-            :color="step.status === 'failed' ? 'error' : 'primary'"
-          >
+          <UBadge variant="soft" size="sm" :color="step.status === 'failed' ? 'error' : 'primary'">
             {{ statusText[step.status] }}
           </UBadge>
         </div>
