@@ -120,15 +120,7 @@
                 :ui="{ wrapper: 'items-center text-center', leading: 'mb-5' }"
               >
                 <template #leading>
-                  <div
-                    v-if="member.iconAvatar"
-                    class="size-32 rounded-full mx-auto flex items-center justify-center ring-4 ring-primary/20"
-                    :class="member.iconBg"
-                  >
-                    <UIcon :name="member.iconAvatar" class="size-16" />
-                  </div>
                   <img
-                    v-else
                     :src="member.avatar"
                     :alt="member.name"
                     class="size-32 rounded-full mx-auto object-cover ring-4 ring-primary/20"
@@ -150,6 +142,7 @@
                         :aria-label="`${member.name} trên GitHub`"
                         color="neutral"
                         variant="ghost"
+                        class="hover:bg-secondary/20"
                       />
                       <UButton
                         v-if="member.facebook"
@@ -159,6 +152,7 @@
                         :aria-label="`${member.name} trên Facebook`"
                         color="neutral"
                         variant="ghost"
+                        class="hover:bg-secondary/20"
                       />
                     </div>
                   </div>
@@ -193,9 +187,7 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  avatar?: string;
-  iconAvatar?: string;
-  iconBg?: string;
+  avatar: string;
   github?: string;
   facebook?: string;
 }
@@ -220,8 +212,8 @@ const coreValues: ValueItem[] = [
     title: "Công nghệ AI",
     description:
       "AI transcription chính xác cao giúp tạo bản chép lời cho bất kỳ video YouTube nào, hỗ trợ nhiều accent khác nhau.",
-    color: "text-secondary",
-    bgColor: "bg-secondary/10",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
   },
   {
     icon: "lucide:users",
@@ -297,25 +289,22 @@ const teamMembers: TeamMember[] = [
     name: "GitHub Copilot",
     role: "AI Coding Assistant",
     bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển NgheGo.",
-    iconAvatar: "i-logos-github-copilot",
-    iconBg: "bg-[#1a1a2e]",
-    github: "https://github.com/features/copilot",
+    avatar: "/images/copilot.png",
+    github: "https://github.com/github/copilot-docs",
   },
   {
     name: "Kiro AI",
     role: "Agentic AI IDE",
-    bio: "IDE AI của AWS, hỗ trợ spec-driven development — từ yêu cầu đến thiết kế đến triển khai — giúp đội nhóm làm việc có cấu trúc hơn.",
-    iconAvatar: "i-logos-aws",
-    iconBg: "bg-[#232f3e]",
-    github: "https://kiro.dev",
+    bio: "IDE AI của AWS, hỗ trợ spec-driven development. Từ yêu cầu đến thiết kế đến triển khai giúp đội nhóm làm việc có cấu trúc hơn.",
+    avatar: "/images/kiro.jpg",
+    github: "https://github.com/kirodotdev/Kiro",
   },
   {
     name: "OpenCode",
     role: "Open-source AI Agent",
     bio: "Coding agent mã nguồn mở chạy trên terminal, hỗ trợ nhiều model AI khác nhau, giúp tự động hóa các tác vụ lập trình lặp đi lặp lại.",
-    iconAvatar: "i-lucide-terminal",
-    iconBg: "bg-neutral-900",
-    github: "https://opencode.ai",
+    avatar: "/images/opencode.png",
+    github: "https://github.com/anomalyco/opencode",
   },
 ];
 </script>
