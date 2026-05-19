@@ -30,8 +30,3 @@ export interface VideoIndexingLog {
   timestamp: string;
   reason?: string;
 }
-
-export interface WorkflowState {
-  runId: string;
-  youtubeId: string;
-}

@@ -6,8 +6,7 @@ import natural from "natural";
 import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { kv } from "@nuxthub/kv";
-import { VideoIndexingStepCode, type VideoIndexingLog } from "../../../shared/types/video-indexing";
+import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 
 const { TfIdf } = natural;
 
@@ -45,10 +44,6 @@ const MAX_TOPIC_INPUT_LENGTH = 3000;
 const KEYWORD_BOOST_WEIGHT = 3.0;
 const TITLE_BOOST_WEIGHT = 2.0;
 const TAG_BOOST_WEIGHT = 1.5;
-
-export function workflowStateKey(runId: string): string {
-  return `workflow:${runId}`;
-}
 
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   const log: VideoIndexingLog = { ...entry, timestamp: new Date().toISOString() };
@@ -101,7 +96,11 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
   };
 }
 
-export async function checkDuration(videoInfo: VideoInfo): Promise<string | null> {
+export type VideoValidationResult =
+  | { ok: true }
+  | { ok: false; code: VideoIndexingErrors; reason: string };
+
+export async function validateVideoInfo(videoInfo: VideoInfo): Promise<VideoValidationResult> {
   "use step";
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationStart });
@@ -112,16 +111,10 @@ export async function checkDuration(videoInfo: VideoInfo): Promise<string | null
       code: VideoIndexingStepCode.CheckDurationFailed,
       reason: VideoIndexingErrors.VIDEO_TOO_LONG,
     });
-    return VideoIndexingErrors.VIDEO_TOO_LONG;
+    return { ok: false, code: VideoIndexingErrors.VIDEO_TOO_LONG, reason: "VIDEO_TOO_LONG" };
   }
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationComplete });
-  return null;
-}
-
-export async function checkLanguage(videoInfo: VideoInfo): Promise<string | null> {
-  "use step";
-
   await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageStart });
 
   if (!/^en(-.*)?$/i.test(videoInfo.language)) {
@@ -130,11 +123,15 @@ export async function checkLanguage(videoInfo: VideoInfo): Promise<string | null
       code: VideoIndexingStepCode.CheckLanguageFailed,
       reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
     });
-    return VideoIndexingErrors.UNSUPPORTED_LANGUAGE;
+    return {
+      ok: false,
+      code: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+      reason: "UNSUPPORTED_LANGUAGE",
+    };
   }
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageComplete });
-  return null;
+  return { ok: true };
 }
 
 export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[] | string> {
@@ -383,31 +380,13 @@ export async function persistVideoIndex(params: {
   return existing;
 }
 
-export async function logIndexStart(): Promise<void> {
+export async function emitLogEntry(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   "use step";
 
-  await writeLog({ level: "info", code: VideoIndexingStepCode.IndexStart });
+  await writeLog(entry);
 }
 
-export async function logIndexComplete(): Promise<void> {
-  "use step";
-
-  await writeLog({ level: "info", code: VideoIndexingStepCode.IndexComplete });
-}
-
-export async function logIndexFailed(reason: string): Promise<void> {
-  "use step";
-
-  await writeLog({ level: "error", code: VideoIndexingStepCode.IndexFailed, reason });
-}
-
-export async function clearWorkflowState(youtubeId: string, runId: string): Promise<void> {
-  "use step";
-
-  await Promise.all([kv.del(workflowStateKey(runId)), kv.del(`video-indexing:${youtubeId}`)]);
-}
-
-export async function finalizeIndexing(): Promise<void> {
+export async function closeLogStream(): Promise<void> {
   "use step";
 
   await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();

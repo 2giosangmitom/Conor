@@ -1,43 +1,30 @@
 import {
   getInfo,
-  checkDuration,
-  checkLanguage,
+  validateVideoInfo,
   generateTranscript,
   analyzeVideo,
   persistVideoIndex,
-  clearWorkflowState,
-  finalizeIndexing,
-  logIndexStart,
-  logIndexComplete,
-  logIndexFailed,
+  closeLogStream,
+  emitLogEntry,
 } from "./steps";
-import { getWorkflowMetadata } from "workflow";
+import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 
 export async function handleIndexVideo(youtubeId: string) {
   "use workflow";
 
-  const { workflowRunId } = getWorkflowMetadata();
-
   const abort = async (reason: string) => {
-    await logIndexFailed(reason);
-    await clearWorkflowState(youtubeId, workflowRunId);
-    await finalizeIndexing();
+    await emitLogEntry({ level: "error", code: VideoIndexingStepCode.IndexFailed, reason });
+    await closeLogStream();
   };
 
   try {
-    await logIndexStart();
+    await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexStart });
 
     const info = await getInfo(youtubeId);
 
-    const durationError = await checkDuration(info);
-    if (durationError) {
-      await abort(durationError);
-      return null;
-    }
-
-    const languageError = await checkLanguage(info);
-    if (languageError) {
-      await abort(languageError);
+    const validation = await validateVideoInfo(info);
+    if (!validation.ok) {
+      await abort(validation.reason);
       return null;
     }
 
@@ -55,15 +42,17 @@ export async function handleIndexVideo(youtubeId: string) {
       subtitles: transcriptResult,
     });
 
-    await logIndexComplete();
-    await clearWorkflowState(youtubeId, workflowRunId);
-    await finalizeIndexing();
+    await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexComplete });
+    await closeLogStream();
 
     return video;
   } catch (error) {
-    await logIndexFailed(error instanceof Error ? error.message : "Unknown error");
-    await clearWorkflowState(youtubeId, workflowRunId);
-    await finalizeIndexing();
+    await emitLogEntry({
+      level: "error",
+      code: VideoIndexingStepCode.IndexFailed,
+      reason: error instanceof Error ? error.message : "Unknown error",
+    });
+    await closeLogStream();
     throw error;
   }
 }

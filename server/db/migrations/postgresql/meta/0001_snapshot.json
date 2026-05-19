@@ -110,12 +110,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -232,12 +228,8 @@
           "name": "practice_attempt_practice_session_id_practice_session_id_fk",
           "tableFrom": "practice_attempt",
           "tableTo": "practice_session",
-          "columnsFrom": [
-            "practice_session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["practice_session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -245,12 +237,8 @@
           "name": "practice_attempt_transcript_sentence_id_video_transcript_sentence_id_fk",
           "tableFrom": "practice_attempt",
           "tableTo": "video_transcript_sentence",
-          "columnsFrom": [
-            "transcript_sentence_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["transcript_sentence_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -384,12 +372,8 @@
           "name": "practice_session_user_id_user_id_fk",
           "tableFrom": "practice_session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -397,12 +381,8 @@
           "name": "practice_session_video_id_video_id_fk",
           "tableFrom": "practice_session",
           "tableTo": "video",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -470,9 +450,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -688,12 +666,8 @@
           "name": "video_transcript_sentence_video_id_video_id_fk",
           "tableFrom": "video_transcript_sentence",
           "tableTo": "video",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -769,12 +743,8 @@
           "name": "word_mistake_practice_attempt_id_practice_attempt_id_fk",
           "tableFrom": "word_mistake",
           "tableTo": "practice_attempt",
-          "columnsFrom": [
-            "practice_attempt_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["practice_attempt_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -790,14 +760,7 @@
     "public.english_level": {
       "name": "english_level",
       "schema": "public",
-      "values": [
-        "A1",
-        "A2",
-        "B1",
-        "B2",
-        "C1",
-        "C2"
-      ]
+      "values": ["A1", "A2", "B1", "B2", "C1", "C2"]
     }
   },
   "schemas": {},

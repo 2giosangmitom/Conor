@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@inspira-ui/plugins": "^0.0.2",

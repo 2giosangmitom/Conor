@@ -41,4 +41,9 @@ export default defineNuxtConfig({
       include: ["@inspira-ui/plugins", "better-auth/vue"],
     },
   },
+  typescript: {
+    tsConfig: {
+      include: ["test/unit/*.ts"],
+    },
+  },
 });

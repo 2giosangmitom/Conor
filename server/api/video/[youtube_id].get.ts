@@ -3,27 +3,35 @@ import { eq } from "drizzle-orm";
 import { start, getRun } from "workflow/api";
 import { kv } from "@nuxthub/kv";
 import { handleIndexVideo } from "~~/server/workflows/video-indexing";
-import { workflowStateKey } from "~~/server/workflows/video-indexing/steps";
 import { z } from "zod";
-import type { WorkflowState } from "~~/shared/types/video-indexing";
 
 const paramSchema = z.object({
   youtube_id: z.string().min(1).max(20),
 });
 
-// Maps youtubeId → active runId so we can reuse an in-progress run
+// Redis key prefix
 const INDEXING_KEY_PREFIX = "video-indexing:";
 
 export default defineEventHandler(async (event) => {
   const { youtube_id: youtubeId } = await getValidatedRouterParams(event, paramSchema.parse);
 
-  const [video] = await db.select().from(schema.video).where(eq(schema.video.youtubeId, youtubeId));
+  // Check if video is already indexed
+  const [video] = await db
+    .select()
+    .from(schema.video)
+    .innerJoin(
+      schema.videoTranscriptSentence,
+      eq(schema.video.id, schema.videoTranscriptSentence.videoId),
+    )
+    .where(eq(schema.video.youtubeId, youtubeId));
 
+  // Return video if found with transcript sentences, ensuring it's fully indexed
   if (video) {
+    setResponseStatus(event, 200);
     return { video };
   }
 
-  // Video not indexed — check for an existing in-progress run
+  // Video not indexed, check if there's an ongoing indexing run for this YouTube ID
   const existingRunId = await kv.get<string>(`${INDEXING_KEY_PREFIX}${youtubeId}`);
 
   if (existingRunId) {
@@ -32,7 +40,7 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 202);
       return { code: "VIDEO_NOT_INDEXED", runId: existingRunId };
     }
-    // Stale pointer — clean up
+    // Cleanup stale run ID
     await kv.del(`${INDEXING_KEY_PREFIX}${youtubeId}`);
   }
 
@@ -40,12 +48,8 @@ export default defineEventHandler(async (event) => {
   const run = await start(handleIndexVideo, [youtubeId]);
   const runId = run.runId;
 
-  // Store youtubeId → runId mapping (for deduplication on re-request)
+  // Store youtubeId -> runId mapping
   await kv.set(`${INDEXING_KEY_PREFIX}${youtubeId}`, runId, { ttl: 60 * 60 });
-
-  // Initialise the workflow state in Redis for history replay
-  const state: WorkflowState = { runId, youtubeId };
-  await kv.set(workflowStateKey(runId), state, { ttl: 60 * 60 });
 
   setResponseStatus(event, 202);
   return { code: "VIDEO_NOT_INDEXED", runId };
