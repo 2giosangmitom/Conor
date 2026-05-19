@@ -8,6 +8,7 @@ vi.mock("../../server/workflows/video-indexing/steps", () => ({
   persistVideoIndex: vi.fn(),
   closeLogStream: vi.fn(),
   emitLogEntry: vi.fn(),
+  clearIndexingKey: vi.fn(),
 }));
 
 const steps = await import("../../server/workflows/video-indexing/steps");
@@ -20,6 +21,7 @@ const analyzeVideo = steps.analyzeVideo as unknown as ReturnType<typeof vi.fn>;
 const persistVideoIndex = steps.persistVideoIndex as unknown as ReturnType<typeof vi.fn>;
 const closeLogStream = steps.closeLogStream as unknown as ReturnType<typeof vi.fn>;
 const emitLogEntry = steps.emitLogEntry as unknown as ReturnType<typeof vi.fn>;
+const clearIndexingKey = steps.clearIndexingKey as unknown as ReturnType<typeof vi.fn>;
 
 describe("video indexing workflow", () => {
   beforeEach(() => {
@@ -30,6 +32,7 @@ describe("video indexing workflow", () => {
     persistVideoIndex.mockReset();
     closeLogStream.mockReset();
     emitLogEntry.mockReset();
+    clearIndexingKey.mockReset();
   });
 
   it("indexes a video successfully", async () => {

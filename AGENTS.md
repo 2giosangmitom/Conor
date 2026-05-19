@@ -49,6 +49,9 @@ pnpm fmt:fix
 
 # Typecheck
 pnpm typecheck
+
+# Run tests
+pnpm test
 ```
 
 ---
@@ -88,3 +91,5 @@ pnpm typecheck
 20. Keep components **focused and small**. Extract reusable logic into composables and reusable UI into components.
 21. Write **self-documenting code**. Add JSDoc comments only for non-obvious functions or public composable APIs.
 22. Use `pnpm lint:fix` and `pnpm fmt:fix` to remediate issues when possible.
+23. Write **unit tests** for all new composables and critical components. Place tests in `tests/unit/` with clear naming.
+24. Run tests with `pnpm test` and ensure all tests pass before marking a task as complete.
