@@ -278,7 +278,7 @@ function formatMs(ms: number) {
             <UBadge variant="soft" color="primary">{{ props.totalSentences }} total</UBadge>
           </div>
         </template>
-        <div class="space-y-2 max-h-[460px] overflow-auto">
+        <div class="space-y-2 max-h-115 overflow-auto">
           <button
             v-for="sentence in props.sentences"
             :key="sentence.id"
