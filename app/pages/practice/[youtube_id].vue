@@ -2,6 +2,7 @@
 import Dexie, { type Table } from "dexie";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
+import type { LoaderStep } from "~/components/practice/PracticeLoader.vue";
 
 definePageMeta({
   layout: "practice",
@@ -62,14 +63,6 @@ interface PracticeSessionRecord {
   lastPracticedAt: string;
 }
 
-type StepStatus = "pending" | "running" | "done" | "failed";
-
-interface LoaderStep {
-  id: string;
-  label: string;
-  status: StepStatus;
-}
-
 type AnswerStatus = "idle" | "checking" | "correct" | "incorrect";
 
 const route = useRoute();
@@ -102,27 +95,6 @@ const stepTemplate: LoaderStep[] = [
 
 const steps = ref<LoaderStep[]>(stepTemplate.map((step) => ({ ...step })));
 
-const statusText: Record<StepStatus, string> = {
-  pending: "Đang chờ",
-  running: "Đang chạy",
-  done: "Hoàn tất",
-  failed: "Thất bại",
-};
-
-const statusColor: Record<StepStatus, string> = {
-  pending: "text-muted",
-  running: "text-primary",
-  done: "text-success",
-  failed: "text-error",
-};
-
-const statusIcon: Record<StepStatus, string> = {
-  pending: "i-lucide-circle",
-  running: "i-lucide-loader-circle",
-  done: "i-lucide-check-circle-2",
-  failed: "i-lucide-x-circle",
-};
-
 const eventSource = shallowRef<EventSource | null>(null);
 
 const { data: fetchResponse, refresh: refreshVideo } = await useAsyncData(
@@ -131,33 +103,18 @@ const { data: fetchResponse, refresh: refreshVideo } = await useAsyncData(
   { server: false, immediate: true, watch: [youtubeId] },
 );
 
-interface PlayerLike {
-  playVideo: () => void;
-  pauseVideo: () => void;
-  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
-  getCurrentTime: () => number;
-}
-
-const PLAYER_STATE_PLAYING = 1;
-const PLAYER_STATE_PAUSED = 2;
-
-const playerRef = ref<{ player?: PlayerLike } | null>(null);
-const canPlay = ref(false);
 const activeSentenceIndex = ref(0);
 const answerInput = ref("");
-const currentWords = ref<string[]>([]);
-const answerWords = ref<string[]>([]);
 const answerStatus = ref<AnswerStatus>("idle");
 const hintCount = ref(0);
 const attemptStart = ref<number | null>(null);
 const replayCount = ref(0);
-const isPlayingSegment = ref(false);
+const sessionId = ref<string | null>(null);
+const sessionScore = ref(0);
 const resumeModalOpen = ref(false);
 const hasResumeCandidate = ref(false);
 const pendingResumeIndex = ref(0);
 const pendingResumeDate = ref<string | null>(null);
-const sessionId = ref<string | null>(null);
-const sessionScore = ref(0);
 
 class PracticeDb extends Dexie {
   sessions!: Table<PracticeLocalSession, string>;
@@ -206,6 +163,9 @@ const matchedWordCount = computed(() => {
   return matches;
 });
 
+const currentWords = ref<string[]>([]);
+const answerWords = ref<string[]>([]);
+
 const showLoader = computed(() => isIndexing.value || isFailed.value || connectionIssue.value);
 const showPractice = computed(
   () => isReady.value && Boolean(video.value) && sentences.value.length > 0,
@@ -237,7 +197,7 @@ function stopStream() {
   }
 }
 
-function markStepStatus(stepId: string, status: StepStatus) {
+function markStepStatus(stepId: string, status: LoaderStep["status"]) {
   const step = steps.value.find((item) => item.id === stepId);
   if (!step) return;
   step.status = status;
@@ -434,7 +394,6 @@ async function startNewSession() {
   answerStatus.value = "idle";
   replayCount.value = 0;
   attemptStart.value = Date.now();
-  canPlay.value = true;
   await playSegment();
 }
 
@@ -465,7 +424,6 @@ async function resumeSession() {
   }
 
   attemptStart.value = Date.now();
-  canPlay.value = true;
   await playSegment();
 }
 
@@ -612,7 +570,6 @@ async function moveToSentence(index: number) {
   hintCount.value = 0;
   replayCount.value = 0;
   attemptStart.value = Date.now();
-  canPlay.value = true;
   await persistProgress();
   await playSegment();
 }
@@ -634,10 +591,8 @@ async function replaySentence() {
 
 async function playSegment() {
   if (!currentSentence.value) return;
-  if (!canPlay.value) return;
   const player = playerRef.value?.player;
   if (!player) return;
-  isPlayingSegment.value = true;
   player.seekTo(currentSentence.value.startTime / 1000, true);
   player.playVideo();
 }
@@ -674,15 +629,7 @@ async function handleTimeUpdate() {
 }
 
 function handlePlayerReady() {
-  if (canPlay.value) {
-    void playSegment();
-  }
-}
-
-function getAttemptStatus(index: number) {
-  if (index < activeSentenceIndex.value) return "done";
-  if (index === activeSentenceIndex.value) return "current";
-  return "pending";
+  void playSegment();
 }
 
 const currentStepLabel = computed(() => {
@@ -752,6 +699,10 @@ watch(
   },
 );
 
+const playerRef = ref<{ player?: { playVideo: () => void; pauseVideo: () => void; seekTo: (seconds: number, allowSeekAhead: boolean) => void; getCurrentTime: () => number } } | null>(null);
+const isPlayingSegment = ref(false);
+const PLAYER_STATE_PLAYING = 1;
+const PLAYER_STATE_PAUSED = 2;
 const intervalId = ref<number | null>(null);
 
 onMounted(() => {
@@ -771,316 +722,55 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <div class="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <UCard v-if="showLoader" class="border-muted/40 backdrop-blur">
-        <template #header>
-          <div class="flex flex-col gap-2">
-            <UBadge variant="soft" color="primary" class="w-fit">
-              Luyện tập với video YouTube
-            </UBadge>
-            <h1 class="text-2xl font-semibold">Chuẩn bị bài luyện tập</h1>
-            <p class="text-sm text-muted">
-              Video ID: <span class="font-medium text-foreground">{{ youtubeId }}</span>
-            </p>
-          </div>
-        </template>
+      <PracticeLoader
+        v-if="showLoader"
+        :youtube-id="youtubeId"
+        :steps="steps"
+        :run-id="runId"
+        :is-indexing="isIndexing"
+        :is-failed="isFailed"
+        :connection-issue="connectionIssue"
+        :error-reason="errorReason"
+        :current-step-label="currentStepLabel"
+        @retry="retryIndexing"
+      />
 
-        <div class="space-y-6">
-          <div class="flex flex-col gap-2" aria-live="polite">
-            <div class="flex items-center gap-2 text-sm text-muted">
-              <UIcon name="i-lucide-activity" class="size-4 text-primary" />
-              <span>Trạng thái hiện tại: {{ currentStepLabel }}</span>
-            </div>
-            <div v-if="runId" class="text-xs text-muted">Run ID: {{ runId }}</div>
-          </div>
+      <PracticeMain
+        v-else-if="showPractice"
+        :youtube-id="youtubeId"
+        :video="video"
+        :sentences="sentences"
+        :active-sentence-index="activeSentenceIndex"
+        :answer-input="answerInput"
+        :answer-status="answerStatus"
+        :hint-count="hintCount"
+        :replay-count="replayCount"
+        :accuracy="accuracy"
+        :completed-count="completedCount"
+        :total-sentences="totalSentences"
+        :progress-value="progressValue"
+        :progress-percent="progressPercent"
+        :word-count="wordCount"
+        :matched-word-count="matchedWordCount"
+        :formatted-time-range="formattedTimeRange"
+        :resume-modal-open="resumeModalOpen"
+        :pending-resume-index="pendingResumeIndex"
+        :pending-resume-date="pendingResumeDate"
+        @update:answer-input="answerInput = $event"
+        @update:resume-modal-open="resumeModalOpen = $event"
+        @check-answer="checkAnswer"
+        @next-sentence="nextSentence"
+        @prev-sentence="prevSentence"
+        @replay-sentence="replaySentence"
+        @move-to-sentence="moveToSentence"
+        @hint="hintCount += 1"
+        @skip="nextSentence"
+        @resume-session="resumeSession"
+        @start-new-session="startNewSession"
+        @player-ready="handlePlayerReady"
+        @player-state-change="handlePlayerState"
+      />
 
-          <div class="space-y-3">
-            <div
-              v-for="step in steps"
-              :key="step.id"
-              class="flex items-center justify-between rounded-lg border border-muted/40 bg-background/70 px-4 py-3"
-            >
-              <div class="flex items-center gap-3">
-                <UIcon
-                  :name="statusIcon[step.status]"
-                  class="size-5"
-                  :class="[
-                    statusColor[step.status],
-                    step.status === 'running' ? 'animate-spin' : '',
-                  ]"
-                />
-                <span class="text-sm font-medium">{{ step.label }}</span>
-              </div>
-              <UBadge
-                variant="soft"
-                size="sm"
-                :color="step.status === 'failed' ? 'error' : 'primary'"
-              >
-                {{ statusText[step.status] }}
-              </UBadge>
-            </div>
-          </div>
-
-          <UAlert
-            v-if="isFailed"
-            title="Không thể lập chỉ mục video"
-            color="error"
-            icon="i-lucide-triangle-alert"
-          >
-            <template #description>
-              <span>Lý do: {{ errorReason }}</span>
-            </template>
-          </UAlert>
-
-          <UAlert
-            v-if="connectionIssue"
-            title="Kết nối bị gián đoạn"
-            color="warning"
-            icon="i-lucide-wifi-off"
-          >
-            <template #description>
-              <span>{{ connectionIssue }}</span>
-            </template>
-          </UAlert>
-
-          <div class="flex flex-wrap gap-3">
-            <UButton
-              v-if="isFailed || connectionIssue"
-              color="primary"
-              variant="solid"
-              @click="retryIndexing"
-            >
-              Thử lại
-            </UButton>
-            <UButton to="/" variant="ghost">Quay về trang chủ</UButton>
-          </div>
-        </div>
-      </UCard>
-
-      <div v-else-if="showPractice" class="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <div class="space-y-6">
-          <UCard class="border-muted/40 bg-background/80">
-            <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p class="text-xs uppercase tracking-wide text-muted">Video</p>
-                  <h1 class="text-xl font-semibold">{{ video?.title }}</h1>
-                  <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
-                    <UBadge variant="soft" color="primary">{{ video?.topic }}</UBadge>
-                    <span>Segment {{ activeSentenceIndex + 1 }} / {{ totalSentences }}</span>
-                    <span>{{ formattedTimeRange }}</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <UBadge variant="outline">{{ wordCount }} từ</UBadge>
-                  <UBadge variant="soft" color="success">
-                    Đúng {{ matchedWordCount }}/{{ wordCount }}
-                  </UBadge>
-                </div>
-              </div>
-            </template>
-
-            <div class="relative aspect-video overflow-hidden rounded-lg border border-muted/40">
-              <ScriptYouTubePlayer
-                ref="playerRef"
-                :video-id="youtubeId"
-                :player-options="{ host: 'https://www.youtube-nocookie.com' }"
-                class="absolute inset-0"
-                @ready="handlePlayerReady"
-                @state-change="handlePlayerState"
-              >
-                <template #awaitingLoad>
-                  <div class="flex h-full w-full items-center justify-center bg-muted/40">
-                    <div class="text-center">
-                      <UIcon name="i-lucide-play" class="mx-auto size-10 text-muted" />
-                      <p class="mt-2 text-sm text-muted">Nhấn để tải video</p>
-                    </div>
-                  </div>
-                </template>
-                <template #loading>
-                  <div class="flex h-full w-full items-center justify-center bg-muted/40">
-                    <UIcon name="i-lucide-loader-circle" class="size-6 animate-spin text-muted" />
-                  </div>
-                </template>
-              </ScriptYouTubePlayer>
-            </div>
-
-            <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
-              <div class="text-sm text-muted">
-                Lặp lại {{ replayCount + 1 }}/3 · Accuracy {{ accuracy }}%
-              </div>
-              <div class="flex flex-wrap items-center gap-3">
-                <UButton
-                  variant="soft"
-                  color="neutral"
-                  icon="i-lucide-chevron-left"
-                  :disabled="activeSentenceIndex === 0"
-                  @click="prevSentence"
-                >
-                  Prev
-                </UButton>
-                <UButton
-                  variant="soft"
-                  color="primary"
-                  icon="i-lucide-repeat"
-                  @click="replaySentence"
-                >
-                  Replay
-                </UButton>
-                <UButton
-                  variant="soft"
-                  color="neutral"
-                  trailing-icon="i-lucide-chevron-right"
-                  :disabled="activeSentenceIndex >= totalSentences - 1"
-                  @click="nextSentence"
-                >
-                  Next
-                </UButton>
-              </div>
-            </div>
-          </UCard>
-
-          <UCard class="border-muted/40 bg-background/80">
-            <template #header>
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-xs uppercase tracking-wide text-muted">Type what you hear</p>
-                  <h2 class="text-lg font-semibold">Nhập câu bạn nghe được</h2>
-                </div>
-                <UBadge
-                  variant="soft"
-                  :color="
-                    answerStatus === 'correct'
-                      ? 'success'
-                      : answerStatus === 'incorrect'
-                        ? 'error'
-                        : 'primary'
-                  "
-                >
-                  {{
-                    answerStatus === "correct"
-                      ? "Chính xác"
-                      : answerStatus === "incorrect"
-                        ? "Chưa đúng"
-                        : "Đang luyện"
-                  }}
-                </UBadge>
-              </div>
-            </template>
-
-            <div class="space-y-4">
-              <UTextarea
-                v-model="answerInput"
-                placeholder="Nghe đoạn này rồi nhập lại nội dung..."
-                :rows="4"
-              />
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-2 text-xs text-muted">
-                  <UIcon name="i-lucide-headphones" class="size-4" />
-                  <span>Segment {{ activeSentenceIndex + 1 }}</span>
-                  <span>•</span>
-                  <span>{{ matchedWordCount }}/{{ wordCount }} từ đúng</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <UButton
-                    variant="ghost"
-                    color="neutral"
-                    icon="i-lucide-lightbulb"
-                    @click="hintCount += 1"
-                  >
-                    Hint
-                  </UButton>
-                  <UButton
-                    variant="ghost"
-                    color="neutral"
-                    icon="i-lucide-skip-forward"
-                    @click="nextSentence"
-                  >
-                    Skip
-                  </UButton>
-                  <UButton
-                    color="primary"
-                    :loading="answerStatus === 'checking'"
-                    @click="checkAnswer"
-                  >
-                    Check answer
-                  </UButton>
-                </div>
-              </div>
-            </div>
-          </UCard>
-        </div>
-
-        <div class="space-y-6">
-          <UCard class="border-muted/40 bg-background/80">
-            <template #header>
-              <h3 class="text-lg font-semibold">Session stats</h3>
-            </template>
-            <div class="grid grid-cols-3 gap-3">
-              <div class="rounded-lg border border-muted/40 p-3 text-center">
-                <p class="text-xs text-muted">Accuracy</p>
-                <p class="text-lg font-semibold">{{ accuracy }}%</p>
-              </div>
-              <div class="rounded-lg border border-muted/40 p-3 text-center">
-                <p class="text-xs text-muted">Done</p>
-                <p class="text-lg font-semibold">{{ completedCount }}</p>
-              </div>
-              <div class="rounded-lg border border-muted/40 p-3 text-center">
-                <p class="text-xs text-muted">Total</p>
-                <p class="text-lg font-semibold">{{ totalSentences }}</p>
-              </div>
-            </div>
-            <div class="mt-4">
-              <div class="mb-2 flex items-center justify-between text-xs text-muted">
-                <span>Progress</span>
-                <span>{{ progressPercent }}%</span>
-              </div>
-              <UProgress :model-value="progressValue" :max="100" animation="swing" size="sm" />
-            </div>
-          </UCard>
-
-          <UCard class="border-muted/40 bg-background/80">
-            <template #header>
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold">Segments</h3>
-                <UBadge variant="soft" color="primary">{{ totalSentences }} total</UBadge>
-              </div>
-            </template>
-            <div class="space-y-2 max-h-[460px] overflow-auto">
-              <button
-                v-for="sentence in sentences"
-                :key="sentence.id"
-                type="button"
-                class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
-                :class="[
-                  getAttemptStatus(sentence.sentenceIndex) === 'current'
-                    ? 'bg-primary/10 border-primary/40'
-                    : getAttemptStatus(sentence.sentenceIndex) === 'done'
-                      ? 'bg-success/10 border-success/30'
-                      : 'bg-background/60',
-                ]"
-                @click="moveToSentence(sentence.sentenceIndex)"
-              >
-                <div class="flex items-center gap-2">
-                  <span
-                    class="size-2 rounded-full"
-                    :class="[
-                      getAttemptStatus(sentence.sentenceIndex) === 'current'
-                        ? 'bg-primary'
-                        : getAttemptStatus(sentence.sentenceIndex) === 'done'
-                          ? 'bg-success'
-                          : 'bg-muted',
-                    ]"
-                  />
-                  <span class="text-sm">Segment {{ sentence.sentenceIndex + 1 }}</span>
-                </div>
-                <span class="text-xs text-muted">
-                  {{ formatMs(sentence.startTime) }}
-                </span>
-              </button>
-            </div>
-          </UCard>
-        </div>
-      </div>
       <UCard v-else class="border-muted/40 backdrop-blur">
         <div class="space-y-3">
           <USkeleton class="h-6 w-1/3" />
@@ -1089,28 +779,5 @@ onBeforeUnmount(() => {
         </div>
       </UCard>
     </div>
-
-    <UModal v-model:open="resumeModalOpen" title="Tiếp tục luyện tập?">
-      <template #body>
-        <div class="space-y-4">
-          <p class="text-sm text-muted">
-            Bạn đang có phiên luyện tập chưa hoàn tất. Bạn muốn tiếp tục hay bắt đầu mới?
-          </p>
-          <div class="rounded-lg border border-muted/40 bg-muted/40 p-3 text-sm">
-            <div class="flex items-center justify-between">
-              <span>Segment gần nhất</span>
-              <span class="font-semibold">{{ pendingResumeIndex + 1 }}</span>
-            </div>
-            <div v-if="pendingResumeDate" class="mt-2 text-xs text-muted">
-              Lần cuối: {{ new Date(pendingResumeDate).toLocaleString() }}
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <UButton color="primary" variant="solid" @click="resumeSession">Tiếp tục</UButton>
-            <UButton variant="ghost" @click="startNewSession">Bắt đầu mới</UButton>
-          </div>
-        </div>
-      </template>
-    </UModal>
   </div>
 </template>
