@@ -38,7 +38,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@inspira-ui/plugins", "better-auth/vue"],
+      include: ["@inspira-ui/plugins", "better-auth/vue", "dexie"],
     },
   },
   typescript: {
