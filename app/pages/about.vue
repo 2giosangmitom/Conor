@@ -1,18 +1,321 @@
 <template>
   <UMain>
-    <UPageSection description="Tính năng đang được phát triển. Vui lòng quay lại sau!">
-      <template #title>
-        <h1 class="text-3xl font-bold">Về chúng tôi</h1>
-      </template>
-      <template #body>
-        <div class="flex flex-col items-center justify-center py-16">
-          <UIcon name="lucide:construction" class="size-16 text-muted mb-4" />
-          <h2 class="text-2xl font-bold mb-2">Coming Soon</h2>
-          <p class="text-muted text-center max-w-md">
-            Trang "Về chúng tôi" đang được phát triển. Chúng tôi sẽ sớm ra mắt!
-          </p>
-        </div>
-      </template>
-    </UPageSection>
+    <!-- Mission -->
+    <ClientOnly>
+      <div class="bg-muted">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+          <UPageSection
+            headline=""
+            title="Tại sao NgheGo tồn tại?"
+            description="Kỹ năng nghe là rào cản lớn nhất với người học tiếng Anh tại Việt Nam. Chúng tôi tin rằng cách học hiệu quả nhất là luyện tập với nội dung thực tế, không phải bài tập giả tạo."
+          >
+            <template #body>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <UPageCard
+                  v-for="value in coreValues"
+                  :key="value.title"
+                  variant="outline"
+                  spotlight
+                  spotlight-color="primary"
+                  :ui="{ wrapper: 'items-center text-center', leading: 'mb-3' }"
+                >
+                  <template #leading>
+                    <div
+                      class="size-12 rounded-xl flex items-center justify-center mx-auto"
+                      :class="value.bgColor"
+                    >
+                      <UIcon :name="value.icon" :class="value.color" class="size-6" />
+                    </div>
+                  </template>
+                  <template #title>{{ value.title }}</template>
+                  <template #description>{{ value.description }}</template>
+                </UPageCard>
+              </div>
+            </template>
+          </UPageSection>
+        </UiBlurReveal>
+      </div>
+    </ClientOnly>
+
+    <!-- Story -->
+    <ClientOnly>
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UPageSection headline="" title="NgheGo bắt đầu như thế nào?">
+          <template #body>
+            <div class="max-w-3xl mx-auto space-y-6 text-base leading-relaxed">
+              <p>
+                NgheGo bắt đầu từ một vấn đề quen thuộc: Dù học tiếng Anh nhiều năm, nhiều người vẫn
+                không thể nghe hiểu khi xem phim, nghe podcast hay nói chuyện với người bản ngữ. Lý
+                do không phải thiếu từ vựng hay ngữ pháp mà là thiếu luyện tập nghe thực tế.
+              </p>
+              <p>
+                Các ứng dụng học tiếng Anh truyền thống thường dùng nội dung nhân tạo, không phản
+                ánh cách người thật nói chuyện. Trong khi đó, YouTube có hàng tỷ video với tiếng Anh
+                tự nhiên, đa dạng accent nhưng không có công cụ nào giúp bạn luyện nghe chép chính
+                tả với chúng một cách có hệ thống.
+              </p>
+              <p>
+                NgheGo lấp đầy khoảng trống đó. Chúng tôi kết hợp AI transcription với giao diện
+                luyện tập từng câu, giúp bạn nghe đi nghe lại, gõ lại những gì nghe được và nhận
+                phản hồi tức thì với video YouTube bạn tự chọn.
+              </p>
+            </div>
+          </template>
+        </UPageSection>
+      </UiBlurReveal>
+    </ClientOnly>
+
+    <!-- How it works recap -->
+    <ClientOnly>
+      <div class="bg-muted">
+        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+          <UPageSection
+            headline=""
+            title="Học bằng cách làm — không phải ghi nhớ"
+            description="Phương pháp dictation được chứng minh là cách hiệu quả nhất để cải thiện kỹ năng nghe và phát âm."
+          >
+            <template #body>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <UPageCard
+                  v-for="method in methodology"
+                  :key="method.title"
+                  variant="outline"
+                  spotlight
+                >
+                  <template #leading>
+                    <div
+                      class="size-10 rounded-lg flex items-center justify-center"
+                      :class="method.bgColor"
+                    >
+                      <UIcon :name="method.icon" :class="method.color" class="size-5" />
+                    </div>
+                  </template>
+                  <template #title>{{ method.title }}</template>
+                  <template #description>{{ method.description }}</template>
+                </UPageCard>
+              </div>
+            </template>
+          </UPageSection>
+        </UiBlurReveal>
+      </div>
+    </ClientOnly>
+
+    <!-- Team -->
+    <ClientOnly>
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UPageSection
+          headline=""
+          title="Những người xây dựng NgheGo"
+          description="Nhóm nhỏ đam mê giáo dục và công nghệ, cùng nhau tạo ra công cụ học tiếng Anh tốt hơn cho người Việt."
+        >
+          <template #body>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <UPageCard
+                v-for="member in teamMembers"
+                :key="member.name"
+                variant="outline"
+                spotlight
+                spotlight-color="primary"
+                class="py-8"
+                :ui="{ wrapper: 'items-center text-center', leading: 'mb-5' }"
+              >
+                <template #leading>
+                  <div
+                    v-if="member.iconAvatar"
+                    class="size-32 rounded-full mx-auto flex items-center justify-center ring-4 ring-primary/20"
+                    :class="member.iconBg"
+                  >
+                    <UIcon :name="member.iconAvatar" class="size-16" />
+                  </div>
+                  <img
+                    v-else
+                    :src="member.avatar"
+                    :alt="member.name"
+                    class="size-32 rounded-full mx-auto object-cover ring-4 ring-primary/20"
+                  />
+                </template>
+                <template #title>
+                  <span class="text-xl">{{ member.name }}</span>
+                </template>
+                <template #description>
+                  <div class="space-y-3">
+                    <UBadge variant="soft" color="primary">{{ member.role }}</UBadge>
+                    <p class="text-sm text-muted leading-relaxed">{{ member.bio }}</p>
+                    <div class="flex items-center justify-center gap-1 pt-1">
+                      <UButton
+                        v-if="member.github"
+                        :to="member.github"
+                        target="_blank"
+                        icon="i-simple-icons-github"
+                        :aria-label="`${member.name} trên GitHub`"
+                        color="neutral"
+                        variant="ghost"
+                      />
+                      <UButton
+                        v-if="member.facebook"
+                        :to="member.facebook"
+                        target="_blank"
+                        icon="i-simple-icons-facebook"
+                        :aria-label="`${member.name} trên Facebook`"
+                        color="neutral"
+                        variant="ghost"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </UPageCard>
+            </div>
+          </template>
+        </UPageSection>
+      </UiBlurReveal>
+    </ClientOnly>
   </UMain>
 </template>
+
+<script setup lang="ts">
+interface ValueItem {
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+  bgColor: string;
+}
+
+interface MethodItem {
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+  bgColor: string;
+}
+
+interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  avatar?: string;
+  iconAvatar?: string;
+  iconBg?: string;
+  github?: string;
+  facebook?: string;
+}
+
+useSeoMeta({
+  title: "Về chúng tôi — NgheGo",
+  description:
+    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
+});
+
+const coreValues: ValueItem[] = [
+  {
+    icon: "lucide:gift",
+    title: "Hoàn toàn miễn phí",
+    description:
+      "Không giới hạn, không phí ẩn. Mọi tính năng đều mở cho tất cả người dùng mà không cần trả tiền.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:sparkles",
+    title: "Công nghệ AI",
+    description:
+      "AI transcription chính xác cao giúp tạo bản chép lời cho bất kỳ video YouTube nào, hỗ trợ nhiều accent khác nhau.",
+    color: "text-secondary",
+    bgColor: "bg-secondary/10",
+  },
+  {
+    icon: "lucide:users",
+    title: "Cộng đồng người học",
+    description:
+      "Cùng học với hàng trăm người dùng khác, khám phá video được cộng đồng luyện tập nhiều nhất.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+];
+
+const methodology: MethodItem[] = [
+  {
+    icon: "lucide:ear",
+    title: "Nghe chủ động",
+    description:
+      "Thay vì nghe thụ động, bạn buộc phải tập trung vào từng âm tiết để gõ lại chính xác — não bộ ghi nhớ sâu hơn nhiều.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:repeat",
+    title: "Lặp lại có chủ đích",
+    description:
+      "Nghe lại những câu khó nhiều lần cho đến khi hiểu rõ, thay vì bỏ qua và tiếp tục như khi xem video thông thường.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:circle-check",
+    title: "Phản hồi tức thì",
+    description:
+      "So sánh kết quả với transcript gốc ngay lập tức, nhận biết lỗi sai và điều chỉnh cách nghe của mình.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: "lucide:trending-up",
+    title: "Tiến bộ đo lường được",
+    description:
+      "Điểm Accuracy cho từng câu giúp bạn thấy rõ mình đang tiến bộ ở đâu và cần cải thiện điều gì.",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+];
+
+const teamMembers: TeamMember[] = [
+  {
+    name: "Võ Văn Duy",
+    role: "UI/UX Designer",
+    bio: "Thiết kế giao diện trực quan và thân thiện, giúp việc luyện nghe trở nên dễ dàng và thú vị hơn.",
+    avatar: "/images/nstcrystal.jpg",
+    github: "https://github.com/nstcrystal",
+    facebook: "https://www.facebook.com/nst.crystal.1",
+  },
+  {
+    name: "Võ Quang Chiến",
+    role: "Founder & Full-stack Developer",
+    bio: "Đam mê về công nghệ. Xây dựng NgheGo để giải quyết vấn đề nghe tiếng Anh mà chính mình từng gặp phải.",
+    avatar: "/images/2giosangmitom.png",
+    github: "https://github.com/2giosangmitom",
+    facebook: "https://www.facebook.com/2giosangmitom",
+  },
+  {
+    name: "Nguyễn Gia Hưng",
+    role: "Tester",
+    bio: "Tìm hiểu và phân tích các thông tin, kiểm tra tính hoàn thiện và báo cáo các vấn đề của web.",
+    avatar: "/images/Ghung862.png",
+    github: "https://github.com/Ghung826",
+    facebook: "https://www.facebook.com/gia.hung.nguyen.297483",
+  },
+  {
+    name: "GitHub Copilot",
+    role: "AI Coding Assistant",
+    bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển NgheGo.",
+    iconAvatar: "i-logos-github-copilot",
+    iconBg: "bg-[#1a1a2e]",
+    github: "https://github.com/features/copilot",
+  },
+  {
+    name: "Kiro AI",
+    role: "Agentic AI IDE",
+    bio: "IDE AI của AWS, hỗ trợ spec-driven development — từ yêu cầu đến thiết kế đến triển khai — giúp đội nhóm làm việc có cấu trúc hơn.",
+    iconAvatar: "i-logos-aws",
+    iconBg: "bg-[#232f3e]",
+    github: "https://kiro.dev",
+  },
+  {
+    name: "OpenCode",
+    role: "Open-source AI Agent",
+    bio: "Coding agent mã nguồn mở chạy trên terminal, hỗ trợ nhiều model AI khác nhau, giúp tự động hóa các tác vụ lập trình lặp đi lặp lại.",
+    iconAvatar: "i-lucide-terminal",
+    iconBg: "bg-neutral-900",
+    github: "https://opencode.ai",
+  },
+];
+</script>
