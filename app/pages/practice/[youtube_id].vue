@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Dexie, { type Table } from "dexie";
-import { diffWords } from "diff";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
 import type {
@@ -611,56 +610,44 @@ watch(
       currentWordCharProgress.value = 0;
       return;
     }
-    const diffResult = diffWords(expectedText, value);
-    let matches = 0;
-    let expectedPos = 0;
-    for (const part of diffResult) {
-      if (part.removed) {
-        const removedWords = splitWords(part.value);
-        expectedPos += removedWords.length;
-      } else if (part.added) {
-        break;
-      } else {
-        const unchangedWords = splitWords(part.value);
-        for (const word of unchangedWords) {
-          if (expectedPos < expectedWordsArr.length && word === expectedWordsArr[expectedPos]) {
-            matches++;
-            expectedPos++;
-          } else {
-            break;
-          }
+
+    const prevRevealed = revealedWords.value;
+    const isLastWordComplete = value.endsWith(" ");
+    const completedCount = isLastWordComplete ? typedWordsArr.length : typedWordsArr.length - 1;
+    const newErrorIndices = new Set<number>();
+
+    for (let i = 0; i < completedCount; i += 1) {
+      const typedWord = normalizeText(typedWordsArr[i] ?? "");
+      if (i < expectedWordsArr.length) {
+        const expectedWord = normalizeText(expectedWordsArr[i] ?? "");
+        if (typedWord !== expectedWord) {
+          newErrorIndices.add(i);
         }
       }
     }
-    revealedWords.value = Math.min(matches, expectedWordsArr.length);
-    const currentWordIndex = revealedWords.value;
-    if (currentWordIndex < expectedWordsArr.length) {
-      const lastWord = typedWordsArr[typedWordsArr.length - 1] ?? "";
+
+    revealedWords.value = completedCount;
+
+    const currentWordIndex = completedCount;
+    if (currentWordIndex < expectedWordsArr.length && !isLastWordComplete) {
+      const currentTypedWord = typedWordsArr[typedWordsArr.length - 1] ?? "";
       const expectedWord = expectedWordsArr[currentWordIndex];
       const expectedLen = expectedWord ? expectedWord.replace(/[.,!?;:]/g, "").length : 0;
-      currentWordCharProgress.value = Math.min(lastWord.length, expectedLen);
+      currentWordCharProgress.value = Math.min(currentTypedWord.length, expectedLen);
     } else {
       currentWordCharProgress.value = 0;
     }
-    if (value.endsWith(" ") && typedWordsArr.length > revealedWords.value) {
-      const typedWord = normalizeText(typedWordsArr[revealedWords.value] ?? "");
-      const expectedWord = normalizeText(expectedWordsArr[revealedWords.value] ?? "");
+
+    if (isLastWordComplete && completedCount > prevRevealed) {
+      const lastCompletedIndex = completedCount - 1;
+      const typedWord = normalizeText(typedWordsArr[lastCompletedIndex] ?? "");
+      const expectedWord = normalizeText(expectedWordsArr[lastCompletedIndex] ?? "");
       if (typedWord !== expectedWord) {
-        errorWordIndices.value.add(revealedWords.value);
         errorAudio.value?.play().catch(() => {});
-      } else {
-        errorWordIndices.value.delete(revealedWords.value);
-      }
-    } else {
-      errorWordIndices.value.delete(revealedWords.value);
-    }
-    const newErrors = new Set<number>();
-    for (const idx of errorWordIndices.value) {
-      if (idx < typedWordsArr.length) {
-        newErrors.add(idx);
       }
     }
-    errorWordIndices.value = newErrors;
+
+    errorWordIndices.value = newErrorIndices;
   },
 );
 

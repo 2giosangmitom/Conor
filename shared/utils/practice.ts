@@ -25,15 +25,16 @@ export function splitWords(text: string): string[] {
 
 export function calculateAccuracy(expected: string, actual: string): number {
   if (!expected) return 0;
-  const expectedWords = expected.split(" ");
-  const actualWords = actual.split(" ");
+  const expectedWords = splitWords(expected);
+  const actualWords = splitWords(actual);
+  if (expectedWords.length === 0) return 0;
   let matchCount = 0;
 
-  expectedWords.forEach((word, index) => {
-    if (actualWords[index] === word) {
+  for (let i = 0; i < expectedWords.length; i += 1) {
+    if (actualWords[i] === expectedWords[i]) {
       matchCount += 1;
     }
-  });
+  }
 
   return Math.round((matchCount / expectedWords.length) * 100);
 }

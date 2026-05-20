@@ -33,14 +33,14 @@ const hiddenDisplay = computed<HiddenWordPart[]>(() => {
   return words.map((word, index) => {
     const cleanWord = word.replace(/[.,!?;:]/g, "");
     const asterisks = "*".repeat(cleanWord.length);
-    if (index < props.revealedWords) {
-      return { text: word, revealed: true, error: false, boldChars: 0 };
-    }
     const isError = errorIndicesSet.value.has(index);
-    const isCurrent = index === props.revealedWords;
     if (isError) {
       return { text: asterisks, revealed: false, error: true, boldChars: 0 };
     }
+    if (index < props.revealedWords) {
+      return { text: word, revealed: true, error: false, boldChars: 0 };
+    }
+    const isCurrent = index === props.revealedWords;
     if (isCurrent) {
       return {
         text: asterisks,
@@ -194,45 +194,65 @@ const hiddenDisplay = computed<HiddenWordPart[]>(() => {
           </div>
         </template>
 
-        <div class="space-y-4">
-          <UTextarea
-            :model-value="props.answerInput"
-            placeholder="Nghe đoạn này rồi nhập lại nội dung..."
-            :rows="6"
-            @update:model-value="emit('update:answerInput', $event)"
-          />
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-2 text-xs text-muted">
-              <UIcon name="i-lucide-headphones" class="size-4" />
-              <span>Segment {{ props.activeSentenceIndex + 1 }}</span>
-              <span>•</span>
-              <span>{{ props.matchedWordCount }}/{{ props.wordCount }} từ đúng</span>
+        <div class="space-y-3">
+          <div class="relative">
+            <UTextarea
+              :model-value="props.answerInput"
+              placeholder="Nghe và gõ lại câu bạn nghe được..."
+              :rows="4"
+              autoresize
+              :maxrows="8"
+              size="lg"
+              variant="subtle"
+              class="text-base leading-relaxed w-full"
+              @update:model-value="emit('update:answerInput', $event)"
+            />
+            <div class="mt-2 flex items-center justify-between text-xs text-muted">
+              <div class="flex items-center gap-3">
+                <UIcon name="i-lucide-headphones" class="size-3.5" />
+                <span>Segment {{ props.activeSentenceIndex + 1 }}</span>
+                <span>•</span>
+                <span>{{ props.matchedWordCount }}/{{ props.wordCount }} từ đúng</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span>{{ props.answerInput.length }} ký tự</span>
+                <span>•</span>
+                <span
+                  >{{
+                    props.answerInput.trim() ? props.answerInput.trim().split(/\s+/).length : 0
+                  }}
+                  từ</span
+                >
+              </div>
             </div>
-            <div class="flex flex-wrap items-center gap-2">
-              <UButton
-                variant="ghost"
-                color="neutral"
-                icon="i-lucide-lightbulb"
-                @click="emit('hint')"
-              >
-                Hint
-              </UButton>
-              <UButton
-                variant="ghost"
-                color="neutral"
-                icon="i-lucide-skip-forward"
-                @click="emit('skip')"
-              >
-                Skip
-              </UButton>
-              <UButton
-                color="primary"
-                :loading="props.answerStatus === 'checking'"
-                @click="emit('checkAnswer')"
-              >
-                Check answer
-              </UButton>
-            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-end gap-2">
+            <UButton
+              variant="ghost"
+              color="neutral"
+              size="sm"
+              icon="i-lucide-lightbulb"
+              @click="emit('hint')"
+            >
+              Hint
+            </UButton>
+            <UButton
+              variant="ghost"
+              color="neutral"
+              size="sm"
+              icon="i-lucide-skip-forward"
+              @click="emit('skip')"
+            >
+              Skip
+            </UButton>
+            <UButton
+              color="primary"
+              size="sm"
+              :loading="props.answerStatus === 'checking'"
+              @click="emit('checkAnswer')"
+            >
+              Check answer
+            </UButton>
           </div>
         </div>
       </UCard>

@@ -111,7 +111,23 @@ describe("calculateAccuracy", () => {
     expect(calculateAccuracy("hello", "hello world extra")).toBe(100);
   });
 
-  it("is case sensitive", () => {
-    expect(calculateAccuracy("Hello World", "hello world")).toBe(0);
+  it("is case insensitive after normalization", () => {
+    expect(calculateAccuracy("Hello World", "hello world")).toBe(100);
+  });
+
+  it("handles punctuation differences", () => {
+    expect(calculateAccuracy("hello, world!", "hello world")).toBe(100);
+  });
+
+  it("calculates accuracy with wrong word in middle", () => {
+    expect(calculateAccuracy("tôi đi học hôm nay", "tôi đi chơi hôm nay")).toBe(80);
+  });
+
+  it("handles completely different words", () => {
+    expect(calculateAccuracy("một hai ba", "x y z")).toBe(0);
+  });
+
+  it("returns 0 for empty actual", () => {
+    expect(calculateAccuracy("hello world", "")).toBe(0);
   });
 });
