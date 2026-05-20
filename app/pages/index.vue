@@ -262,19 +262,7 @@
 
 <script setup lang="ts">
 import type { PageFeatureProps, AccordionItem } from "@nuxt/ui";
-
-interface TrendingVideo {
-  id: string;
-  title: string;
-  youtubeId: string;
-  duration: number;
-  topic: string;
-  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-  thumbnailUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  practiceCount: number;
-}
+import type { TrendingVideo, Stat, HowToUseStep } from "~/types/home";
 
 const videoUrl = ref("");
 const heroRef = useTemplateRef("heroRef");
@@ -311,23 +299,6 @@ const auroraColors = computed(() => {
         "var(--color-primary-500)",
       ];
 });
-
-interface Stat {
-  icon: string;
-  value: number;
-  label: string;
-  color: string;
-  bgColor: string;
-}
-
-interface HowToUseStep {
-  icon: string;
-  title: string;
-  description: string;
-  points: string[];
-  color: string;
-  bgColor: string;
-}
 
 const stats: Stat[] = [
   {

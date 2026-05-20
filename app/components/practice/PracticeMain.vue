@@ -1,70 +1,9 @@
 <script setup lang="ts">
-interface VideoInfo {
-  id: string;
-  title: string;
-  youtubeId: string;
-  duration: number;
-  topic: string;
-  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-  thumbnailUrl: string;
-}
-
-interface VideoSentence {
-  id: string;
-  videoId: string;
-  sentenceIndex: number;
-  startTime: number;
-  endTime: number;
-  text: string;
-}
-
-interface PlayerLike {
-  playVideo: () => void;
-  pauseVideo: () => void;
-  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
-  getCurrentTime: () => number;
-}
-
-interface Props {
-  youtubeId: string;
-  video: VideoInfo | null;
-  sentences: VideoSentence[];
-  activeSentenceIndex: number;
-  answerInput: string;
-  answerStatus: "idle" | "checking" | "correct" | "incorrect";
-  hintCount: number;
-  replayCount: number;
-  accuracy: number;
-  completedCount: number;
-  totalSentences: number;
-  progressValue: number;
-  progressPercent: number;
-  wordCount: number;
-  matchedWordCount: number;
-  formattedTimeRange: string;
-  resumeModalOpen: boolean;
-  pendingResumeIndex: number;
-  pendingResumeDate: string | null;
-}
-
-interface Emits {
-  (e: "update:answerInput", value: string): void;
-  (e: "update:resumeModalOpen", value: boolean): void;
-  (
-    e:
-      | "checkAnswer"
-      | "nextSentence"
-      | "prevSentence"
-      | "replaySentence"
-      | "hint"
-      | "skip"
-      | "resumeSession"
-      | "startNewSession"
-      | "playerReady",
-  ): void;
-  (e: "moveToSentence", index: number): void;
-  (e: "playerStateChange", event: { data: number }): void;
-}
+import type {
+  PlayerLike,
+  PracticeMainProps as Props,
+  PracticeMainEmits as Emits,
+} from "~/types/practice";
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();

@@ -1,24 +1,5 @@
 <script setup lang="ts">
-export interface LoaderStep {
-  id: string;
-  label: string;
-  status: "pending" | "running" | "done" | "failed";
-}
-
-interface Props {
-  youtubeId: string;
-  steps: LoaderStep[];
-  runId: string | null;
-  isIndexing: boolean;
-  isFailed: boolean;
-  connectionIssue: string | null;
-  errorReason: string | null;
-  currentStepLabel: string;
-}
-
-interface Emits {
-  (e: "retry"): void;
-}
+import type { PracticeLoaderProps as Props, PracticeLoaderEmits as Emits } from "~/types/practice";
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();

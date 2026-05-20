@@ -2,69 +2,21 @@
 import Dexie, { type Table } from "dexie";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
-import type { LoaderStep } from "~/components/practice/PracticeLoader.vue";
+import type {
+  VideoInfo,
+  VideoSentence,
+  PracticeAttemptDraft,
+  PracticeLocalSession,
+  PracticeSessionResponse,
+  PracticeSessionRecord,
+  LoaderStep,
+  AnswerStatus,
+} from "~/types/practice";
 import { formatMs, normalizeText, splitWords, calculateAccuracy } from "~~/shared/utils/practice";
 
 definePageMeta({
   layout: "practice",
 });
-
-interface VideoInfo {
-  id: string;
-  title: string;
-  youtubeId: string;
-  duration: number;
-  topic: string;
-  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-  thumbnailUrl: string;
-}
-
-interface VideoSentence {
-  id: string;
-  videoId: string;
-  sentenceIndex: number;
-  startTime: number;
-  endTime: number;
-  text: string;
-}
-
-interface PracticeAttemptDraft {
-  sentenceId: string;
-  userText: string;
-  accuracy: number;
-  hintsUsed: number;
-  timeTaken: number;
-}
-
-interface PracticeLocalSession {
-  youtubeId: string;
-  currentSentenceIndex: number;
-  attempts: PracticeAttemptDraft[];
-  updatedAt: string;
-}
-
-interface PracticeSessionResponse {
-  practice_session: {
-    id: string;
-    currentSentenceIndex: number;
-    completed: boolean;
-    score: number;
-    lastPracticedAt: string;
-  };
-  video: {
-    youtubeId: string;
-  };
-}
-
-interface PracticeSessionRecord {
-  id: string;
-  currentSentenceIndex: number;
-  completed: boolean;
-  score: number;
-  lastPracticedAt: string;
-}
-
-type AnswerStatus = "idle" | "checking" | "correct" | "incorrect";
 
 const route = useRoute();
 const { data: session } = await useSession(useFetch);
