@@ -40,9 +40,11 @@ const statusIcon: Record<string, string> = {
 
     <div class="space-y-6">
       <div class="flex flex-col gap-2" aria-live="polite">
-        <div class="flex items-center gap-2 text-sm text-muted">
+        <div class="flex items-center gap-2 text-sm">
           <UIcon name="i-lucide-activity" class="size-4 text-primary" />
-          <span>Trạng thái hiện tại: {{ props.currentStepLabel }}</span>
+          <UiRadianText color="var(--color-primary)" :duration="4" text-color="var(--ui-text)">
+            Trạng thái hiện tại: {{ props.currentStepLabel }}
+          </UiRadianText>
         </div>
         <div v-if="props.runId" class="text-xs text-muted">Run ID: {{ props.runId }}</div>
       </div>

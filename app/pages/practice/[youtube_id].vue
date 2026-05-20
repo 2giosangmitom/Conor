@@ -640,64 +640,62 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
-    <div class="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <PracticeLoader
-        v-if="showLoader"
-        :youtube-id="youtubeId"
-        :steps="steps"
-        :run-id="runId"
-        :is-indexing="isIndexing"
-        :is-failed="isFailed"
-        :connection-issue="connectionIssue"
-        :error-reason="errorReason"
-        :current-step-label="currentStepLabel"
-        @retry="retryIndexing"
-      />
+  <div class="mx-auto max-w-7xl px-3 py-4 sm:px-4 lg:px-6">
+    <PracticeLoader
+      v-if="showLoader"
+      :youtube-id="youtubeId"
+      :steps="steps"
+      :run-id="runId"
+      :is-indexing="isIndexing"
+      :is-failed="isFailed"
+      :connection-issue="connectionIssue"
+      :error-reason="errorReason"
+      :current-step-label="currentStepLabel"
+      @retry="retryIndexing"
+    />
 
-      <PracticeMain
-        v-else-if="showPractice"
-        :youtube-id="youtubeId"
-        :video="video"
-        :sentences="sentences"
-        :active-sentence-index="activeSentenceIndex"
-        :answer-input="answerInput"
-        :answer-status="answerStatus"
-        :hint-count="hintCount"
-        :replay-count="replayCount"
-        :accuracy="accuracy"
-        :completed-count="completedCount"
-        :total-sentences="totalSentences"
-        :progress-value="progressValue"
-        :progress-percent="progressPercent"
-        :word-count="wordCount"
-        :matched-word-count="matchedWordCount"
-        :formatted-time-range="formattedTimeRange"
-        :resume-modal-open="resumeModalOpen"
-        :pending-resume-index="pendingResumeIndex"
-        :pending-resume-date="pendingResumeDate"
-        @update:answer-input="answerInput = $event"
-        @update:resume-modal-open="resumeModalOpen = $event"
-        @check-answer="checkAnswer"
-        @next-sentence="nextSentence"
-        @prev-sentence="prevSentence"
-        @replay-sentence="replaySentence"
-        @move-to-sentence="moveToSentence"
-        @hint="hintCount += 1"
-        @skip="nextSentence"
-        @resume-session="resumeSession"
-        @start-new-session="startNewSession"
-        @player-ready="handlePlayerReady"
-        @player-state-change="handlePlayerState"
-      />
+    <PracticeMain
+      v-else-if="showPractice"
+      :youtube-id="youtubeId"
+      :video="video"
+      :sentences="sentences"
+      :active-sentence-index="activeSentenceIndex"
+      :answer-input="answerInput"
+      :answer-status="answerStatus"
+      :hint-count="hintCount"
+      :replay-count="replayCount"
+      :accuracy="accuracy"
+      :completed-count="completedCount"
+      :total-sentences="totalSentences"
+      :progress-value="progressValue"
+      :progress-percent="progressPercent"
+      :word-count="wordCount"
+      :matched-word-count="matchedWordCount"
+      :formatted-time-range="formattedTimeRange"
+      :resume-modal-open="resumeModalOpen"
+      :pending-resume-index="pendingResumeIndex"
+      :pending-resume-date="pendingResumeDate"
+      @update:answer-input="answerInput = $event"
+      @update:resume-modal-open="resumeModalOpen = $event"
+      @check-answer="checkAnswer"
+      @next-sentence="nextSentence"
+      @prev-sentence="prevSentence"
+      @replay-sentence="replaySentence"
+      @move-to-sentence="moveToSentence"
+      @hint="hintCount += 1"
+      @skip="nextSentence"
+      @resume-session="resumeSession"
+      @start-new-session="startNewSession"
+      @player-ready="handlePlayerReady"
+      @player-state-change="handlePlayerState"
+    />
 
-      <UCard v-else class="border-muted/40 backdrop-blur">
-        <div class="space-y-3">
-          <USkeleton class="h-6 w-1/3" />
-          <USkeleton class="h-4 w-full" />
-          <USkeleton class="h-4 w-2/3" />
-        </div>
-      </UCard>
-    </div>
+    <UCard v-else class="border-muted/40 backdrop-blur">
+      <div class="space-y-3">
+        <USkeleton class="h-6 w-1/3" />
+        <USkeleton class="h-4 w-full" />
+        <USkeleton class="h-4 w-2/3" />
+      </div>
+    </UCard>
   </div>
 </template>

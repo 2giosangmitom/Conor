@@ -374,8 +374,8 @@ export async function persistVideoIndex(params: {
     const transcriptRows = subtitles.map((subtitle, index) => ({
       videoId: existing.id,
       sentenceIndex: index,
-      startTime: Math.round(subtitle.start * 1000),
-      endTime: Math.round(subtitle.end * 1000),
+      startTime: Math.round(subtitle.start),
+      endTime: Math.round(subtitle.end),
       text: subtitle.text,
     }));
 

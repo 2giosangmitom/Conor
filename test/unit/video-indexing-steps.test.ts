@@ -232,7 +232,7 @@ describe("video indexing steps", () => {
         subtitlesUrl: "https://sub",
       },
       analysis: { topic: "Programming", level: "B1" },
-      subtitles: [{ start: 0, end: 1, text: "Hello" }],
+      subtitles: [{ start: 0, end: 1000, text: "Hello" }],
     });
 
     expect(result).toEqual({ id: "1", youtubeId: "abc" });
@@ -285,7 +285,7 @@ describe("video indexing steps", () => {
           subtitlesUrl: "https://sub",
         },
         analysis: { topic: "Programming", level: "B1" },
-        subtitles: [{ start: 0, end: 1, text: "Hello" }],
+        subtitles: [{ start: 0, end: 1000, text: "Hello" }],
       }),
     ).rejects.toThrow("VIDEO_NOT_SAVED");
   });
