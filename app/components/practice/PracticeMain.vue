@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import type { PracticeMainProps as Props, PracticeMainEmits as Emits } from "~/types/practice";
 
+interface HiddenWordPart {
+  text: string;
+  revealed: boolean;
+  error: boolean;
+  boldChars: number;
+}
+
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
@@ -16,11 +23,40 @@ function formatMs(ms: number) {
   const secs = seconds % 60;
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
+
+const errorIndicesSet = computed(() => new Set(props.errorWordIndices));
+
+const hiddenDisplay = computed<HiddenWordPart[]>(() => {
+  const sentence = props.sentences[props.activeSentenceIndex];
+  if (!sentence) return [];
+  const words = sentence.text.split(" ");
+  return words.map((word, index) => {
+    const cleanWord = word.replace(/[.,!?;:]/g, "");
+    const asterisks = "*".repeat(cleanWord.length);
+    if (index < props.revealedWords) {
+      return { text: word, revealed: true, error: false, boldChars: 0 };
+    }
+    const isError = errorIndicesSet.value.has(index);
+    const isCurrent = index === props.revealedWords;
+    if (isError) {
+      return { text: asterisks, revealed: false, error: true, boldChars: 0 };
+    }
+    if (isCurrent) {
+      return {
+        text: asterisks,
+        revealed: false,
+        error: false,
+        boldChars: props.currentWordCharProgress,
+      };
+    }
+    return { text: asterisks, revealed: false, error: false, boldChars: 0 };
+  });
+});
 </script>
 
 <template>
   <div class="grid gap-4 lg:grid-cols-[1fr_1.5fr_1fr]">
-    <!-- Left column: Video + Sentences + Controls -->
+    <!-- Left column: Video + Stats + Controls -->
     <div class="space-y-4">
       <UCard class="border-muted/40 bg-background/80">
         <template #header>
@@ -71,85 +107,64 @@ function formatMs(ms: number) {
           </ScriptYouTubePlayer>
         </div>
 
-        <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
-          <div class="text-sm text-muted">
-            Lặp lại {{ props.replayCount + 1 }}/3 · Accuracy {{ props.accuracy }}%
+        <div class="mt-4">
+          <div class="mb-2 flex items-center justify-between text-xs text-muted">
+            <span>Tiến độ</span>
+            <span>{{ props.progressPercent }}%</span>
           </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <UButton
-              variant="soft"
-              color="neutral"
-              icon="i-lucide-chevron-left"
-              :disabled="props.activeSentenceIndex === 0"
-              @click="emit('prevSentence')"
-            >
-              Prev
-            </UButton>
-            <UButton
-              variant="soft"
-              color="primary"
-              icon="i-lucide-repeat"
-              @click="emit('replaySentence')"
-            >
-              Replay
-            </UButton>
-            <UButton
-              variant="soft"
-              color="neutral"
-              trailing-icon="i-lucide-chevron-right"
-              :disabled="props.activeSentenceIndex >= props.totalSentences - 1"
-              @click="emit('nextSentence')"
-            >
-              Next
-            </UButton>
+          <UProgress :model-value="props.progressValue" :max="100" animation="swing" size="sm" />
+        </div>
+
+        <div class="mt-4 grid grid-cols-3 gap-3">
+          <div class="rounded-lg border border-muted/40 p-3 text-center">
+            <p class="text-xs text-muted">Chính xác</p>
+            <p class="text-lg font-semibold">{{ props.accuracy }}%</p>
+          </div>
+          <div class="rounded-lg border border-muted/40 p-3 text-center">
+            <p class="text-xs text-muted">Đã xong</p>
+            <p class="text-lg font-semibold">{{ props.completedCount }}</p>
+          </div>
+          <div class="rounded-lg border border-muted/40 p-3 text-center">
+            <p class="text-xs text-muted">Tổng cộng</p>
+            <p class="text-lg font-semibold">{{ props.totalSentences }}</p>
           </div>
         </div>
       </UCard>
 
-      <UCard class="border-muted/40 bg-background/80">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold">Segments</h3>
-            <UBadge variant="soft" color="primary">{{ props.totalSentences }} total</UBadge>
-          </div>
-        </template>
-        <div class="space-y-2 max-h-60 overflow-auto lg:max-h-80">
-          <button
-            v-for="sentence in props.sentences"
-            :key="sentence.id"
-            type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
-            :class="[
-              getAttemptStatus(sentence.sentenceIndex) === 'current'
-                ? 'bg-primary/10 border-primary/40'
-                : getAttemptStatus(sentence.sentenceIndex) === 'done'
-                  ? 'bg-success/10 border-success/30'
-                  : 'bg-background/60',
-            ]"
-            @click="emit('moveToSentence', sentence.sentenceIndex)"
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm text-muted">Lặp lại {{ props.replayCount + 1 }}/3</div>
+        <div class="flex flex-wrap items-center gap-3">
+          <UButton
+            variant="soft"
+            color="neutral"
+            icon="i-lucide-chevron-left"
+            :disabled="props.activeSentenceIndex === 0"
+            @click="emit('prevSentence')"
           >
-            <div class="flex items-center gap-2">
-              <span
-                class="size-2 rounded-full"
-                :class="[
-                  getAttemptStatus(sentence.sentenceIndex) === 'current'
-                    ? 'bg-primary'
-                    : getAttemptStatus(sentence.sentenceIndex) === 'done'
-                      ? 'bg-success'
-                      : 'bg-muted',
-                ]"
-              />
-              <span class="text-sm">Segment {{ sentence.sentenceIndex + 1 }}</span>
-            </div>
-            <span class="text-xs text-muted">
-              {{ formatMs(sentence.startTime) }}
-            </span>
-          </button>
+            Prev
+          </UButton>
+          <UButton
+            variant="soft"
+            color="primary"
+            icon="i-lucide-repeat"
+            @click="emit('replaySentence')"
+          >
+            Replay
+          </UButton>
+          <UButton
+            variant="soft"
+            color="neutral"
+            trailing-icon="i-lucide-chevron-right"
+            :disabled="props.activeSentenceIndex >= props.totalSentences - 1"
+            @click="emit('nextSentence')"
+          >
+            Next
+          </UButton>
         </div>
-      </UCard>
+      </div>
     </div>
 
-    <!-- Center column: Input -->
+    <!-- Center column: Input + Word chips -->
     <div class="space-y-4">
       <UCard class="border-muted/40 bg-background/80">
         <template #header>
@@ -221,34 +236,79 @@ function formatMs(ms: number) {
           </div>
         </div>
       </UCard>
+
+      <UCard class="border-muted/40 bg-background/80">
+        <template #header>
+          <h3 class="text-lg font-semibold">Câu hiện tại</h3>
+        </template>
+        <div class="flex flex-wrap gap-2">
+          <template v-for="(part, index) in hiddenDisplay" :key="index">
+            <template v-if="part.boldChars > 0 && !part.revealed && !part.error">
+              <UBadge variant="outline" class="font-mono font-bold tracking-wider">
+                {{ part.text.slice(0, part.boldChars) }}
+                <span class="opacity-60">{{ part.text.slice(part.boldChars) }}</span>
+              </UBadge>
+            </template>
+            <UBadge
+              v-else
+              variant="outline"
+              class="font-mono tracking-wider"
+              :class="[
+                part.revealed
+                  ? 'border-primary/40 bg-primary/10 text-primary font-semibold'
+                  : part.error
+                    ? 'border-error/40 bg-error/10 text-error'
+                    : 'border-muted/40 bg-muted/20 text-muted/60',
+              ]"
+            >
+              {{ part.text }}
+            </UBadge>
+          </template>
+        </div>
+      </UCard>
     </div>
 
-    <!-- Right column: Stats -->
+    <!-- Right column: Segments -->
     <div class="space-y-4">
       <UCard class="border-muted/40 bg-background/80">
         <template #header>
-          <h3 class="text-lg font-semibold">Thống kê phiên luyện</h3>
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Segments</h3>
+            <UBadge variant="soft" color="primary">{{ props.totalSentences }} total</UBadge>
+          </div>
         </template>
-        <div class="grid grid-cols-3 gap-3 lg:grid-cols-1">
-          <div class="rounded-lg border border-muted/40 p-3 text-center">
-            <p class="text-xs text-muted">Chính xác</p>
-            <p class="text-lg font-semibold">{{ props.accuracy }}%</p>
-          </div>
-          <div class="rounded-lg border border-muted/40 p-3 text-center">
-            <p class="text-xs text-muted">Đã xong</p>
-            <p class="text-lg font-semibold">{{ props.completedCount }}</p>
-          </div>
-          <div class="rounded-lg border border-muted/40 p-3 text-center">
-            <p class="text-xs text-muted">Tổng cộng</p>
-            <p class="text-lg font-semibold">{{ props.totalSentences }}</p>
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="mb-2 flex items-center justify-between text-xs text-muted">
-            <span>Tiến độ</span>
-            <span>{{ props.progressPercent }}%</span>
-          </div>
-          <UProgress :model-value="props.progressValue" :max="100" animation="swing" size="sm" />
+        <div class="space-y-2 max-h-[calc(100vh-12rem)] overflow-auto">
+          <button
+            v-for="sentence in props.sentences"
+            :key="sentence.id"
+            type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
+            :class="[
+              getAttemptStatus(sentence.sentenceIndex) === 'current'
+                ? 'bg-primary/10 border-primary/40'
+                : getAttemptStatus(sentence.sentenceIndex) === 'done'
+                  ? 'bg-success/10 border-success/30'
+                  : 'bg-background/60',
+            ]"
+            @click="emit('moveToSentence', sentence.sentenceIndex)"
+          >
+            <div class="flex items-center gap-2">
+              <span
+                class="size-2 rounded-full"
+                :class="[
+                  getAttemptStatus(sentence.sentenceIndex) === 'current'
+                    ? 'bg-primary'
+                    : getAttemptStatus(sentence.sentenceIndex) === 'done'
+                      ? 'bg-success'
+                      : 'bg-muted',
+                ]"
+              />
+              <span class="text-sm">Segment {{ sentence.sentenceIndex + 1 }}</span>
+            </div>
+            <span class="text-xs text-muted">
+              {{ formatMs(sentence.startTime) }}
+            </span>
+          </button>
         </div>
       </UCard>
     </div>

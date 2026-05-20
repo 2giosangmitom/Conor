@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Dexie, { type Table } from "dexie";
+import { diffWords } from "diff";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
 import type {
@@ -68,6 +69,10 @@ const resumeModalOpen = ref(false);
 const hasResumeCandidate = ref(false);
 const pendingResumeIndex = ref(0);
 const pendingResumeDate = ref<string | null>(null);
+const revealedWords = ref(0);
+const errorWordIndices = ref(new Set<number>());
+const currentWordCharProgress = ref(0);
+const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 
 class PracticeDb extends Dexie {
   sessions!: Table<PracticeLocalSession, string>;
@@ -482,6 +487,9 @@ async function moveToSentence(index: number) {
   answerStatus.value = "idle";
   hintCount.value = 0;
   replayCount.value = 0;
+  revealedWords.value = 0;
+  errorWordIndices.value = new Set();
+  currentWordCharProgress.value = 0;
   attemptStart.value = Date.now();
   await persistProgress();
   await playSegment();
@@ -594,6 +602,65 @@ watch(
   () => answerInput.value,
   (value) => {
     answerWords.value = splitWords(value);
+    if (!currentSentence.value) return;
+    const expectedText = currentSentence.value.text;
+    const expectedWordsArr = splitWords(expectedText);
+    const typedWordsArr = splitWords(value);
+    if (typedWordsArr.length === 0) {
+      revealedWords.value = 0;
+      currentWordCharProgress.value = 0;
+      return;
+    }
+    const diffResult = diffWords(expectedText, value);
+    let matches = 0;
+    let expectedPos = 0;
+    for (const part of diffResult) {
+      if (part.removed) {
+        const removedWords = splitWords(part.value);
+        expectedPos += removedWords.length;
+      } else if (part.added) {
+        break;
+      } else {
+        const unchangedWords = splitWords(part.value);
+        for (const word of unchangedWords) {
+          if (expectedPos < expectedWordsArr.length && word === expectedWordsArr[expectedPos]) {
+            matches++;
+            expectedPos++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    revealedWords.value = Math.min(matches, expectedWordsArr.length);
+    const currentWordIndex = revealedWords.value;
+    if (currentWordIndex < expectedWordsArr.length) {
+      const lastWord = typedWordsArr[typedWordsArr.length - 1] ?? "";
+      const expectedWord = expectedWordsArr[currentWordIndex];
+      const expectedLen = expectedWord ? expectedWord.replace(/[.,!?;:]/g, "").length : 0;
+      currentWordCharProgress.value = Math.min(lastWord.length, expectedLen);
+    } else {
+      currentWordCharProgress.value = 0;
+    }
+    if (value.endsWith(" ") && typedWordsArr.length > revealedWords.value) {
+      const typedWord = normalizeText(typedWordsArr[revealedWords.value] ?? "");
+      const expectedWord = normalizeText(expectedWordsArr[revealedWords.value] ?? "");
+      if (typedWord !== expectedWord) {
+        errorWordIndices.value.add(revealedWords.value);
+        errorAudio.value?.play().catch(() => {});
+      } else {
+        errorWordIndices.value.delete(revealedWords.value);
+      }
+    } else {
+      errorWordIndices.value.delete(revealedWords.value);
+    }
+    const newErrors = new Set<number>();
+    for (const idx of errorWordIndices.value) {
+      if (idx < typedWordsArr.length) {
+        newErrors.add(idx);
+      }
+    }
+    errorWordIndices.value = newErrors;
   },
 );
 
@@ -626,6 +693,7 @@ const PLAYER_STATE_PAUSED = 2;
 const intervalId = ref<number | null>(null);
 
 onMounted(() => {
+  errorAudio.value = new Audio("/audio/fahhh.mp3");
   intervalId.value = window.setInterval(() => {
     void handleTimeUpdate();
   }, 300);
@@ -671,6 +739,9 @@ onBeforeUnmount(() => {
       :progress-percent="progressPercent"
       :word-count="wordCount"
       :matched-word-count="matchedWordCount"
+      :revealed-words="revealedWords"
+      :error-word-indices="Array.from(errorWordIndices)"
+      :current-word-char-progress="currentWordCharProgress"
       :formatted-time-range="formattedTimeRange"
       :resume-modal-open="resumeModalOpen"
       :pending-resume-index="pendingResumeIndex"

@@ -78,6 +78,9 @@ export interface PracticeMainProps {
   progressPercent: number;
   wordCount: number;
   matchedWordCount: number;
+  revealedWords: number;
+  errorWordIndices: number[];
+  currentWordCharProgress: number;
   formattedTimeRange: string;
   resumeModalOpen: boolean;
   pendingResumeIndex: number;
