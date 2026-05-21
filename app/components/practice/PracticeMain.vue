@@ -13,6 +13,12 @@ interface WordDisplay {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const playerRef = useTemplateRef("scriptYouTubePlayer");
+
+defineExpose({
+  player: computed(() => playerRef.value?.player),
+});
+
 function getAttemptStatus(index: number) {
   const status = props.sentenceAttempts[index];
   if (!status || status === "none") {
@@ -132,7 +138,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
 
         <div class="relative aspect-video overflow-hidden rounded-lg border border-muted/40">
           <ScriptYouTubePlayer
-            ref="playerRef"
+            ref="scriptYouTubePlayer"
             :video-id="props.youtubeId"
             :player-options="{ host: 'https://www.youtube-nocookie.com' }"
             class="absolute inset-0"

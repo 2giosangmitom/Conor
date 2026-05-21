@@ -544,45 +544,6 @@ async function replaySentence() {
   await playSegment();
 }
 
-async function playSegment() {
-  if (!currentSentence.value) return;
-  const player = playerRef.value?.player;
-  if (!player) return;
-  player.seekTo(currentSentence.value.startTime / 1000, true);
-  player.playVideo();
-}
-
-function handlePlayerState(event: { data: number }) {
-  if (!currentSentence.value) return;
-  if (event.data === PLAYER_STATE_PLAYING) {
-    return;
-  }
-
-  if (event.data === PLAYER_STATE_PAUSED && isPlayingSegment.value) {
-    return;
-  }
-}
-
-async function handleTimeUpdate() {
-  if (!currentSentence.value) return;
-  const player = playerRef.value?.player;
-  if (!player) return;
-  if (!isPlayingSegment.value) return;
-  const currentTime = player.getCurrentTime();
-  const endTime = currentSentence.value.endTime / 1000;
-  if (currentTime < endTime) return;
-
-  if (replayCount.value < 2) {
-    replayCount.value += 1;
-    player.seekTo(currentSentence.value.startTime / 1000, true);
-    player.playVideo();
-  } else {
-    replayCount.value = 2;
-    player.pauseVideo();
-    isPlayingSegment.value = false;
-  }
-}
-
 function handlePlayerReady() {
   void playSegment();
 }
@@ -680,32 +641,90 @@ watch(
   },
 );
 
-const playerRef = ref<{
+const practiceMainRef = ref<{
   player?: {
     playVideo: () => void;
     pauseVideo: () => void;
+    stopVideo: () => void;
     seekTo: (seconds: number, allowSeekAhead: boolean) => void;
     getCurrentTime: () => number;
+    loadVideoById: (options: {
+      videoId: string;
+      startSeconds?: number;
+      endSeconds?: number;
+    }) => void;
   };
 } | null>(null);
-const isPlayingSegment = ref(false);
+
+function getPlayer() {
+  return practiceMainRef.value?.player;
+}
+const timeCheckInterval = ref<number | null>(null);
+const PLAYER_STATE_ENDED = 0;
 const PLAYER_STATE_PLAYING = 1;
 const PLAYER_STATE_PAUSED = 2;
-const intervalId = ref<number | null>(null);
+
+function handlePlayerState(event: { data: number }) {
+  if (event.data === PLAYER_STATE_PLAYING) {
+    startTimeCheck();
+  } else if (event.data === PLAYER_STATE_PAUSED || event.data === PLAYER_STATE_ENDED) {
+    stopTimeCheck();
+    if (replayCount.value < 2 && currentSentence.value) {
+      replayCount.value += 1;
+      const player = getPlayer();
+      if (player) {
+        player.loadVideoById({
+          videoId: youtubeId.value,
+          startSeconds: currentSentence.value.startTime / 1000,
+          endSeconds: currentSentence.value.endTime / 1000,
+        });
+        startTimeCheck();
+      }
+    }
+  }
+}
+
+function startTimeCheck() {
+  stopTimeCheck();
+  timeCheckInterval.value = window.setInterval(() => {
+    const player = getPlayer();
+    if (!player || !currentSentence.value) return;
+    const currentTime = player.getCurrentTime();
+    const endTime = currentSentence.value.endTime / 1000;
+    if (currentTime >= endTime && currentTime > 0) {
+      player.pauseVideo();
+    }
+  }, 250);
+}
+
+function stopTimeCheck() {
+  if (timeCheckInterval.value !== null) {
+    clearInterval(timeCheckInterval.value);
+    timeCheckInterval.value = null;
+  }
+}
+
+async function playSegment() {
+  if (!currentSentence.value) return;
+  const player = getPlayer();
+  if (!player) return;
+  replayCount.value = 0;
+  player.loadVideoById({
+    videoId: youtubeId.value,
+    startSeconds: currentSentence.value.startTime / 1000,
+    endSeconds: currentSentence.value.endTime / 1000,
+  });
+  startTimeCheck();
+}
 
 onMounted(() => {
   errorAudio.value = new Audio("/audio/fahhh.mp3");
   successAudio.value = new Audio("/audio/quick-ting.mp3");
-  intervalId.value = window.setInterval(() => {
-    void handleTimeUpdate();
-  }, 300);
 });
 
 onBeforeUnmount(() => {
   stopStream();
-  if (intervalId.value !== null) {
-    window.clearInterval(intervalId.value);
-  }
+  stopTimeCheck();
 });
 </script>
 
@@ -726,6 +745,7 @@ onBeforeUnmount(() => {
 
     <PracticeMain
       v-else-if="showPractice"
+      ref="practiceMainRef"
       :youtube-id="youtubeId"
       :video="video"
       :sentences="sentences"
