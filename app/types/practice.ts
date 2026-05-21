@@ -26,6 +26,8 @@ export interface PlayerLike {
 
 export type AnswerStatus = "idle" | "checking" | "correct" | "incorrect";
 
+export type SentenceAttemptStatus = "none" | "correct" | "incorrect";
+
 export interface PracticeAttemptDraft {
   sentenceId: string;
   userText: string;
@@ -86,6 +88,7 @@ export interface PracticeMainProps {
   resumeModalOpen: boolean;
   pendingResumeIndex: number;
   pendingResumeDate: string | null;
+  sentenceAttempts: SentenceAttemptStatus[];
 }
 
 export interface PracticeMainEmits {

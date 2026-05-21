@@ -14,9 +14,12 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 function getAttemptStatus(index: number) {
-  if (index < props.activeSentenceIndex) return "done";
-  if (index === props.activeSentenceIndex) return "current";
-  return "pending";
+  const status = props.sentenceAttempts[index];
+  if (!status || status === "none") {
+    if (index === props.activeSentenceIndex) return "current";
+    return "pending";
+  }
+  return status;
 }
 
 function formatMs(ms: number) {
@@ -215,7 +218,6 @@ const wordDisplay = computed<WordDisplay[]>(() => {
         <template #header>
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-xs uppercase tracking-wide text-muted">Type what you hear</p>
               <h2 class="text-lg font-semibold">Nhập câu bạn nghe được</h2>
             </div>
             <UBadge
@@ -296,7 +298,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               :loading="props.answerStatus === 'checking'"
               @click="emit('checkAnswer')"
             >
-              Check answer
+              Kiểm tra
             </UButton>
           </div>
         </div>
@@ -339,8 +341,8 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       <UCard class="border-muted/40 bg-background/80">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold">Segments</h3>
-            <UBadge variant="soft" color="primary">{{ props.totalSentences }} total</UBadge>
+            <h3 class="text-lg font-semibold">Danh sách câu</h3>
+            <UBadge variant="soft" color="primary">{{ props.totalSentences }} câu</UBadge>
           </div>
         </template>
         <div class="space-y-2 max-h-[calc(100vh-12rem)] overflow-auto">
@@ -352,9 +354,11 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             :class="[
               getAttemptStatus(sentence.sentenceIndex) === 'current'
                 ? 'bg-primary/10 border-primary/40'
-                : getAttemptStatus(sentence.sentenceIndex) === 'done'
+                : getAttemptStatus(sentence.sentenceIndex) === 'correct'
                   ? 'bg-success/10 border-success/30'
-                  : 'bg-background/60',
+                  : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                    ? 'bg-error/10 border-error/30'
+                    : 'bg-background/60',
             ]"
             @click="emit('moveToSentence', sentence.sentenceIndex)"
           >
@@ -364,12 +368,14 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 :class="[
                   getAttemptStatus(sentence.sentenceIndex) === 'current'
                     ? 'bg-primary'
-                    : getAttemptStatus(sentence.sentenceIndex) === 'done'
+                    : getAttemptStatus(sentence.sentenceIndex) === 'correct'
                       ? 'bg-success'
-                      : 'bg-muted',
+                      : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                        ? 'bg-error'
+                        : 'bg-muted',
                 ]"
               />
-              <span class="text-sm">Segment {{ sentence.sentenceIndex + 1 }}</span>
+              <span class="text-sm">Câu {{ sentence.sentenceIndex + 1 }}</span>
             </div>
             <span class="text-xs text-muted">
               {{ formatMs(sentence.startTime) }}

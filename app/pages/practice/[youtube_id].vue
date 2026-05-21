@@ -11,6 +11,7 @@ import type {
   PracticeSessionRecord,
   LoaderStep,
   AnswerStatus,
+  SentenceAttemptStatus,
 } from "~/types/practice";
 import { formatMs, normalizeText, splitWords, calculateAccuracy } from "~~/shared/utils/practice";
 
@@ -74,6 +75,7 @@ const currentWordCharProgress = ref(0);
 const currentWordTypedChars = ref("");
 const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
+const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
 
 class PracticeDb extends Dexie {
   sessions!: Table<PracticeLocalSession, string>;
@@ -251,6 +253,7 @@ function startStream(id: string) {
 function setReadyState(payload: { video: VideoInfo; sentences: VideoSentence[] }) {
   video.value = payload.video;
   sentences.value = payload.sentences;
+  sentenceAttempts.value = payload.sentences.map(() => "none" as const);
   isReady.value = true;
   isIndexing.value = false;
   isFailed.value = false;
@@ -480,6 +483,8 @@ async function checkAnswer() {
   }
   sessionScore.value += accuracyValue;
   answerStatus.value = accuracyValue >= 90 ? "correct" : "incorrect";
+  sentenceAttempts.value[activeSentenceIndex.value] =
+    answerStatus.value === "correct" ? "correct" : "incorrect";
   if (answerStatus.value === "correct" && successAudio.value) {
     successAudio.value.currentTime = 0;
     successAudio.value.play().catch(() => {});
@@ -518,6 +523,7 @@ async function moveToSentence(index: number) {
   errorWordIndices.value = new Set();
   currentWordCharProgress.value = 0;
   currentWordTypedChars.value = "";
+  sentenceAttempts.value[safeIndex] = "none";
   attemptStart.value = Date.now();
   await persistProgress();
   await playSegment();
@@ -743,6 +749,7 @@ onBeforeUnmount(() => {
       :resume-modal-open="resumeModalOpen"
       :pending-resume-index="pendingResumeIndex"
       :pending-resume-date="pendingResumeDate"
+      :sentence-attempts="sentenceAttempts"
       @update:answer-input="answerInput = $event"
       @update:resume-modal-open="resumeModalOpen = $event"
       @check-answer="checkAnswer"
