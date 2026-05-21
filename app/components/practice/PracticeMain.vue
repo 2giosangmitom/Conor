@@ -264,22 +264,20 @@ const hiddenDisplay = computed<HiddenWordPart[]>(() => {
         <div class="flex flex-wrap gap-2">
           <template v-for="(part, index) in hiddenDisplay" :key="index">
             <template v-if="part.boldChars > 0 && !part.revealed && !part.error">
-              <UBadge variant="outline" class="font-mono font-bold tracking-wider">
+              <UBadge variant="subtle" size="lg" class="tracking-wider gap-0">
                 {{ part.text.slice(0, part.boldChars) }}
                 <span class="opacity-60">{{ part.text.slice(part.boldChars) }}</span>
               </UBadge>
             </template>
             <UBadge
               v-else
-              variant="outline"
-              class="font-mono tracking-wider"
-              :class="[
-                part.revealed
-                  ? 'border-primary/40 bg-primary/10 text-primary font-semibold'
-                  : part.error
-                    ? 'border-error/40 bg-error/10 text-error'
-                    : 'border-muted/40 bg-muted/20 text-muted/60',
-              ]"
+              variant="subtle"
+              size="lg"
+              :color="part.revealed ? 'primary' : part.error ? 'error' : 'neutral'"
+              class="tracking-wider"
+              :class="{
+                'text-dimmed': !part.revealed && !part.error,
+              }"
             >
               {{ part.text }}
             </UBadge>
