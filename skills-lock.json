@@ -79,11 +79,23 @@
       "skillPath": "better-auth/twoFactor/SKILL.md",
       "computedHash": "7e297aaf887e11fdc03e52bdbf44974e161e8f7c393170ced7dc66cace4f6d46"
     },
+    "unhead-vue-skilld": {
+      "source": "skilld-dev/vue-ecosystem-skills",
+      "sourceType": "github",
+      "skillPath": "skills/unhead-vue-skilld/SKILL.md",
+      "computedHash": "537862d89be39dd766d18e12ddf8a2332654d5bd221adf264ffc0976ce0f21d7"
+    },
     "vue": {
       "source": "antfu/skills",
       "sourceType": "github",
       "skillPath": "skills/vue/SKILL.md",
       "computedHash": "9c241141e07e836e4f0537c63e8f929fba3767c2997250be38e699f19b75e3f2"
+    },
+    "vueuse-motion-skilld": {
+      "source": "skilld-dev/vue-ecosystem-skills",
+      "sourceType": "github",
+      "skillPath": "skills/vueuse-motion-skilld/SKILL.md",
+      "computedHash": "57b0d55e741533050615aeadc9abf93ab6c3d5ed30bd0d39a788a9ac01552a03"
     },
     "web-quality-audit": {
       "source": "addyosmani/web-quality-skills",
