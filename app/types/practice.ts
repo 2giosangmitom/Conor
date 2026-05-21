@@ -89,6 +89,7 @@ export interface PracticeMainProps {
   pendingResumeIndex: number;
   pendingResumeDate: string | null;
   sentenceAttempts: SentenceAttemptStatus[];
+  revealedWordIndices: number[];
 }
 
 export interface PracticeMainEmits {
@@ -100,13 +101,12 @@ export interface PracticeMainEmits {
       | "nextSentence"
       | "prevSentence"
       | "replaySentence"
-      | "hint"
       | "skip"
       | "resumeSession"
       | "startNewSession"
       | "playerReady",
   ): void;
-  (e: "moveToSentence", index: number): void;
+  (e: "hint" | "moveToSentence", index: number): void;
   (e: "playerStateChange", event: { data: number }): void;
 }
 

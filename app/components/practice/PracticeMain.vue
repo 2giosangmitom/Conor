@@ -8,6 +8,7 @@ interface WordDisplay {
   charHint: number;
   isCurrent: boolean;
   isWrongLength: boolean;
+  isHinted: boolean;
 }
 
 const props = defineProps<Props>();
@@ -36,6 +37,7 @@ function formatMs(ms: number) {
 }
 
 const errorIndicesSet = computed(() => new Set(props.errorWordIndices));
+const revealedIndicesSet = computed(() => new Set(props.revealedWordIndices));
 
 const wordDisplay = computed<WordDisplay[]>(() => {
   const sentence = props.sentences[props.activeSentenceIndex];
@@ -63,15 +65,22 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           charHint: 0,
           isCurrent: false,
           isWrongLength: typedWord.length !== expectedClean.length,
+          isHinted: false,
         });
       } else if (i === completedCount && !endsWithSpace) {
         const cleanWord = expectedWords[i]!.replace(/[.,!?;:]/g, "");
         const typedChars = props.currentWordTypedChars;
         const typedLen = typedChars.length;
-        const displayText =
-          typedLen > 0
-            ? typedChars + "*".repeat(Math.max(0, cleanWord.length - typedLen))
-            : "*".repeat(cleanWord.length);
+        const isHinted = revealedIndicesSet.value.has(i);
+        let displayText: string;
+        if (isHinted && typedLen === 0) {
+          displayText = cleanWord[0] + "*".repeat(Math.max(0, cleanWord.length - 1));
+        } else {
+          displayText =
+            typedLen > 0
+              ? typedChars + "*".repeat(Math.max(0, cleanWord.length - typedLen))
+              : "*".repeat(cleanWord.length);
+        }
         result.push({
           text: displayText,
           isCorrect: true,
@@ -79,16 +88,22 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           charHint: cleanWord.length,
           isCurrent: true,
           isWrongLength: false,
+          isHinted: isHinted && typedLen === 0,
         });
       } else {
         const cleanWord = expectedWords[i]!.replace(/[.,!?;:]/g, "");
+        const isHinted = revealedIndicesSet.value.has(i);
+        const displayText = isHinted
+          ? cleanWord[0] + "*".repeat(Math.max(0, cleanWord.length - 1))
+          : "*".repeat(cleanWord.length);
         result.push({
-          text: "*".repeat(cleanWord.length),
+          text: displayText,
           isCorrect: true,
           isPlaceholder: true,
           charHint: 0,
           isCurrent: false,
           isWrongLength: false,
+          isHinted,
         });
       }
     }
@@ -104,6 +119,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
     charHint: 0,
     isCurrent: false,
     isWrongLength: false,
+    isHinted: false,
   }));
 });
 </script>
@@ -169,7 +185,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           <UProgress :model-value="props.progressValue" :max="100" animation="swing" size="sm" />
         </div>
 
-        <div class="mt-4 grid grid-cols-3 gap-3">
+        <div class="mt-4 grid grid-cols-4 gap-3">
           <div class="rounded-lg border border-muted/40 p-3 text-center">
             <p class="text-xs text-muted">Chính xác</p>
             <p class="text-lg font-semibold">{{ props.accuracy }}%</p>
@@ -181,6 +197,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           <div class="rounded-lg border border-muted/40 p-3 text-center">
             <p class="text-xs text-muted">Tổng cộng</p>
             <p class="text-lg font-semibold">{{ props.totalSentences }}</p>
+          </div>
+          <div class="rounded-lg border border-muted/40 p-3 text-center">
+            <p class="text-xs text-muted">Gợi ý</p>
+            <p class="text-lg font-semibold">{{ props.hintCount }}</p>
           </div>
         </div>
       </UCard>
@@ -285,7 +305,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               color="neutral"
               size="sm"
               icon="i-lucide-lightbulb"
-              @click="emit('hint')"
+              @click="emit('hint', 0)"
             >
               Hint
             </UButton>
@@ -323,17 +343,20 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             :color="
               word.isWrongLength
                 ? 'warning'
-                : word.isCurrent
-                  ? 'secondary'
-                  : word.isPlaceholder
-                    ? 'neutral'
-                    : word.isCorrect
-                      ? 'primary'
-                      : 'error'
+                : word.isHinted
+                  ? 'warning'
+                  : word.isCurrent
+                    ? 'secondary'
+                    : word.isPlaceholder
+                      ? 'neutral'
+                      : word.isCorrect
+                        ? 'primary'
+                        : 'error'
             "
             class="tracking-wider"
             :class="{
-              'text-dimmed': word.isPlaceholder && !word.isCurrent,
+              'text-dimmed': word.isPlaceholder && !word.isCurrent && !word.isHinted,
+              'text-warning': word.isHinted,
             }"
           >
             {{ word.text }}

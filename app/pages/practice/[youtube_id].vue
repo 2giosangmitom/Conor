@@ -73,6 +73,7 @@ const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const currentWordCharProgress = ref(0);
 const currentWordTypedChars = ref("");
+const revealedWordIndices = ref<number[]>([]);
 const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
 const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
@@ -467,6 +468,23 @@ async function persistAttempt(accuracyValue: number, userText: string) {
   }
 }
 
+function useHint() {
+  if (!currentSentence.value) return;
+  const expectedWords = splitWords(currentSentence.value.text);
+  const typedWords = splitWords(answerInput.value);
+
+  for (let i = 0; i < expectedWords.length; i += 1) {
+    if (revealedWordIndices.value.includes(i)) continue;
+    const typedWord = normalizeText(typedWords[i] ?? "");
+    const expectedWord = normalizeText(expectedWords[i] ?? "");
+    if (typedWord !== expectedWord) {
+      revealedWordIndices.value.push(i);
+      hintCount.value += 1;
+      return;
+    }
+  }
+}
+
 async function checkAnswer() {
   if (!currentSentence.value) return;
   answerStatus.value = "checking";
@@ -523,6 +541,7 @@ async function moveToSentence(index: number) {
   errorWordIndices.value = new Set();
   currentWordCharProgress.value = 0;
   currentWordTypedChars.value = "";
+  revealedWordIndices.value = [];
   sentenceAttempts.value[safeIndex] = "none";
   attemptStart.value = Date.now();
   await persistProgress();
@@ -770,6 +789,7 @@ onBeforeUnmount(() => {
       :pending-resume-index="pendingResumeIndex"
       :pending-resume-date="pendingResumeDate"
       :sentence-attempts="sentenceAttempts"
+      :revealed-word-indices="revealedWordIndices"
       @update:answer-input="answerInput = $event"
       @update:resume-modal-open="resumeModalOpen = $event"
       @check-answer="checkAnswer"
@@ -777,7 +797,7 @@ onBeforeUnmount(() => {
       @prev-sentence="prevSentence"
       @replay-sentence="replaySentence"
       @move-to-sentence="moveToSentence"
-      @hint="hintCount += 1"
+      @hint="useHint"
       @skip="nextSentence"
       @resume-session="resumeSession"
       @start-new-session="startNewSession"
