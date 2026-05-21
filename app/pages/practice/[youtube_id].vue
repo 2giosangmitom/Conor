@@ -736,6 +736,41 @@ async function playSegment() {
   startTimeCheck();
 }
 
+defineShortcuts({
+  meta_enter: {
+    usingInput: true,
+    handler: () => {
+      if (
+        answerStatus.value !== "checking" &&
+        answerStatus.value !== "correct" &&
+        answerStatus.value !== "incorrect"
+      ) {
+        checkAnswer();
+      }
+    },
+  },
+  meta_arrowleft: {
+    usingInput: true,
+    handler: () => prevSentence(),
+  },
+  meta_arrowright: {
+    usingInput: true,
+    handler: () => nextSentence(),
+  },
+  meta_r: {
+    usingInput: true,
+    handler: () => replaySentence(),
+  },
+  meta_h: {
+    usingInput: true,
+    handler: () => useHint(),
+  },
+  meta_s: {
+    usingInput: true,
+    handler: () => nextSentence(),
+  },
+});
+
 onMounted(() => {
   errorAudio.value = new Audio("/audio/fahhh.mp3");
   successAudio.value = new Audio("/audio/quick-ting.mp3");

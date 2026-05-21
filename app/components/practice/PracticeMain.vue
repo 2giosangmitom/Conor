@@ -208,32 +208,38 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div class="text-sm text-muted">Lặp lại {{ props.replayCount + 1 }}/3</div>
         <div class="flex flex-wrap items-center gap-3">
-          <UButton
-            variant="soft"
-            color="neutral"
-            icon="i-lucide-chevron-left"
-            :disabled="props.activeSentenceIndex === 0"
-            @click="emit('prevSentence')"
-          >
-            Prev
-          </UButton>
-          <UButton
-            variant="soft"
-            color="primary"
-            icon="i-lucide-repeat"
-            @click="emit('replaySentence')"
-          >
-            Replay
-          </UButton>
-          <UButton
-            variant="soft"
-            color="neutral"
-            trailing-icon="i-lucide-chevron-right"
-            :disabled="props.activeSentenceIndex >= props.totalSentences - 1"
-            @click="emit('nextSentence')"
-          >
-            Next
-          </UButton>
+          <UTooltip text="Câu trước" :kbds="['meta', '←']">
+            <UButton
+              variant="soft"
+              color="neutral"
+              icon="i-lucide-chevron-left"
+              :disabled="props.activeSentenceIndex === 0"
+              @click="emit('prevSentence')"
+            >
+              Prev
+            </UButton>
+          </UTooltip>
+          <UTooltip text="Phát lại" :kbds="['meta', 'R']">
+            <UButton
+              variant="soft"
+              color="primary"
+              icon="i-lucide-repeat"
+              @click="emit('replaySentence')"
+            >
+              Replay
+            </UButton>
+          </UTooltip>
+          <UTooltip text="Câu sau" :kbds="['meta', '→']">
+            <UButton
+              variant="soft"
+              color="neutral"
+              trailing-icon="i-lucide-chevron-right"
+              :disabled="props.activeSentenceIndex >= props.totalSentences - 1"
+              @click="emit('nextSentence')"
+            >
+              Next
+            </UButton>
+          </UTooltip>
         </div>
       </div>
     </div>
@@ -271,6 +277,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           <div class="relative">
             <UTextarea
               :model-value="props.answerInput"
+              name="answerInput"
               placeholder="Nghe và gõ lại câu bạn nghe được..."
               :rows="4"
               autoresize
@@ -300,32 +307,38 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             </div>
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2">
-            <UButton
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              icon="i-lucide-lightbulb"
-              @click="emit('hint', 0)"
-            >
-              Hint
-            </UButton>
-            <UButton
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              icon="i-lucide-skip-forward"
-              @click="emit('skip')"
-            >
-              Skip
-            </UButton>
-            <UButton
-              color="primary"
-              size="sm"
-              :loading="props.answerStatus === 'checking'"
-              @click="emit('checkAnswer')"
-            >
-              Kiểm tra
-            </UButton>
+            <UTooltip text="Gợi ý chữ cái đầu" :kbds="['meta', 'H']">
+              <UButton
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                icon="i-lucide-lightbulb"
+                @click="emit('hint', 0)"
+              >
+                Hint
+              </UButton>
+            </UTooltip>
+            <UTooltip text="Bỏ qua câu này" :kbds="['meta', 'S']">
+              <UButton
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                icon="i-lucide-skip-forward"
+                @click="emit('skip')"
+              >
+                Skip
+              </UButton>
+            </UTooltip>
+            <UTooltip text="Kiểm tra đáp án" :kbds="['meta', 'Enter']">
+              <UButton
+                color="primary"
+                size="sm"
+                :loading="props.answerStatus === 'checking'"
+                @click="emit('checkAnswer')"
+              >
+                Kiểm tra
+              </UButton>
+            </UTooltip>
           </div>
         </div>
       </UCard>
