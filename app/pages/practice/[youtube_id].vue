@@ -72,6 +72,7 @@ const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const currentWordCharProgress = ref(0);
 const errorAudio = shallowRef<HTMLAudioElement | null>(null);
+const successAudio = shallowRef<HTMLAudioElement | null>(null);
 
 class PracticeDb extends Dexie {
   sessions!: Table<PracticeLocalSession, string>;
@@ -474,6 +475,10 @@ async function checkAnswer() {
   }
   sessionScore.value += accuracyValue;
   answerStatus.value = accuracyValue >= 90 ? "correct" : "incorrect";
+  if (answerStatus.value === "correct" && successAudio.value) {
+    successAudio.value.currentTime = 0;
+    successAudio.value.play().catch(() => {});
+  }
   await persistAttempt(accuracyValue, answerInput.value);
   await persistProgress();
 }
@@ -643,7 +648,10 @@ watch(
       const typedWord = normalizeText(typedWordsArr[lastCompletedIndex] ?? "");
       const expectedWord = normalizeText(expectedWordsArr[lastCompletedIndex] ?? "");
       if (typedWord !== expectedWord) {
-        errorAudio.value?.play().catch(() => {});
+        if (errorAudio.value) {
+          errorAudio.value.currentTime = 0;
+          errorAudio.value.play().catch(() => {});
+        }
       }
     }
 
@@ -681,6 +689,7 @@ const intervalId = ref<number | null>(null);
 
 onMounted(() => {
   errorAudio.value = new Audio("/audio/fahhh.mp3");
+  successAudio.value = new Audio("/audio/quick-ting.mp3");
   intervalId.value = window.setInterval(() => {
     void handleTimeUpdate();
   }, 300);
