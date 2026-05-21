@@ -5,11 +5,15 @@ const props = withDefaults(
   defineProps<{
     duration?: number;
     radiantWidth?: number;
+    color?: string;
+    textColor?: string;
     class?: string;
   }>(),
   {
     duration: 10,
     radiantWidth: 100,
+    color: undefined,
+    textColor: undefined,
     class: "",
   },
 );
@@ -18,6 +22,8 @@ const styleVar = computed(() => {
   return {
     "--radiant-anim-duration": `${props.duration}s`,
     "--radiant-width": `${props.radiantWidth}px`,
+    ...(props.color ? { "--radiant-color": props.color } : {}),
+    ...(props.textColor ? { "--radiant-text-color": props.textColor } : {}),
   };
 });
 </script>
@@ -27,7 +33,7 @@ const styleVar = computed(() => {
     :style="styleVar"
     :class="
       cn(
-        `radiant-animation mx-auto max-w-md bg-linear-to-r from-transparent via-black via-50% to-transparent bg-size-[var(--radiant-width)_100%] bg-clip-text bg-position-[0_0] bg-no-repeat text-neutral-600/70 [transition:background-position_1s_cubic-bezier(.6,.6,0,1)_infinite] dark:via-white dark:text-neutral-400/70`,
+        `radiant-animation max-w-md bg-linear-to-r from-transparent via-(--radiant-color,var(--color-primary)) via-50% to-transparent bg-size-[var(--radiant-width)_100%] bg-clip-text bg-position-[0_0] bg-no-repeat text-(--radiant-text-color,var(--color-neutral-600))/70 [transition:background-position_1s_cubic-bezier(.6,.6,0,1)_infinite] dark:via-(--radiant-color,white) dark:text-(--radiant-text-color,var(--color-neutral-400))/70`,
         props.class,
       )
     "

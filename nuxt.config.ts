@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxt/ui",
     "@vueuse/nuxt",
+    "@nuxt/test-utils/module",
     "@nuxt/scripts",
     "motion-v/nuxt",
   ],
@@ -37,7 +38,12 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@inspira-ui/plugins", "better-auth/vue"],
+      include: ["@inspira-ui/plugins", "better-auth/vue", "dexie"],
+    },
+  },
+  typescript: {
+    tsConfig: {
+      include: ["test/unit/*.ts"],
     },
   },
 });

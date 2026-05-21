@@ -1,16 +1,13 @@
 import { getYouTubeVideoInfo } from "../../utils/youtube";
-import { FatalError, getWritable } from "workflow";
+import { getWritable } from "workflow";
 import { parseSync, type Node } from "subtitle";
 import type { ReadabilityApi } from "text-readability";
 import natural from "natural";
 import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
+import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 import { kv } from "@nuxthub/kv";
-import {
-  VideoIndexingEventCode,
-  type VideoIndexingLog,
-} from "../../../shared/types/video-indexing";
 
 const { TfIdf } = natural;
 
@@ -40,6 +37,8 @@ const MAX_DURATION = 60 * 60;
 
 const STREAM_NAMESPACE = "logs";
 
+const INDEXING_KEY_PREFIX = "video-indexing:";
+
 const MAX_TRANSCRIPT_LENGTH = 15000;
 const RS_MODULE = "text-readability";
 let readabilityApi: ReadabilityApi | undefined;
@@ -50,28 +49,32 @@ const TITLE_BOOST_WEIGHT = 2.0;
 const TAG_BOOST_WEIGHT = 1.5;
 
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+  const log: VideoIndexingLog = { ...entry, timestamp: new Date().toISOString() };
+
   const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
   const writer = writable.getWriter();
-
   try {
-    await writer.write({
-      ...entry,
-      timestamp: new Date().toISOString(),
-    });
+    await writer.write(log);
   } finally {
     writer.releaseLock();
   }
 }
 
 function findEnglishCaptionUrl(
-  captions: Record<string, Array<{ ext: string; url: string }>>,
+  subtitles: Record<string, Array<{ ext: string; url: string }>>,
+  automaticCaptions: Record<string, Array<{ ext: string; url: string }>>,
 ): string {
-  for (const key of Object.keys(captions)) {
-    if (/^en(-.*)?$/i.test(key)) {
-      const vtt = captions[key]?.find((c) => c.ext === "vtt");
-      if (vtt) return vtt.url;
+  const sources = [subtitles, automaticCaptions];
+
+  for (const source of sources) {
+    for (const key of Object.keys(source ?? {})) {
+      if (/^en(-.*)?$/i.test(key)) {
+        const vtt = source[key]?.find((c) => c.ext === "vtt");
+        if (vtt) return vtt.url;
+      }
     }
   }
+
   return "";
 }
 
@@ -83,12 +86,11 @@ export enum VideoIndexingErrors {
 export async function getInfo(youtubeId: string): Promise<VideoInfo> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.FetchingMetadata,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataStart });
 
   const info = await getYouTubeVideoInfo(youtubeId);
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataComplete });
 
   return {
     title: info.title,
@@ -99,50 +101,66 @@ export async function getInfo(youtubeId: string): Promise<VideoInfo> {
         ?.url,
     tags: info.tags,
     language: info.language,
-    subtitlesUrl: findEnglishCaptionUrl(info.automatic_captions),
+    subtitlesUrl: findEnglishCaptionUrl(info.subtitles ?? {}, info.automatic_captions ?? {}),
   };
 }
 
-export async function checkDuration(videoInfo: VideoInfo): Promise<void> {
+export type VideoValidationResult =
+  | { ok: true }
+  | { ok: false; code: VideoIndexingErrors; reason: string };
+
+export async function validateVideoInfo(videoInfo: VideoInfo): Promise<VideoValidationResult> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.CheckingDuration,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationStart });
 
   if (videoInfo.duration > MAX_DURATION) {
-    throw new FatalError(VideoIndexingErrors.VIDEO_TOO_LONG);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.CheckDurationFailed,
+      reason: VideoIndexingErrors.VIDEO_TOO_LONG,
+    });
+    return { ok: false, code: VideoIndexingErrors.VIDEO_TOO_LONG, reason: "VIDEO_TOO_LONG" };
   }
-}
 
-export async function checkLanguage(videoInfo: VideoInfo): Promise<void> {
-  "use step";
-
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.CheckingLanguage,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckDurationComplete });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageStart });
 
   if (!/^en(-.*)?$/i.test(videoInfo.language)) {
-    throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.CheckLanguageFailed,
+      reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+    });
+    return {
+      ok: false,
+      code: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+      reason: "UNSUPPORTED_LANGUAGE",
+    };
   }
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageComplete });
+  return { ok: true };
 }
 
-export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[]> {
+export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[] | string> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.GeneratingTranscript,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptStart });
 
   if (!videoInfo.subtitlesUrl) {
-    throw new FatalError(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
+    await writeLog({
+      level: "error",
+      code: VideoIndexingStepCode.GenerateTranscriptFailed,
+      reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
+    });
+    return VideoIndexingErrors.UNSUPPORTED_LANGUAGE;
   }
 
   const subtitles = await $fetch<string>(videoInfo.subtitlesUrl);
   const nodes = parseSync(subtitles);
+
+  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptComplete });
 
   return nodes
     .filter((node): node is Node & { type: "cue" } => node.type === "cue")
@@ -153,20 +171,13 @@ export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSub
     }));
 }
 
-// Analyze the subtitles with AI to determine the topic and difficulty level of the video.
 export async function analyzeVideo(
   subtitles: VideoSubtitle[],
-  metadata: {
-    title: string;
-    tags: string[];
-  },
+  metadata: { title: string; tags: string[] },
 ): Promise<VideoAnalysis> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.AnalyzingVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.AnalyzeVideoStart });
 
   const transcript = subtitles
     .map((subtitle) => subtitle.text)
@@ -178,10 +189,9 @@ export async function analyzeVideo(
   const level = await getEnglishLevel(transcript);
   const topic = await labelTopic(transcript, metadata);
 
-  return {
-    topic,
-    level,
-  };
+  await writeLog({ level: "info", code: VideoIndexingStepCode.AnalyzeVideoComplete });
+
+  return { topic, level };
 }
 
 async function labelTopic(
@@ -335,10 +345,7 @@ export async function persistVideoIndex(params: {
 }): Promise<typeof schema.video.$inferSelect> {
   "use step";
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.PersistingVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.PersistVideoStart });
 
   const { youtubeId, info, analysis, subtitles } = params;
 
@@ -352,9 +359,7 @@ export async function persistVideoIndex(params: {
       level: analysis.level,
       thumbnailUrl: info.thumbnailUrl,
     })
-    .onConflictDoNothing({
-      target: schema.video.youtubeId,
-    })
+    .onConflictDoNothing({ target: schema.video.youtubeId })
     .returning();
 
   const [existing] = inserted
@@ -362,15 +367,15 @@ export async function persistVideoIndex(params: {
     : await db.select().from(schema.video).where(eq(schema.video.youtubeId, youtubeId));
 
   if (!existing) {
-    throw new FatalError("VIDEO_NOT_SAVED");
+    throw new Error("VIDEO_NOT_SAVED");
   }
 
   if (inserted) {
     const transcriptRows = subtitles.map((subtitle, index) => ({
       videoId: existing.id,
       sentenceIndex: index,
-      startTime: Math.round(subtitle.start * 1000),
-      endTime: Math.round(subtitle.end * 1000),
+      startTime: Math.round(subtitle.start),
+      endTime: Math.round(subtitle.end),
       text: subtitle.text,
     }));
 
@@ -379,31 +384,29 @@ export async function persistVideoIndex(params: {
     }
   }
 
-  await writeLog({
-    level: "info",
-    code: VideoIndexingEventCode.PersistedVideo,
-  });
+  await writeLog({ level: "info", code: VideoIndexingStepCode.PersistVideoComplete });
 
   return existing;
 }
 
-export async function logIndexing(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+export async function emitLogEntry(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   "use step";
 
   await writeLog(entry);
 }
 
-export async function clearIndexingRun(youtubeId: string): Promise<void> {
-  "use step";
-
-  await kv.del(`video-indexing:${youtubeId}`);
-}
-
-export async function finalizeIndexing(): Promise<void> {
+export async function closeLogStream(): Promise<void> {
   "use step";
 
   await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
 }
+
+export async function clearIndexingKey(youtubeId: string): Promise<void> {
+  "use step";
+
+  await kv.del(`${INDEXING_KEY_PREFIX}${youtubeId}`);
+}
+
 async function getReadabilityApi(): Promise<ReadabilityApi> {
   if (readabilityApi) {
     return readabilityApi;

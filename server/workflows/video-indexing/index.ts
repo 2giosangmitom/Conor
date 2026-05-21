@@ -1,54 +1,61 @@
 import {
   getInfo,
-  checkDuration,
-  checkLanguage,
+  validateVideoInfo,
   generateTranscript,
   analyzeVideo,
   persistVideoIndex,
-  logIndexing,
-  clearIndexingRun,
-  finalizeIndexing,
+  closeLogStream,
+  emitLogEntry,
+  clearIndexingKey,
 } from "./steps";
-import { FatalError } from "workflow";
-import { VideoIndexingEventCode } from "../../../shared/types/video-indexing";
+import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 
 export async function handleIndexVideo(youtubeId: string) {
   "use workflow";
 
+  const abort = async (reason: string) => {
+    await emitLogEntry({ level: "error", code: VideoIndexingStepCode.IndexFailed, reason });
+    await closeLogStream();
+  };
+
   try {
-    await logIndexing({
-      level: "info",
-      code: VideoIndexingEventCode.IndexingStarted,
-    });
+    await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexStart });
+
     const info = await getInfo(youtubeId);
-    await checkDuration(info);
-    await checkLanguage(info);
-    const subtitles = await generateTranscript(info);
-    const analysis = await analyzeVideo(subtitles, {
-      title: info.title,
-      tags: info.tags,
-    });
+
+    const validation = await validateVideoInfo(info);
+    if (!validation.ok) {
+      await abort(validation.reason);
+      return null;
+    }
+
+    const transcriptResult = await generateTranscript(info);
+    if (typeof transcriptResult === "string") {
+      await abort(transcriptResult);
+      return null;
+    }
+
+    const analysis = await analyzeVideo(transcriptResult, { title: info.title, tags: info.tags });
     const video = await persistVideoIndex({
       youtubeId,
       info,
       analysis,
-      subtitles,
+      subtitles: transcriptResult,
     });
-    await logIndexing({
-      level: "info",
-      code: VideoIndexingEventCode.IndexingCompleted,
-    });
-    await clearIndexingRun(youtubeId);
-    await finalizeIndexing();
+
+    await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexComplete });
+    await closeLogStream();
 
     return video;
   } catch (error) {
-    await logIndexing({
+    await emitLogEntry({
       level: "error",
-      code: VideoIndexingEventCode.IndexingFailed,
+      code: VideoIndexingStepCode.IndexFailed,
+      reason: error instanceof Error ? error.message : "Unknown error",
     });
-    await clearIndexingRun(youtubeId);
-    await finalizeIndexing();
-    throw new FatalError(error instanceof Error ? error.message : "Unknown error");
+    await closeLogStream();
+    throw error;
+  } finally {
+    await clearIndexingKey(youtubeId);
   }
 }
