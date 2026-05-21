@@ -81,6 +81,7 @@ export interface PracticeMainProps {
   revealedWords: number;
   errorWordIndices: number[];
   currentWordCharProgress: number;
+  currentWordTypedChars: string;
   formattedTimeRange: string;
   resumeModalOpen: boolean;
   pendingResumeIndex: number;

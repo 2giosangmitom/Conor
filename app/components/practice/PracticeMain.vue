@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { PracticeMainProps as Props, PracticeMainEmits as Emits } from "~/types/practice";
 
-interface HiddenWordPart {
+interface WordDisplay {
   text: string;
-  revealed: boolean;
-  error: boolean;
-  boldChars: number;
+  isCorrect: boolean;
+  isPlaceholder: boolean;
+  charHint: number;
+  isCurrent: boolean;
+  isWrongLength: boolean;
 }
 
 const props = defineProps<Props>();
@@ -26,31 +28,74 @@ function formatMs(ms: number) {
 
 const errorIndicesSet = computed(() => new Set(props.errorWordIndices));
 
-const hiddenDisplay = computed<HiddenWordPart[]>(() => {
+const wordDisplay = computed<WordDisplay[]>(() => {
   const sentence = props.sentences[props.activeSentenceIndex];
   if (!sentence) return [];
-  const words = sentence.text.split(" ");
-  return words.map((word, index) => {
-    const cleanWord = word.replace(/[.,!?;:]/g, "");
-    const asterisks = "*".repeat(cleanWord.length);
-    const isError = errorIndicesSet.value.has(index);
-    if (isError) {
-      return { text: asterisks, revealed: false, error: true, boldChars: 0 };
+
+  const isAfterCheck = props.answerStatus === "correct" || props.answerStatus === "incorrect";
+
+  if (!isAfterCheck) {
+    const endsWithSpace = props.answerInput.endsWith(" ");
+    const nonEmptyWords = props.answerInput.split(" ").filter((w) => w.length > 0);
+    const completedCount = endsWithSpace
+      ? nonEmptyWords.length
+      : Math.max(0, nonEmptyWords.length - 1);
+    const expectedWords = sentence.text.split(" ");
+    const result: WordDisplay[] = [];
+
+    for (let i = 0; i < expectedWords.length; i += 1) {
+      if (i < completedCount) {
+        const typedWord = nonEmptyWords[i] ?? "";
+        const expectedClean = expectedWords[i]!.replace(/[.,!?;:]/g, "");
+        result.push({
+          text: typedWord,
+          isCorrect: true,
+          isPlaceholder: false,
+          charHint: 0,
+          isCurrent: false,
+          isWrongLength: typedWord.length !== expectedClean.length,
+        });
+      } else if (i === completedCount && !endsWithSpace) {
+        const cleanWord = expectedWords[i]!.replace(/[.,!?;:]/g, "");
+        const typedChars = props.currentWordTypedChars;
+        const typedLen = typedChars.length;
+        const displayText =
+          typedLen > 0
+            ? typedChars + "*".repeat(Math.max(0, cleanWord.length - typedLen))
+            : "*".repeat(cleanWord.length);
+        result.push({
+          text: displayText,
+          isCorrect: true,
+          isPlaceholder: true,
+          charHint: cleanWord.length,
+          isCurrent: true,
+          isWrongLength: false,
+        });
+      } else {
+        const cleanWord = expectedWords[i]!.replace(/[.,!?;:]/g, "");
+        result.push({
+          text: "*".repeat(cleanWord.length),
+          isCorrect: true,
+          isPlaceholder: true,
+          charHint: 0,
+          isCurrent: false,
+          isWrongLength: false,
+        });
+      }
     }
-    if (index < props.revealedWords) {
-      return { text: word, revealed: true, error: false, boldChars: 0 };
-    }
-    const isCurrent = index === props.revealedWords;
-    if (isCurrent) {
-      return {
-        text: asterisks,
-        revealed: false,
-        error: false,
-        boldChars: props.currentWordCharProgress,
-      };
-    }
-    return { text: asterisks, revealed: false, error: false, boldChars: 0 };
-  });
+
+    return result;
+  }
+
+  const expectedWords = sentence.text.split(" ");
+  return expectedWords.map((word, index) => ({
+    text: word,
+    isCorrect: !errorIndicesSet.value.has(index),
+    isPlaceholder: false,
+    charHint: 0,
+    isCurrent: false,
+    isWrongLength: false,
+  }));
 });
 </script>
 
@@ -262,26 +307,29 @@ const hiddenDisplay = computed<HiddenWordPart[]>(() => {
           <h3 class="text-lg font-semibold">Câu hiện tại</h3>
         </template>
         <div class="flex flex-wrap gap-2">
-          <template v-for="(part, index) in hiddenDisplay" :key="index">
-            <template v-if="part.boldChars > 0 && !part.revealed && !part.error">
-              <UBadge variant="subtle" size="lg" class="tracking-wider gap-0">
-                {{ part.text.slice(0, part.boldChars) }}
-                <span class="opacity-60">{{ part.text.slice(part.boldChars) }}</span>
-              </UBadge>
-            </template>
-            <UBadge
-              v-else
-              variant="subtle"
-              size="lg"
-              :color="part.revealed ? 'primary' : part.error ? 'error' : 'neutral'"
-              class="tracking-wider"
-              :class="{
-                'text-dimmed': !part.revealed && !part.error,
-              }"
-            >
-              {{ part.text }}
-            </UBadge>
-          </template>
+          <UBadge
+            v-for="(word, index) in wordDisplay"
+            :key="index"
+            variant="subtle"
+            size="lg"
+            :color="
+              word.isWrongLength
+                ? 'warning'
+                : word.isCurrent
+                  ? 'secondary'
+                  : word.isPlaceholder
+                    ? 'neutral'
+                    : word.isCorrect
+                      ? 'primary'
+                      : 'error'
+            "
+            class="tracking-wider"
+            :class="{
+              'text-dimmed': word.isPlaceholder && !word.isCurrent,
+            }"
+          >
+            {{ word.text }}
+          </UBadge>
         </div>
       </UCard>
     </div>

@@ -71,6 +71,7 @@ const pendingResumeDate = ref<string | null>(null);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const currentWordCharProgress = ref(0);
+const currentWordTypedChars = ref("");
 const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
 
@@ -471,6 +472,10 @@ async function checkAnswer() {
   const accuracyValue = calculateAccuracy(expected, actual);
   if (!Number.isFinite(accuracyValue)) {
     answerStatus.value = "incorrect";
+    if (errorAudio.value) {
+      errorAudio.value.currentTime = 0;
+      errorAudio.value.play().catch(() => {});
+    }
     return;
   }
   sessionScore.value += accuracyValue;
@@ -479,6 +484,24 @@ async function checkAnswer() {
     successAudio.value.currentTime = 0;
     successAudio.value.play().catch(() => {});
   }
+  if (answerStatus.value === "incorrect" && errorAudio.value) {
+    errorAudio.value.currentTime = 0;
+    errorAudio.value.play().catch(() => {});
+  }
+
+  const expectedWords = splitWords(currentSentence.value.text);
+  const typedWords = splitWords(answerInput.value);
+  const newErrorIndices = new Set<number>();
+  for (let i = 0; i < expectedWords.length; i += 1) {
+    const typedWord = normalizeText(typedWords[i] ?? "");
+    const expectedWord = normalizeText(expectedWords[i] ?? "");
+    if (typedWord !== expectedWord) {
+      newErrorIndices.add(i);
+    }
+  }
+  errorWordIndices.value = newErrorIndices;
+  revealedWords.value = expectedWords.length;
+
   await persistAttempt(accuracyValue, answerInput.value);
   await persistProgress();
 }
@@ -494,6 +517,7 @@ async function moveToSentence(index: number) {
   revealedWords.value = 0;
   errorWordIndices.value = new Set();
   currentWordCharProgress.value = 0;
+  currentWordTypedChars.value = "";
   attemptStart.value = Date.now();
   await persistProgress();
   await playSegment();
@@ -606,56 +630,32 @@ watch(
   () => answerInput.value,
   (value) => {
     answerWords.value = splitWords(value);
+    if (answerStatus.value === "correct" || answerStatus.value === "incorrect") {
+      answerStatus.value = "idle";
+      errorWordIndices.value = new Set();
+      revealedWords.value = 0;
+    }
     if (!currentSentence.value) return;
-    const expectedText = currentSentence.value.text;
-    const expectedWordsArr = splitWords(expectedText);
+    const expectedWordsArr = splitWords(currentSentence.value.text);
     const typedWordsArr = splitWords(value);
     if (typedWordsArr.length === 0) {
-      revealedWords.value = 0;
       currentWordCharProgress.value = 0;
+      currentWordTypedChars.value = "";
       return;
     }
 
-    const prevRevealed = revealedWords.value;
     const isLastWordComplete = value.endsWith(" ");
     const completedCount = isLastWordComplete ? typedWordsArr.length : typedWordsArr.length - 1;
-    const newErrorIndices = new Set<number>();
-
-    for (let i = 0; i < completedCount; i += 1) {
-      const typedWord = normalizeText(typedWordsArr[i] ?? "");
-      if (i < expectedWordsArr.length) {
-        const expectedWord = normalizeText(expectedWordsArr[i] ?? "");
-        if (typedWord !== expectedWord) {
-          newErrorIndices.add(i);
-        }
-      }
-    }
-
-    revealedWords.value = completedCount;
-
     const currentWordIndex = completedCount;
     if (currentWordIndex < expectedWordsArr.length && !isLastWordComplete) {
-      const currentTypedWord = typedWordsArr[typedWordsArr.length - 1] ?? "";
-      const expectedWord = expectedWordsArr[currentWordIndex];
-      const expectedLen = expectedWord ? expectedWord.replace(/[.,!?;:]/g, "").length : 0;
-      currentWordCharProgress.value = Math.min(currentTypedWord.length, expectedLen);
+      const words = value.trim().split(/\s+/);
+      const rawCurrentWord = words[words.length - 1] ?? "";
+      currentWordTypedChars.value = rawCurrentWord;
+      currentWordCharProgress.value = rawCurrentWord.length;
     } else {
+      currentWordTypedChars.value = "";
       currentWordCharProgress.value = 0;
     }
-
-    if (isLastWordComplete && completedCount > prevRevealed) {
-      const lastCompletedIndex = completedCount - 1;
-      const typedWord = normalizeText(typedWordsArr[lastCompletedIndex] ?? "");
-      const expectedWord = normalizeText(expectedWordsArr[lastCompletedIndex] ?? "");
-      if (typedWord !== expectedWord) {
-        if (errorAudio.value) {
-          errorAudio.value.currentTime = 0;
-          errorAudio.value.play().catch(() => {});
-        }
-      }
-    }
-
-    errorWordIndices.value = newErrorIndices;
   },
 );
 
@@ -738,6 +738,7 @@ onBeforeUnmount(() => {
       :revealed-words="revealedWords"
       :error-word-indices="Array.from(errorWordIndices)"
       :current-word-char-progress="currentWordCharProgress"
+      :current-word-typed-chars="currentWordTypedChars"
       :formatted-time-range="formattedTimeRange"
       :resume-modal-open="resumeModalOpen"
       :pending-resume-index="pendingResumeIndex"
