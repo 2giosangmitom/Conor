@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/scripts",
     "motion-v/nuxt",
+    "@nuxt/content",
   ],
   hints: {
     features: {

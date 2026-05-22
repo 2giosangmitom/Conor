@@ -18,6 +18,7 @@
     "@inspira-ui/plugins": "^0.0.2",
     "@neondatabase/serverless": "^1.1.0",
     "@nuxt/a11y": "1.0.0-alpha.1",
+    "@nuxt/content": "^3.14.0",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/hints": "^1.1.1",
     "@nuxt/image": "^2.0.0",
