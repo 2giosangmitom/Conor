@@ -21,6 +21,29 @@ definePageMeta({
 
 const route = useRoute();
 const { data: session } = await useSession(useFetch);
+const { origin } = useRequestURL();
+
+const videoTitle = computed(() => video.value?.title ?? "Luyện nghe chép chính tả tiếng Anh");
+const pageTitle = computed(() => `Luyện nghe chép chính tả: ${videoTitle.value}`);
+const pageDescription = computed(() =>
+  video.value
+    ? `Luyện nghe chép chính tả tiếng Anh với "${video.value.title}". Nghe từng câu, gõ lại chính xác và nhận phản hồi tức thì từ video YouTube.`
+    : "Luyện nghe chép chính tả tiếng Anh với video YouTube yêu thích. Nghe từng câu và gõ lại chính xác những gì bạn nghe được.",
+);
+
+useSeoMeta({
+  title: pageTitle,
+  description: pageDescription,
+  ogType: "article",
+  ogTitle: computed(() => `${pageTitle.value} - NgheGo`),
+  ogDescription: pageDescription,
+  ogUrl: computed(() => `${origin}/practice/${youtubeId.value}`),
+  ogImage: `${origin}/images/logo.svg`,
+  twitterCard: "summary_large_image",
+  twitterTitle: computed(() => `${pageTitle.value} - NgheGo`),
+  twitterDescription: pageDescription,
+  twitterImage: `${origin}/images/logo.svg`,
+});
 
 const youtubeId = computed(() => String(route.params.youtube_id ?? ""));
 const isSignedIn = computed(() => Boolean(session.value?.user));

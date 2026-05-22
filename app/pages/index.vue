@@ -187,6 +187,23 @@
 import type { PageFeatureProps, AccordionItem } from "@nuxt/ui";
 import type { Stat, HowToUseStep } from "~/types/home";
 
+const { origin } = useRequestURL();
+
+useSeoMeta({
+  title: "Luyện nghe tiếng Anh",
+  description:
+    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
+  ogTitle: "Luyện nghe tiếng Anh - NgheGo",
+  ogDescription:
+    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
+  ogUrl: origin,
+  ogImage: `${origin}/images/logo.svg`,
+  twitterTitle: "Luyện nghe tiếng Anh - NgheGo",
+  twitterDescription:
+    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube.",
+  twitterImage: `${origin}/images/logo.svg`,
+});
+
 const videoUrl = ref("");
 const heroRef = useTemplateRef("heroRef");
 const colorMode = useColorMode();

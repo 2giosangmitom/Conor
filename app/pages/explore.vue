@@ -142,6 +142,23 @@
 </template>
 
 <script setup lang="ts">
+const { origin } = useRequestURL();
+
+useSeoMeta({
+  title: "Khám phá bài học",
+  description:
+    "Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn theo trình độ, chủ đề và thời lượng.",
+  ogTitle: "Khám phá bài học - NgheGo",
+  ogDescription:
+    "Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn.",
+  ogUrl: `${origin}/explore`,
+  ogImage: `${origin}/images/logo.svg`,
+  twitterTitle: "Khám phá bài học - NgheGo",
+  twitterDescription:
+    "Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn.",
+  twitterImage: `${origin}/images/logo.svg`,
+});
+
 const colorMode = useColorMode();
 
 const auroraColors = computed(() => {

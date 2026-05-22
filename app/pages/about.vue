@@ -184,12 +184,23 @@ interface TeamMember {
   facebook?: string;
 }
 
+const { origin } = useRequestURL();
+
 const colorMode = useColorMode();
 
 useSeoMeta({
-  title: "Về chúng tôi — NgheGo",
+  title: "Về chúng tôi",
   description:
     "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
+  ogTitle: "Về chúng tôi - NgheGo",
+  ogDescription:
+    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
+  ogUrl: `${origin}/about`,
+  ogImage: `${origin}/images/logo.svg`,
+  twitterTitle: "Về chúng tôi - NgheGo",
+  twitterDescription:
+    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích.",
+  twitterImage: `${origin}/images/logo.svg`,
 });
 
 const coreValues: ValueItem[] = [
