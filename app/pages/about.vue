@@ -126,28 +126,6 @@
                 <div class="space-y-3">
                   <UBadge variant="soft" color="primary">{{ member.role }}</UBadge>
                   <p class="text-sm text-muted leading-relaxed">{{ member.bio }}</p>
-                  <div class="flex items-center justify-center gap-1 pt-1">
-                    <UButton
-                      v-if="member.github"
-                      :to="member.github"
-                      target="_blank"
-                      icon="i-simple-icons-github"
-                      :aria-label="`${member.name} trên GitHub`"
-                      color="neutral"
-                      variant="ghost"
-                      class="hover:bg-secondary/20"
-                    />
-                    <UButton
-                      v-if="member.facebook"
-                      :to="member.facebook"
-                      target="_blank"
-                      icon="i-simple-icons-facebook"
-                      :aria-label="`${member.name} trên Facebook`"
-                      color="neutral"
-                      variant="ghost"
-                      class="hover:bg-secondary/20"
-                    />
-                  </div>
                 </div>
               </template>
             </UPageCard>
@@ -180,8 +158,6 @@ interface TeamMember {
   role: string;
   bio: string;
   avatar: string;
-  github?: string;
-  facebook?: string;
 }
 
 const { origin } = useRequestURL();
@@ -268,48 +244,39 @@ const methodology: MethodItem[] = [
 const teamMembers = computed<TeamMember[]>(() => [
   {
     name: "Võ Văn Duy",
-    role: "UI/UX Designer",
+    role: "Vibe Designer/Vibe Coder",
     bio: "Thiết kế giao diện trực quan và thân thiện, giúp việc luyện nghe trở nên dễ dàng và thú vị hơn.",
     avatar: "/images/nstcrystal.jpg",
-    github: "https://github.com/nstcrystal",
-    facebook: "https://www.facebook.com/nst.crystal.1",
   },
   {
     name: "Võ Quang Chiến",
-    role: "Founder & Full-stack Developer",
+    role: "Founder/Vibe Coder",
     bio: "Đam mê về công nghệ. Xây dựng NgheGo để giải quyết vấn đề nghe tiếng Anh mà chính mình từng gặp phải.",
     avatar: "/images/2giosangmitom.png",
-    github: "https://github.com/2giosangmitom",
-    facebook: "https://www.facebook.com/2giosangmitom",
   },
   {
     name: "Nguyễn Gia Hưng",
     role: "Tester",
     bio: "Tìm hiểu và phân tích các thông tin, kiểm tra tính hoàn thiện và báo cáo các vấn đề của web.",
     avatar: "/images/Ghung862.png",
-    github: "https://github.com/Ghung826",
-    facebook: "https://www.facebook.com/gia.hung.nguyen.297483",
   },
   {
     name: "GitHub Copilot",
-    role: "AI Coding Assistant",
+    role: "Senior Full-stack Developer",
     bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển NgheGo.",
     avatar: colorMode.value === "dark" ? "/images/copilot-dark.png" : "/images/copilot.png",
-    github: "https://github.com/github/copilot-docs",
   },
   {
     name: "Kiro AI",
-    role: "Agentic AI IDE",
+    role: "Senior Full-stack Developer",
     bio: "IDE AI của AWS, hỗ trợ spec-driven development. Từ yêu cầu đến thiết kế đến triển khai giúp đội nhóm làm việc có cấu trúc hơn.",
     avatar: "/images/kiro.jpg",
-    github: "https://github.com/kirodotdev/Kiro",
   },
   {
     name: "OpenCode",
-    role: "Open-source AI Agent",
+    role: "Senior Full-stack Developer",
     bio: "Coding agent mã nguồn mở chạy trên terminal, hỗ trợ nhiều model AI khác nhau, giúp tự động hóa các tác vụ lập trình lặp đi lặp lại.",
     avatar: colorMode.value === "dark" ? "/images/opencode-dark.png" : "/images/opencode.png",
-    github: "https://github.com/anomalyco/opencode",
   },
 ]);
 </script>
