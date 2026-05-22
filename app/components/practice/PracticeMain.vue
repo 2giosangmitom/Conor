@@ -278,6 +278,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             <UTextarea
               :model-value="props.answerInput"
               name="answerInput"
+              aria-label="Nhập câu bạn nghe được"
               placeholder="Nghe và gõ lại câu bạn nghe được..."
               :rows="4"
               autoresize

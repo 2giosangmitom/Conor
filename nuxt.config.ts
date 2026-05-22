@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   ],
   hints: {
     features: {
-      htmlValidate: false,
+      htmlValidate: true,
     },
   },
   hub: {

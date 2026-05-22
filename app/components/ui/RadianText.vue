@@ -27,7 +27,7 @@ const styleVar = computed(() => {
 <template>
   <p
     :style="styleVar"
-    class="radiant-animation max-w-md bg-linear-to-r from-transparent via-(--radiant-color,var(--color-primary)) via-50% to-transparent bg-size-[var(--radiant-width)_100%] bg-clip-text bg-position-[0_0] bg-no-repeat text-(--radiant-text-color,var(--color-neutral-600))/70 [transition:background-position_1s_cubic-bezier(.6,.6,0,1)_infinite] dark:via-(--radiant-color,white) dark:text-(--radiant-text-color,var(--color-neutral-400))/70"
+    class="radiant-animation max-w-md bg-linear-to-r from-transparent via-(--radiant-color,var(--color-primary)) via-50% to-transparent bg-size-[var(--radiant-width)_100%] bg-clip-text bg-position-[0_0] bg-no-repeat text-(--radiant-text-color,var(--color-neutral-600)) [transition:background-position_1s_cubic-bezier(.6,.6,0,1)_infinite] dark:via-(--radiant-color,white) dark:text-(--radiant-text-color,var(--color-neutral-400))"
   >
     <slot />
   </p>

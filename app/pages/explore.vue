@@ -78,7 +78,7 @@
                   >
                     <template #leading>
                       <div class="overflow-hidden rounded-lg bg-muted">
-                        <img
+                        <NuxtImg
                           :src="video.thumbnailUrl"
                           :alt="video.title"
                           class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
@@ -190,6 +190,12 @@ async function scrollToSection() {
   await nextTick();
   const top = allVideosSectionRef.value.offsetTop;
   window.scrollTo({ top, behavior: "smooth" });
+  const firstFocusable = allVideosSectionRef.value.querySelector(
+    'input, button, [tabindex]:not([tabindex="-1"])',
+  );
+  if (firstFocusable instanceof HTMLElement) {
+    firstFocusable.focus({ preventScroll: true });
+  }
 }
 
 const levelMenuItems = computed(() => [

@@ -1,7 +1,9 @@
 <template>
   <div>
     <AppHeader />
-    <slot />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
     <AppFooter />
   </div>
 </template>

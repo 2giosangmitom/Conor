@@ -67,7 +67,7 @@ watch(
 </script>
 
 <template>
-  <span ref="spanRef" class="inline-block tracking-wider text-black tabular-nums dark:text-white">
+  <span ref="spanRef" class="inline-block tracking-wider tabular-nums text-default">
     {{ output }}
   </span>
 </template>

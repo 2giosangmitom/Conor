@@ -1,5 +1,11 @@
 <template>
   <UApp>
+    <a
+      href="#main-content"
+      class="skip-link"
+    >
+      Bỏ qua điều hướng
+    </a>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
