@@ -123,7 +123,7 @@ async function signInWithGoogle() {
   <UModal
     v-model:open="isAuthModalOpen"
     title="Đăng nhập"
-    description="Đăng nhập bằng tài khoản Google hoặc Facebook."
+    description="Đăng nhập bằng tài khoản Google."
   >
     <template #body>
       <LazyUAuthForm
