@@ -1,6 +1,8 @@
-import { getYouTubeVideoInfo } from "../../utils/youtube";
 import { getWritable } from "workflow";
-import { parseSync, type Node } from "subtitle";
+import {
+  fetchTranscript,
+  YoutubeTranscriptNotAvailableLanguageError,
+} from "youtube-transcript-plus";
 import type { ReadabilityApi } from "text-readability";
 import natural from "natural";
 import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
@@ -17,7 +19,6 @@ interface VideoInfo {
   thumbnailUrl: string;
   tags: string[];
   language: string;
-  subtitlesUrl: string;
 }
 
 interface VideoSubtitle {
@@ -60,49 +61,55 @@ async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<voi
   }
 }
 
-function findEnglishCaptionUrl(
-  subtitles: Record<string, Array<{ ext: string; url: string }>>,
-  automaticCaptions: Record<string, Array<{ ext: string; url: string }>>,
-): string {
-  const sources = [subtitles, automaticCaptions];
-
-  for (const source of sources) {
-    for (const key of Object.keys(source ?? {})) {
-      if (/^en(-.*)?$/i.test(key)) {
-        const vtt = source[key]?.find((c) => c.ext === "vtt");
-        if (vtt) return vtt.url;
-      }
-    }
-  }
-
-  return "";
-}
-
 export enum VideoIndexingErrors {
   VIDEO_TOO_LONG = "VIDEO_TOO_LONG",
   UNSUPPORTED_LANGUAGE = "UNSUPPORTED_LANGUAGE",
 }
 
-export async function getInfo(youtubeId: string): Promise<VideoInfo> {
+export async function getInfo(
+  youtubeId: string,
+): Promise<{ info: VideoInfo; transcript: VideoSubtitle[] }> {
   "use step";
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataStart });
 
-  const info = await getYouTubeVideoInfo(youtubeId);
+  try {
+    const result = await fetchTranscript(youtubeId, { lang: "en", videoDetails: true });
 
-  await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataComplete });
+    await writeLog({ level: "info", code: VideoIndexingStepCode.FetchDataComplete });
 
-  return {
-    title: info.title,
-    duration: info.duration,
-    thumbnailUrl:
-      info.thumbnail ||
-      info.thumbnails.sort((a: { width: number }, b: { width: number }) => b.width - a.width)[0]
-        ?.url,
-    tags: info.tags,
-    language: info.language,
-    subtitlesUrl: findEnglishCaptionUrl(info.subtitles ?? {}, info.automatic_captions ?? {}),
-  };
+    const thumbnails = result.videoDetails.thumbnails ?? [];
+    const thumbnailUrl =
+      thumbnails.length > 0
+        ? thumbnails.reduce((best, t) => (t.width > best.width ? t : best)).url
+        : "";
+
+    const info: VideoInfo = {
+      title: result.videoDetails.title,
+      duration: result.videoDetails.lengthSeconds,
+      thumbnailUrl,
+      tags: result.videoDetails.keywords ?? [],
+      language: result.segments[0]?.lang ?? "en",
+    };
+
+    const transcript: VideoSubtitle[] = result.segments.map((s) => ({
+      start: Math.round(s.offset * 1000),
+      end: Math.round((s.offset + s.duration) * 1000),
+      text: s.text.trim(),
+    }));
+
+    return { info, transcript };
+  } catch (error) {
+    if (error instanceof YoutubeTranscriptNotAvailableLanguageError) {
+      await writeLog({
+        level: "error",
+        code: VideoIndexingStepCode.GenerateTranscriptFailed,
+        reason: "UNSUPPORTED_LANGUAGE",
+      });
+      throw new Error("UNSUPPORTED_LANGUAGE");
+    }
+    throw error;
+  }
 }
 
 export type VideoValidationResult =
@@ -141,34 +148,6 @@ export async function validateVideoInfo(videoInfo: VideoInfo): Promise<VideoVali
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.CheckLanguageComplete });
   return { ok: true };
-}
-
-export async function generateTranscript(videoInfo: VideoInfo): Promise<VideoSubtitle[] | string> {
-  "use step";
-
-  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptStart });
-
-  if (!videoInfo.subtitlesUrl) {
-    await writeLog({
-      level: "error",
-      code: VideoIndexingStepCode.GenerateTranscriptFailed,
-      reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
-    });
-    return VideoIndexingErrors.UNSUPPORTED_LANGUAGE;
-  }
-
-  const subtitles = await $fetch<string>(videoInfo.subtitlesUrl);
-  const nodes = parseSync(subtitles);
-
-  await writeLog({ level: "info", code: VideoIndexingStepCode.GenerateTranscriptComplete });
-
-  return nodes
-    .filter((node): node is Node & { type: "cue" } => node.type === "cue")
-    .map((node) => ({
-      start: node.data.start,
-      end: node.data.end,
-      text: node.data.text.trim(),
-    }));
 }
 
 export async function analyzeVideo(

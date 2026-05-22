@@ -1,7 +1,6 @@
 import {
   getInfo,
   validateVideoInfo,
-  generateTranscript,
   analyzeVideo,
   persistVideoIndex,
   closeLogStream,
@@ -21,7 +20,7 @@ export async function handleIndexVideo(youtubeId: string) {
   try {
     await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexStart });
 
-    const info = await getInfo(youtubeId);
+    const { info, transcript } = await getInfo(youtubeId);
 
     const validation = await validateVideoInfo(info);
     if (!validation.ok) {
@@ -29,18 +28,12 @@ export async function handleIndexVideo(youtubeId: string) {
       return null;
     }
 
-    const transcriptResult = await generateTranscript(info);
-    if (typeof transcriptResult === "string") {
-      await abort(transcriptResult);
-      return null;
-    }
-
-    const analysis = await analyzeVideo(transcriptResult, { title: info.title, tags: info.tags });
+    const analysis = await analyzeVideo(transcript, { title: info.title, tags: info.tags });
     const video = await persistVideoIndex({
       youtubeId,
       info,
       analysis,
-      subtitles: transcriptResult,
+      subtitles: transcript,
     });
 
     await emitLogEntry({ level: "info", code: VideoIndexingStepCode.IndexComplete });

@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("../../server/workflows/video-indexing/steps", () => ({
   getInfo: vi.fn(),
   validateVideoInfo: vi.fn(),
-  generateTranscript: vi.fn(),
   analyzeVideo: vi.fn(),
   persistVideoIndex: vi.fn(),
   closeLogStream: vi.fn(),
@@ -16,7 +15,6 @@ const { handleIndexVideo } = await import("../../server/workflows/video-indexing
 
 const getInfo = steps.getInfo as unknown as ReturnType<typeof vi.fn>;
 const validateVideoInfo = steps.validateVideoInfo as unknown as ReturnType<typeof vi.fn>;
-const generateTranscript = steps.generateTranscript as unknown as ReturnType<typeof vi.fn>;
 const analyzeVideo = steps.analyzeVideo as unknown as ReturnType<typeof vi.fn>;
 const persistVideoIndex = steps.persistVideoIndex as unknown as ReturnType<typeof vi.fn>;
 const closeLogStream = steps.closeLogStream as unknown as ReturnType<typeof vi.fn>;
@@ -27,7 +25,6 @@ describe("video indexing workflow", () => {
   beforeEach(() => {
     getInfo.mockReset();
     validateVideoInfo.mockReset();
-    generateTranscript.mockReset();
     analyzeVideo.mockReset();
     persistVideoIndex.mockReset();
     closeLogStream.mockReset();
@@ -42,15 +39,13 @@ describe("video indexing workflow", () => {
       thumbnailUrl: "https://img",
       tags: ["tag"],
       language: "en",
-      subtitlesUrl: "https://sub",
     };
     const subtitles = [{ start: 0, end: 1, text: "Hello" }];
     const analysis = { topic: "General", level: "A2" };
     const persisted = { id: "1", youtubeId: "abc" };
 
-    getInfo.mockResolvedValue(videoInfo);
+    getInfo.mockResolvedValue({ info: videoInfo, transcript: subtitles });
     validateVideoInfo.mockResolvedValue({ ok: true });
-    generateTranscript.mockResolvedValue(subtitles);
     analyzeVideo.mockResolvedValue(analysis);
     persistVideoIndex.mockResolvedValue(persisted);
 
@@ -60,7 +55,6 @@ describe("video indexing workflow", () => {
     expect(emitLogEntry).toHaveBeenCalledWith(expect.objectContaining({ code: "INDEX_START" }));
     expect(getInfo).toHaveBeenCalledWith("abc");
     expect(validateVideoInfo).toHaveBeenCalledWith(videoInfo);
-    expect(generateTranscript).toHaveBeenCalledWith(videoInfo);
     expect(analyzeVideo).toHaveBeenCalledWith(subtitles, {
       title: videoInfo.title,
       tags: videoInfo.tags,
@@ -82,10 +76,9 @@ describe("video indexing workflow", () => {
       thumbnailUrl: "https://img",
       tags: [],
       language: "en",
-      subtitlesUrl: "https://sub",
     };
 
-    getInfo.mockResolvedValue(videoInfo);
+    getInfo.mockResolvedValue({ info: videoInfo, transcript: [] });
     validateVideoInfo.mockResolvedValue({
       ok: false,
       code: "VIDEO_TOO_LONG",
@@ -101,31 +94,6 @@ describe("video indexing workflow", () => {
     expect(closeLogStream).toHaveBeenCalledTimes(1);
   });
 
-  it("aborts when transcript generation fails", async () => {
-    const videoInfo = {
-      title: "Missing subtitles",
-      duration: 30,
-      thumbnailUrl: "https://img",
-      tags: [],
-      language: "en",
-      subtitlesUrl: "",
-    };
-
-    getInfo.mockResolvedValue(videoInfo);
-    validateVideoInfo.mockResolvedValue({ ok: true });
-    generateTranscript.mockResolvedValue("UNSUPPORTED_LANGUAGE");
-
-    const result = await handleIndexVideo("abc");
-
-    expect(result).toBeNull();
-    expect(analyzeVideo).not.toHaveBeenCalled();
-    expect(persistVideoIndex).not.toHaveBeenCalled();
-    expect(emitLogEntry).toHaveBeenCalledWith(
-      expect.objectContaining({ code: "INDEX_FAILED", reason: "UNSUPPORTED_LANGUAGE" }),
-    );
-    expect(closeLogStream).toHaveBeenCalledTimes(1);
-  });
-
   it("logs failure and rethrows on unexpected errors", async () => {
     const videoInfo = {
       title: "Sample",
@@ -133,13 +101,11 @@ describe("video indexing workflow", () => {
       thumbnailUrl: "https://img",
       tags: ["tag"],
       language: "en",
-      subtitlesUrl: "https://sub",
     };
     const subtitles = [{ start: 0, end: 1, text: "Hello" }];
 
-    getInfo.mockResolvedValue(videoInfo);
+    getInfo.mockResolvedValue({ info: videoInfo, transcript: subtitles });
     validateVideoInfo.mockResolvedValue({ ok: true });
-    generateTranscript.mockResolvedValue(subtitles);
     analyzeVideo.mockResolvedValue({ topic: "General", level: "A2" });
     persistVideoIndex.mockRejectedValue(new Error("DB_FAIL"));
 

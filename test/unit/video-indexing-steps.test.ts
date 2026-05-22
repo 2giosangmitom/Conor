@@ -1,8 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { VideoIndexingLog } from "../../shared/types/video-indexing";
 
-vi.mock("../../server/utils/youtube", () => ({
-  getYouTubeVideoInfo: vi.fn(),
+vi.mock("youtube-transcript-plus", () => ({
+  fetchTranscript: vi.fn(),
+  YoutubeTranscriptNotAvailableLanguageError: class extends Error {
+    readonly videoId: string;
+    readonly lang: string;
+    readonly availableLangs: string[];
+    constructor(lang: string, availableLangs: string[], videoId: string) {
+      super(`Transcript not available in ${lang}`);
+      this.name = "YoutubeTranscriptNotAvailableLanguageError";
+      this.videoId = videoId;
+      this.lang = lang;
+      this.availableLangs = availableLangs;
+    }
+  },
 }));
 
 const mockWriter = {
@@ -16,12 +28,6 @@ const mockWritable = {
 
 vi.mock("workflow", () => ({
   getWritable: vi.fn(() => mockWritable),
-}));
-
-const fetchMock = vi.fn();
-
-vi.mock("subtitle", () => ({
-  parseSync: vi.fn(),
 }));
 
 let readabilityModule: { default: { textStandard: () => number; fleschReadingEase: () => number } };
@@ -65,17 +71,13 @@ vi.mock("drizzle-orm", () => ({
 
 describe("video indexing steps", () => {
   beforeEach(async () => {
-    vi.stubGlobal("$fetch", fetchMock);
-    fetchMock.mockReset();
     mockWriter.write.mockReset();
     mockWriter.releaseLock.mockReset();
     mockWritable.close.mockReset();
     const { getWritable } = await import("workflow");
     vi.mocked(getWritable).mockClear();
-    const { getYouTubeVideoInfo } = await import("../../server/utils/youtube");
-    vi.mocked(getYouTubeVideoInfo).mockReset();
-    const { parseSync } = await import("subtitle");
-    vi.mocked(parseSync).mockReset();
+    const { fetchTranscript } = await import("youtube-transcript-plus");
+    vi.mocked(fetchTranscript).mockReset();
     dbInsert.values.mockClear();
     dbInsert.onConflictDoNothing.mockClear();
     dbInsert.returning.mockReset();
@@ -93,33 +95,43 @@ describe("video indexing steps", () => {
     vi.unstubAllGlobals();
   });
 
-  it("maps video info and picks best thumbnail", async () => {
-    const { getYouTubeVideoInfo } = await import("../../server/utils/youtube");
-    vi.mocked(getYouTubeVideoInfo).mockResolvedValue({
-      title: "My Video",
-      duration: 120,
-      thumbnail: "",
-      thumbnails: [
-        { width: 100, url: "https://small" },
-        { width: 300, url: "https://large" },
-      ],
-      tags: ["tag"],
-      language: "en",
-      automatic_captions: {
-        en: [{ ext: "vtt", url: "https://sub" }],
+  it("maps video info and returns transcript from fetchTranscript", async () => {
+    const { fetchTranscript } = await import("youtube-transcript-plus");
+    vi.mocked(fetchTranscript).mockResolvedValue({
+      videoDetails: {
+        videoId: "abc",
+        title: "My Video",
+        author: "Author",
+        channelId: "UC123",
+        lengthSeconds: 120,
+        viewCount: 1000,
+        description: "",
+        keywords: ["tag"],
+        thumbnails: [
+          { url: "https://small", width: 100, height: 60 },
+          { url: "https://large", width: 300, height: 180 },
+        ],
+        isLiveContent: false,
       },
+      segments: [
+        { text: "Hello world", offset: 0, duration: 1.5, lang: "en" },
+        { text: "How are you", offset: 1.5, duration: 2.0, lang: "en" },
+      ],
     });
 
-    const info = await steps.getInfo("abc");
+    const result = await steps.getInfo("abc");
 
-    expect(info).toEqual({
+    expect(result.info).toEqual({
       title: "My Video",
       duration: 120,
       thumbnailUrl: "https://large",
       tags: ["tag"],
       language: "en",
-      subtitlesUrl: "https://sub",
     });
+    expect(result.transcript).toEqual([
+      { start: 0, end: 1500, text: "Hello world" },
+      { start: 1500, end: 3500, text: "How are you" },
+    ]);
   });
 
   it("flags videos longer than max duration", async () => {
@@ -129,7 +141,6 @@ describe("video indexing steps", () => {
       thumbnailUrl: "",
       tags: [],
       language: "en",
-      subtitlesUrl: "",
     });
 
     expect(result).toEqual({
@@ -153,7 +164,6 @@ describe("video indexing steps", () => {
       thumbnailUrl: "",
       tags: [],
       language: "fr",
-      subtitlesUrl: "",
     });
 
     expect(result).toEqual({
@@ -168,39 +178,6 @@ describe("video indexing steps", () => {
         reason: VideoIndexingErrors.UNSUPPORTED_LANGUAGE,
       }) as VideoIndexingLog,
     );
-  });
-
-  it("returns subtitles when parsing transcript", async () => {
-    fetchMock.mockResolvedValue("WEBVTT");
-    const { parseSync } = await import("subtitle");
-    vi.mocked(parseSync).mockReturnValue([
-      { type: "cue", data: { start: 0, end: 1, text: " Hello " } },
-      { type: "header", data: "WEBVTT" },
-    ]);
-
-    const result = await steps.generateTranscript({
-      title: "",
-      duration: 120,
-      thumbnailUrl: "",
-      tags: [],
-      language: "en",
-      subtitlesUrl: "https://sub",
-    });
-
-    expect(result).toEqual([{ start: 0, end: 1, text: "Hello" }]);
-  });
-
-  it("returns unsupported language when subtitles missing", async () => {
-    const result = await steps.generateTranscript({
-      title: "",
-      duration: 120,
-      thumbnailUrl: "",
-      tags: [],
-      language: "en",
-      subtitlesUrl: "",
-    });
-
-    expect(result).toBe(VideoIndexingErrors.UNSUPPORTED_LANGUAGE);
   });
 
   it("classifies topic and level", async () => {
@@ -229,7 +206,6 @@ describe("video indexing steps", () => {
         thumbnailUrl: "https://img",
         tags: [],
         language: "en",
-        subtitlesUrl: "https://sub",
       },
       analysis: { topic: "Programming", level: "B1" },
       subtitles: [{ start: 0, end: 1000, text: "Hello" }],
@@ -259,7 +235,6 @@ describe("video indexing steps", () => {
         thumbnailUrl: "https://img",
         tags: [],
         language: "en",
-        subtitlesUrl: "https://sub",
       },
       analysis: { topic: "Programming", level: "B1" },
       subtitles: [{ start: 0, end: 1, text: "Hello" }],
@@ -282,7 +257,6 @@ describe("video indexing steps", () => {
           thumbnailUrl: "https://img",
           tags: [],
           language: "en",
-          subtitlesUrl: "https://sub",
         },
         analysis: { topic: "Programming", level: "B1" },
         subtitles: [{ start: 0, end: 1000, text: "Hello" }],
