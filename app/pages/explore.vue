@@ -6,7 +6,7 @@
           id="all-videos"
           headline=""
           title="Tất cả Video"
-          description="Lọc theo mức độ, thời lượng, chủ đề và tìm kiếm nhanh"
+          description="Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn theo trình độ, chủ đề và thời lượng."
           :ui="{
             wrapper: 'text-left',
             headline: 'justify-start',
