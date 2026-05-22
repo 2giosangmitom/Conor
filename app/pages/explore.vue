@@ -1,154 +1,143 @@
 <template>
   <UMain>
-    <ClientOnly>
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-        <UPageHero
-          description="Khám phá kho bài học đa dạng, luyện nghe và chép chính tả với hàng ngàn video YouTube được tuyển chọn."
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageHero
+        description="Khám phá kho bài học đa dạng, luyện nghe và chép chính tả với hàng ngàn video YouTube được tuyển chọn."
+      >
+        <template #title>
+          <span class="flex flex-col items-center gap-4">
+            <UBadge class="tracking-normal" variant="soft" icon="lucide:compass">
+              Khám phá bài học
+            </UBadge>
+            <UiAuroraText :colors="auroraColors">
+              Học tiếng Anh, Chép chính tả qua YouTube
+            </UiAuroraText>
+          </span>
+        </template>
+      </UPageHero>
+    </UiBlurReveal>
+
+    <div ref="allVideosSectionRef" class="bg-elevated">
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
+        <UPageSection
+          id="all-videos"
+          headline=""
+          title="Tất cả Video"
+          description="Lọc theo mức độ, thời lượng, chủ đề và tìm kiếm nhanh"
+          :ui="{
+            wrapper: 'text-left',
+            headline: 'justify-start',
+            title: 'text-left',
+            description: 'text-left',
+          }"
         >
-          <template #title>
-            <span class="flex flex-col items-center gap-4">
-              <UBadge class="tracking-normal" variant="soft" icon="lucide:compass">
-                Khám phá bài học
-              </UBadge>
-              <ClientOnly>
-                <UiAuroraText :colors="auroraColors">
-                  Học tiếng Anh, Chép chính tả qua YouTube
-                </UiAuroraText>
-                <template #fallback>
-                  <span class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-                    Học tiếng Anh, Chép chính tả qua YouTube
-                  </span>
-                </template>
-              </ClientOnly>
-            </span>
-          </template>
-        </UPageHero>
-      </UiBlurReveal>
-    </ClientOnly>
-
-    <ClientOnly>
-      <div ref="allVideosSectionRef" class="bg-elevated">
-        <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
-          <UPageSection
-            id="all-videos"
-            headline=""
-            title="Tất cả Video"
-            description="Lọc theo mức độ, thời lượng, chủ đề và tìm kiếm nhanh"
-            :ui="{
-              wrapper: 'text-left',
-              headline: 'justify-start',
-              title: 'text-left',
-              description: 'text-left',
-            }"
-          >
-            <template #body>
-              <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div class="flex flex-wrap items-center gap-2">
-                  <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
-                    <UButton
-                      variant="outline"
-                      size="sm"
-                      trailing-icon="lucide:chevron-down"
-                      :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
-                    />
-                  </UDropdownMenu>
-                  <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
-                    <UButton
-                      variant="outline"
-                      size="sm"
-                      trailing-icon="lucide:chevron-down"
-                      :label="durationFilterLabel"
-                    />
-                  </UDropdownMenu>
-                </div>
-                <UInput
-                  v-model="searchQuery"
-                  placeholder="Tìm kiếm video"
-                  aria-label="Tìm kiếm video"
-                  leading-icon="lucide:search"
-                  class="w-full lg:w-72"
-                  size="lg"
-                />
+          <template #body>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div class="flex flex-wrap items-center gap-2">
+                <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
+                  <UButton
+                    variant="outline"
+                    size="sm"
+                    trailing-icon="lucide:chevron-down"
+                    :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
+                  />
+                </UDropdownMenu>
+                <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
+                  <UButton
+                    variant="outline"
+                    size="sm"
+                    trailing-icon="lucide:chevron-down"
+                    :label="durationFilterLabel"
+                  />
+                </UDropdownMenu>
               </div>
+              <UInput
+                v-model="searchQuery"
+                placeholder="Tìm kiếm video"
+                aria-label="Tìm kiếm video"
+                leading-icon="lucide:search"
+                class="w-full lg:w-72"
+                size="lg"
+              />
+            </div>
 
-              <div class="mt-6">
-                <UiBlurReveal
-                  :key="currentPage"
-                  :duration="0.5"
-                  :stagger-delay="0.12"
-                  blur="6px"
-                  :y-offset="14"
-                >
-                  <div v-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                    <UPageCard
-                      v-for="video in displayedVideos"
-                      :key="video.youtubeId"
-                      variant="outline"
-                      class="group h-full"
-                    >
-                      <template #leading>
-                        <div class="overflow-hidden rounded-lg bg-muted">
-                          <img
-                            :src="video.thumbnailUrl"
-                            :alt="video.title"
-                            class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                            loading="lazy"
-                          />
-                        </div>
-                      </template>
-                      <template #title>
-                        <span class="line-clamp-2">{{ video.title }}</span>
-                      </template>
-                      <template #description>
-                        <div class="flex min-h-16 flex-wrap items-center gap-2">
-                          <UBadge variant="soft">{{ video.level }}</UBadge>
-                          <UBadge variant="soft">{{ video.topic }}</UBadge>
-                          <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
-                            {{ formatDuration(video.duration) }}
-                          </UBadge>
-                        </div>
-                      </template>
-                      <template #footer>
-                        <UButton
-                          :to="`/practice/${video.youtubeId}`"
-                          label="Bắt đầu"
-                          trailing-icon="lucide:arrow-right"
-                          size="sm"
-                          color="primary"
-                          variant="solid"
-                        />
-                      </template>
-                    </UPageCard>
-                  </div>
-                  <div
-                    v-else
-                    class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+            <div class="mt-6">
+              <UiBlurReveal
+                :key="currentPage"
+                :duration="0.5"
+                :stagger-delay="0.12"
+                blur="6px"
+                :y-offset="14"
+              >
+                <div v-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  <UPageCard
+                    v-for="video in displayedVideos"
+                    :key="video.youtubeId"
+                    variant="outline"
+                    class="group h-full"
                   >
-                    <UIcon name="lucide:search-x" class="size-6 text-muted" />
-                    <div>
-                      <p class="text-sm font-semibold">Không tìm thấy Video</p>
-                      <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
-                    </div>
-                    <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
+                    <template #leading>
+                      <div class="overflow-hidden rounded-lg bg-muted">
+                        <img
+                          :src="video.thumbnailUrl"
+                          :alt="video.title"
+                          class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                          loading="lazy"
+                        />
+                      </div>
+                    </template>
+                    <template #title>
+                      <span class="line-clamp-2">{{ video.title }}</span>
+                    </template>
+                    <template #description>
+                      <div class="flex min-h-16 flex-wrap items-center gap-2">
+                        <UBadge variant="soft">{{ video.level }}</UBadge>
+                        <UBadge variant="soft">{{ video.topic }}</UBadge>
+                        <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
+                          {{ formatDuration(video.duration) }}
+                        </UBadge>
+                      </div>
+                    </template>
+                    <template #footer>
+                      <UButton
+                        :to="`/practice/${video.youtubeId}`"
+                        label="Bắt đầu"
+                        trailing-icon="lucide:arrow-right"
+                        size="sm"
+                        color="primary"
+                        variant="solid"
+                      />
+                    </template>
+                  </UPageCard>
+                </div>
+                <div
+                  v-else
+                  class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+                >
+                  <UIcon name="lucide:search-x" class="size-6 text-muted" />
+                  <div>
+                    <p class="text-sm font-semibold">Không tìm thấy Video</p>
+                    <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
                   </div>
-                </UiBlurReveal>
-              </div>
+                  <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
+                </div>
+              </UiBlurReveal>
+            </div>
 
-              <div class="mt-6 flex flex-col items-center gap-3">
-                <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
-                <UPagination
-                  v-model:page="currentPage"
-                  :total="totalVideos"
-                  :items-per-page="pageSize"
-                  size="lg"
-                  class="scale-110"
-                />
-              </div>
-            </template>
-          </UPageSection>
-        </UiBlurReveal>
-      </div>
-    </ClientOnly>
+            <div class="mt-6 flex flex-col items-center gap-3">
+              <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
+              <UPagination
+                v-model:page="currentPage"
+                :total="totalVideos"
+                :items-per-page="pageSize"
+                size="lg"
+                class="scale-110"
+              />
+            </div>
+          </template>
+        </UPageSection>
+      </UiBlurReveal>
+    </div>
   </UMain>
 </template>
 
@@ -164,10 +153,10 @@ const auroraColors = computed(() => {
         "var(--color-primary-400)",
       ]
     : [
-        "var(--color-primary-300)",
-        "var(--color-primary-500)",
-        "var(--color-primary-700)",
         "var(--color-primary-900)",
+        "var(--color-primary-800)",
+        "var(--color-primary-700)",
+        "var(--color-primary-600)",
       ];
 });
 

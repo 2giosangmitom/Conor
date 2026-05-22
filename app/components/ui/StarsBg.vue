@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { SpringOptions, Transition } from "motion-v";
-import { cn } from "@inspira-ui/plugins";
 import { motion, useMotionValue, useSpring } from "motion-v";
 
 interface StarsBackgroundProps {
@@ -9,7 +8,6 @@ interface StarsBackgroundProps {
   transition?: SpringOptions;
   starColor?: string;
   starColorDark?: string;
-  class?: string;
 }
 
 const props = withDefaults(defineProps<StarsBackgroundProps>(), {
@@ -18,7 +16,6 @@ const props = withDefaults(defineProps<StarsBackgroundProps>(), {
   transition: () => ({ stiffness: 50, damping: 20 }),
   starColor: "var(--ui-primary)",
   starColorDark: "var(--ui-primary)",
-  class: "",
 });
 
 const colorMode = useColorMode();
@@ -108,10 +105,7 @@ const starLayer3Transition = computed<Transition>(() => ({
 </script>
 
 <template>
-  <div
-    :class="cn(`relative size-full overflow-hidden bg-transparent`, props.class)"
-    @mousemove="handleMouseMove"
-  >
+  <div class="relative size-full overflow-hidden bg-transparent" @mousemove="handleMouseMove">
     <div class="absolute inset-0">
       <motion.div :style="{ x: springX, y: springY }">
         <!-- Star Layer 1 -->

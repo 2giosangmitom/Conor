@@ -6,7 +6,6 @@ interface Props {
   staggerDelay?: number;
   blur?: string;
   yOffset?: number;
-  class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -14,7 +13,6 @@ const props = withDefaults(defineProps<Props>(), {
   staggerDelay: 0.2,
   blur: "10px",
   yOffset: 10,
-  class: "",
 });
 
 const slots = useSlots();
@@ -43,7 +41,7 @@ function getTransition(index: number): Transition {
 </script>
 
 <template>
-  <div :class="props.class">
+  <div>
     <Motion
       v-for="(child, index) in children"
       :key="index"

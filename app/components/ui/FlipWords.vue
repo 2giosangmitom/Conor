@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { cn } from "@inspira-ui/plugins";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 interface Props {
   words: string[];
   duration?: number;
-  class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   duration: 3000,
-  class: "",
 });
 
 defineEmits(["animationStart", "animationComplete"]);
@@ -65,12 +62,7 @@ watch(isVisible, (newValue) => {
     <Transition @after-enter="$emit('animationStart')" @after-leave="$emit('animationComplete')">
       <span
         v-show="isVisible"
-        :class="
-          cn(
-            `relative z-10 inline-block text-left text-neutral-900 dark:text-neutral-100`,
-            props.class,
-          )
-        "
+        class="relative z-10 inline-block text-left text-neutral-900 dark:text-neutral-100"
       >
         <template v-for="(wordObj, wordIndex) in splitWords" :key="wordObj.word + wordIndex">
           <span

@@ -1,168 +1,160 @@
 <template>
   <UMain>
     <!-- Mission -->
-    <ClientOnly>
-      <div class="bg-muted">
-        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-          <UPageSection
-            headline=""
-            title="Tại sao NgheGo tồn tại?"
-            description="Kỹ năng nghe là rào cản lớn nhất với người học tiếng Anh tại Việt Nam. Chúng tôi tin rằng cách học hiệu quả nhất là luyện tập với nội dung thực tế, không phải bài tập giả tạo."
-          >
-            <template #body>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <UPageCard
-                  v-for="value in coreValues"
-                  :key="value.title"
-                  variant="outline"
-                  spotlight
-                  spotlight-color="primary"
-                  :ui="{ wrapper: 'items-center text-center', leading: 'mb-3' }"
-                >
-                  <template #leading>
-                    <div
-                      class="size-12 rounded-xl flex items-center justify-center mx-auto"
-                      :class="value.bgColor"
-                    >
-                      <UIcon :name="value.icon" :class="value.color" class="size-6" />
-                    </div>
-                  </template>
-                  <template #title>{{ value.title }}</template>
-                  <template #description>{{ value.description }}</template>
-                </UPageCard>
-              </div>
-            </template>
-          </UPageSection>
-        </UiBlurReveal>
-      </div>
-    </ClientOnly>
-
-    <!-- Story -->
-    <ClientOnly>
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-        <UPageSection headline="" title="NgheGo bắt đầu như thế nào?">
-          <template #body>
-            <div class="max-w-3xl mx-auto space-y-6 text-base leading-relaxed">
-              <p>
-                NgheGo bắt đầu từ một vấn đề quen thuộc: Dù học tiếng Anh nhiều năm, nhiều người vẫn
-                không thể nghe hiểu khi xem phim, nghe podcast hay nói chuyện với người bản ngữ. Lý
-                do không phải thiếu từ vựng hay ngữ pháp mà là thiếu luyện tập nghe thực tế.
-              </p>
-              <p>
-                Các ứng dụng học tiếng Anh truyền thống thường dùng nội dung nhân tạo, không phản
-                ánh cách người thật nói chuyện. Trong khi đó, YouTube có hàng tỷ video với tiếng Anh
-                tự nhiên, đa dạng accent nhưng không có công cụ nào giúp bạn luyện nghe chép chính
-                tả với chúng một cách có hệ thống.
-              </p>
-              <p>
-                NgheGo lấp đầy khoảng trống đó. Chúng tôi kết hợp AI transcription với giao diện
-                luyện tập từng câu, giúp bạn nghe đi nghe lại, gõ lại những gì nghe được và nhận
-                phản hồi tức thì với video YouTube bạn tự chọn.
-              </p>
-            </div>
-          </template>
-        </UPageSection>
-      </UiBlurReveal>
-    </ClientOnly>
-
-    <!-- How it works recap -->
-    <ClientOnly>
-      <div class="bg-muted">
-        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-          <UPageSection
-            headline=""
-            title="Học bằng cách làm — không phải ghi nhớ"
-            description="Phương pháp dictation được chứng minh là cách hiệu quả nhất để cải thiện kỹ năng nghe và phát âm."
-          >
-            <template #body>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                <UPageCard
-                  v-for="method in methodology"
-                  :key="method.title"
-                  variant="outline"
-                  spotlight
-                >
-                  <template #leading>
-                    <div
-                      class="size-10 rounded-lg flex items-center justify-center"
-                      :class="method.bgColor"
-                    >
-                      <UIcon :name="method.icon" :class="method.color" class="size-5" />
-                    </div>
-                  </template>
-                  <template #title>{{ method.title }}</template>
-                  <template #description>{{ method.description }}</template>
-                </UPageCard>
-              </div>
-            </template>
-          </UPageSection>
-        </UiBlurReveal>
-      </div>
-    </ClientOnly>
-
-    <!-- Team -->
-    <ClientOnly>
+    <div class="bg-muted">
       <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
         <UPageSection
           headline=""
-          title="Những người xây dựng NgheGo"
-          description="Nhóm nhỏ đam mê giáo dục và công nghệ, cùng nhau tạo ra công cụ học tiếng Anh tốt hơn cho người Việt."
+          title="Tại sao NgheGo tồn tại?"
+          description="Kỹ năng nghe là rào cản lớn nhất với người học tiếng Anh tại Việt Nam. Chúng tôi tin rằng cách học hiệu quả nhất là luyện tập với nội dung thực tế, không phải bài tập giả tạo."
         >
           <template #body>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <UPageCard
-                v-for="member in teamMembers"
-                :key="member.name"
+                v-for="value in coreValues"
+                :key="value.title"
                 variant="outline"
                 spotlight
                 spotlight-color="primary"
-                class="py-8"
-                :ui="{ wrapper: 'items-center text-center', leading: 'mb-5' }"
+                :ui="{ wrapper: 'items-center text-center', leading: 'mb-3' }"
               >
                 <template #leading>
-                  <NuxtImg
-                    :src="member.avatar"
-                    :alt="member.name"
-                    class="size-40 rounded-full object-cover object-center ring-4 ring-primary/20"
-                  />
-                </template>
-                <template #title>
-                  <span class="text-xl">{{ member.name }}</span>
-                </template>
-                <template #description>
-                  <div class="space-y-3">
-                    <UBadge variant="soft" color="primary">{{ member.role }}</UBadge>
-                    <p class="text-sm text-muted leading-relaxed">{{ member.bio }}</p>
-                    <div class="flex items-center justify-center gap-1 pt-1">
-                      <UButton
-                        v-if="member.github"
-                        :to="member.github"
-                        target="_blank"
-                        icon="i-simple-icons-github"
-                        :aria-label="`${member.name} trên GitHub`"
-                        color="neutral"
-                        variant="ghost"
-                        class="hover:bg-secondary/20"
-                      />
-                      <UButton
-                        v-if="member.facebook"
-                        :to="member.facebook"
-                        target="_blank"
-                        icon="i-simple-icons-facebook"
-                        :aria-label="`${member.name} trên Facebook`"
-                        color="neutral"
-                        variant="ghost"
-                        class="hover:bg-secondary/20"
-                      />
-                    </div>
+                  <div
+                    class="size-12 rounded-xl flex items-center justify-center mx-auto"
+                    :class="value.bgColor"
+                  >
+                    <UIcon :name="value.icon" :class="value.color" class="size-6" />
                   </div>
                 </template>
+                <template #title>{{ value.title }}</template>
+                <template #description>{{ value.description }}</template>
               </UPageCard>
             </div>
           </template>
         </UPageSection>
       </UiBlurReveal>
-    </ClientOnly>
+    </div>
+
+    <!-- Story -->
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageSection headline="" title="NgheGo bắt đầu như thế nào?">
+        <template #body>
+          <div class="max-w-3xl mx-auto space-y-6 text-base leading-relaxed">
+            <p>
+              NgheGo bắt đầu từ một vấn đề quen thuộc: Dù học tiếng Anh nhiều năm, nhiều người vẫn
+              không thể nghe hiểu khi xem phim, nghe podcast hay nói chuyện với người bản ngữ. Lý do
+              không phải thiếu từ vựng hay ngữ pháp mà là thiếu luyện tập nghe thực tế.
+            </p>
+            <p>
+              Các ứng dụng học tiếng Anh truyền thống thường dùng nội dung nhân tạo, không phản ánh
+              cách người thật nói chuyện. Trong khi đó, YouTube có hàng tỷ video với tiếng Anh tự
+              nhiên, đa dạng accent nhưng không có công cụ nào giúp bạn luyện nghe chép chính tả với
+              chúng một cách có hệ thống.
+            </p>
+            <p>
+              NgheGo lấp đầy khoảng trống đó. Chúng tôi kết hợp AI transcription với giao diện luyện
+              tập từng câu, giúp bạn nghe đi nghe lại, gõ lại những gì nghe được và nhận phản hồi
+              tức thì với video YouTube bạn tự chọn.
+            </p>
+          </div>
+        </template>
+      </UPageSection>
+    </UiBlurReveal>
+
+    <!-- How it works recap -->
+    <div class="bg-muted">
+      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+        <UPageSection
+          headline=""
+          title="Học bằng cách làm — không phải ghi nhớ"
+          description="Phương pháp dictation được chứng minh là cách hiệu quả nhất để cải thiện kỹ năng nghe và phát âm."
+        >
+          <template #body>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <UPageCard
+                v-for="method in methodology"
+                :key="method.title"
+                variant="outline"
+                spotlight
+              >
+                <template #leading>
+                  <div
+                    class="size-10 rounded-lg flex items-center justify-center"
+                    :class="method.bgColor"
+                  >
+                    <UIcon :name="method.icon" :class="method.color" class="size-5" />
+                  </div>
+                </template>
+                <template #title>{{ method.title }}</template>
+                <template #description>{{ method.description }}</template>
+              </UPageCard>
+            </div>
+          </template>
+        </UPageSection>
+      </UiBlurReveal>
+    </div>
+
+    <!-- Team -->
+    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <UPageSection
+        headline=""
+        title="Những người xây dựng NgheGo"
+        description="Nhóm nhỏ đam mê giáo dục và công nghệ, cùng nhau tạo ra công cụ học tiếng Anh tốt hơn cho người Việt."
+      >
+        <template #body>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <UPageCard
+              v-for="member in teamMembers"
+              :key="member.name"
+              variant="outline"
+              spotlight
+              spotlight-color="primary"
+              class="py-8"
+              :ui="{ wrapper: 'items-center text-center', leading: 'mb-5' }"
+            >
+              <template #leading>
+                <NuxtImg
+                  :src="member.avatar"
+                  :alt="member.name"
+                  class="size-40 rounded-full object-cover object-center ring-4 ring-primary/20"
+                />
+              </template>
+              <template #title>
+                <span class="text-xl">{{ member.name }}</span>
+              </template>
+              <template #description>
+                <div class="space-y-3">
+                  <UBadge variant="soft" color="primary">{{ member.role }}</UBadge>
+                  <p class="text-sm text-muted leading-relaxed">{{ member.bio }}</p>
+                  <div class="flex items-center justify-center gap-1 pt-1">
+                    <UButton
+                      v-if="member.github"
+                      :to="member.github"
+                      target="_blank"
+                      icon="i-simple-icons-github"
+                      :aria-label="`${member.name} trên GitHub`"
+                      color="neutral"
+                      variant="ghost"
+                      class="hover:bg-secondary/20"
+                    />
+                    <UButton
+                      v-if="member.facebook"
+                      :to="member.facebook"
+                      target="_blank"
+                      icon="i-simple-icons-facebook"
+                      :aria-label="`${member.name} trên Facebook`"
+                      color="neutral"
+                      variant="ghost"
+                      class="hover:bg-secondary/20"
+                    />
+                  </div>
+                </div>
+              </template>
+            </UPageCard>
+          </div>
+        </template>
+      </UPageSection>
+    </UiBlurReveal>
   </UMain>
 </template>
 

@@ -6,6 +6,10 @@ const columns: FooterColumn[] = [
     label: "Sản phẩm",
     children: [
       {
+        label: "Khám phá",
+        to: "/explore",
+      },
+      {
         label: "Tính năng",
         to: "#features",
       },
@@ -21,10 +25,6 @@ const columns: FooterColumn[] = [
       {
         label: "Về chúng tôi",
         to: "/about",
-      },
-      {
-        label: "Blog",
-        to: "/blog",
       },
     ],
   },

@@ -1,16 +1,19 @@
 <template>
-  <span class="relative inline-block" :class="className">
-    <span class="sr-only">
-      <slot />
+  <ClientOnly>
+    <span class="relative inline-block" :class="className">
+      <span
+        class="animate-aurora relative bg-clip-text text-transparent"
+        :style="gradientStyle"
+        aria-hidden="true"
+      >
+        <slot />
+      </span>
     </span>
-    <span
-      class="animate-aurora relative bg-clip-text text-transparent"
-      :style="gradientStyle"
-      aria-hidden="true"
-    >
-      <slot />
-    </span>
-  </span>
+
+    <template #fallback>
+      <span><slot /></span>
+    </template>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

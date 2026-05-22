@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { cn } from "@inspira-ui/plugins";
 import { TransitionPresets, useElementVisibility, useTransition } from "@vueuse/core";
 
 type TransitionsPresetsKeys = keyof typeof TransitionPresets;
@@ -10,7 +9,6 @@ interface NumberTickerProps {
   duration?: number;
   delay?: number;
   decimalPlaces?: number;
-  class?: string;
   transition?: TransitionsPresetsKeys;
 }
 
@@ -21,7 +19,6 @@ const props = withDefaults(defineProps<NumberTickerProps>(), {
   duration: 1000,
   decimalPlaces: 2,
   transition: "easeOutCubic",
-  class: "",
 });
 
 const spanRef = ref<HTMLSpanElement>();
@@ -70,10 +67,7 @@ watch(
 </script>
 
 <template>
-  <span
-    ref="spanRef"
-    :class="cn(`inline-block tracking-wider text-black tabular-nums dark:text-white`, props.class)"
-  >
+  <span ref="spanRef" class="inline-block tracking-wider text-black tabular-nums dark:text-white">
     {{ output }}
   </span>
 </template>

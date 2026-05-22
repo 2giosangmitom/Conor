@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { cn } from "@inspira-ui/plugins";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { motion, type Transition, type VariantLabels, type VariantType } from "motion-v";
 
@@ -8,14 +7,12 @@ interface WordRotateMotionProps {
   animate?: VariantType | VariantLabels;
   exit?: VariantType | VariantLabels;
   transition?: Transition;
-  class?: string;
 }
 
 interface Props {
   words: string[];
   duration?: number;
   motionProps?: WordRotateMotionProps;
-  class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -26,7 +23,6 @@ const props = withDefaults(defineProps<Props>(), {
     exit: { opacity: 0, y: 50 },
     transition: { duration: 0.25, ease: "easeOut" },
   }),
-  class: "",
 });
 
 const index = ref(0);
@@ -64,7 +60,6 @@ onBeforeUnmount(() => {
   <div class="overflow-hidden py-2">
     <motion.h1
       :key="props.words[index] ?? ''"
-      :class="cn(props.class)"
       :initial="props.motionProps?.initial"
       :animate="props.motionProps?.animate"
       :exit="props.motionProps?.exit"
