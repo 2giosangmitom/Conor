@@ -1,23 +1,6 @@
 <template>
   <UMain>
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UPageHero
-        description="Khám phá kho bài học đa dạng, luyện nghe và chép chính tả với hàng ngàn video YouTube được tuyển chọn."
-      >
-        <template #title>
-          <span class="flex flex-col items-center gap-4">
-            <UBadge class="tracking-normal" variant="soft" icon="lucide:compass">
-              Khám phá bài học
-            </UBadge>
-            <UiAuroraText :colors="auroraColors">
-              Học tiếng Anh, Chép chính tả qua YouTube
-            </UiAuroraText>
-          </span>
-        </template>
-      </UPageHero>
-    </UiBlurReveal>
-
-    <div ref="allVideosSectionRef" class="bg-elevated">
+    <div ref="allVideosSectionRef">
       <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
         <UPageSection
           id="all-videos"
@@ -157,24 +140,6 @@ useSeoMeta({
   twitterDescription:
     "Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn.",
   twitterImage: `${origin}/images/logo.svg`,
-});
-
-const colorMode = useColorMode();
-
-const auroraColors = computed(() => {
-  return colorMode.value === "dark"
-    ? [
-        "var(--color-primary-100)",
-        "var(--color-primary-200)",
-        "var(--color-primary-300)",
-        "var(--color-primary-400)",
-      ]
-    : [
-        "var(--color-primary-900)",
-        "var(--color-primary-800)",
-        "var(--color-primary-700)",
-        "var(--color-primary-600)",
-      ];
 });
 
 interface ApiVideo {
