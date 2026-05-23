@@ -1,127 +1,130 @@
 <template>
-  <UMain>
-    <div ref="allVideosSectionRef">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.2" blur="5px">
-        <UPageSection
-          id="all-videos"
-          headline=""
-          title="Tất cả Video"
-          description="Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn theo trình độ, chủ đề và thời lượng."
-          :ui="{
-            wrapper: 'text-left',
-            headline: 'justify-start',
-            title: 'text-left',
-            description: 'text-left',
-          }"
-        >
-          <template #body>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div class="flex flex-wrap items-center gap-2">
-                <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
-                  <UButton
-                    variant="outline"
-                    size="sm"
-                    trailing-icon="lucide:chevron-down"
-                    :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
-                  />
-                </UDropdownMenu>
-                <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
-                  <UButton
-                    variant="outline"
-                    size="sm"
-                    trailing-icon="lucide:chevron-down"
-                    :label="durationFilterLabel"
-                  />
-                </UDropdownMenu>
-              </div>
-              <UInput
-                v-model="searchQuery"
-                placeholder="Tìm kiếm video"
-                aria-label="Tìm kiếm video"
-                leading-icon="lucide:search"
-                class="w-full lg:w-72"
-                size="lg"
-              />
+  <div ref="allVideosSectionRef">
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
+      <UPageSection
+        id="all-videos"
+        headline=""
+        title="Tất cả Video"
+        description="Khám phá kho bài học tiếng Anh đa dạng. Luyện nghe chép chính tả với hàng ngàn video YouTube được tuyển chọn theo trình độ, chủ đề và thời lượng."
+        :ui="{
+          wrapper: 'text-left',
+          headline: 'justify-start',
+          title: 'text-left',
+          description: 'text-left',
+        }"
+      >
+        <template #body>
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-wrap items-center gap-2">
+              <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
+                <UButton
+                  variant="outline"
+                  size="sm"
+                  trailing-icon="lucide:chevron-down"
+                  :label="selectedLevel ? `Level: ${selectedLevel}` : 'Level'"
+                />
+              </UDropdownMenu>
+              <UDropdownMenu :items="durationMenuItems" :content="{ align: 'start' }">
+                <UButton
+                  variant="outline"
+                  size="sm"
+                  trailing-icon="lucide:chevron-down"
+                  :label="durationFilterLabel"
+                />
+              </UDropdownMenu>
             </div>
+            <UInput
+              v-model="searchQuery"
+              placeholder="Tìm kiếm video"
+              aria-label="Tìm kiếm video"
+              leading-icon="lucide:search"
+              class="w-full lg:w-72"
+              size="lg"
+            />
+          </div>
 
-            <div class="mt-6">
-              <UiBlurReveal
-                :key="currentPage"
-                :duration="0.5"
-                :stagger-delay="0.12"
-                blur="6px"
-                :y-offset="14"
-              >
-                <div v-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                  <UPageCard
-                    v-for="video in displayedVideos"
-                    :key="video.youtubeId"
-                    variant="outline"
-                    class="group h-full"
-                  >
-                    <template #leading>
-                      <div class="overflow-hidden rounded-lg bg-muted">
-                        <NuxtImg
-                          :src="video.thumbnailUrl"
-                          :alt="video.title"
-                          class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                          loading="lazy"
-                        />
-                      </div>
-                    </template>
-                    <template #title>
-                      <span class="line-clamp-2">{{ video.title }}</span>
-                    </template>
-                    <template #description>
-                      <div class="flex min-h-16 flex-wrap items-center gap-2">
-                        <UBadge variant="soft">{{ video.level }}</UBadge>
-                        <UBadge variant="soft">{{ video.topic }}</UBadge>
-                        <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
-                          {{ formatDuration(video.duration) }}
-                        </UBadge>
-                      </div>
-                    </template>
-                    <template #footer>
-                      <UButton
-                        :to="`/practice/${video.youtubeId}`"
-                        label="Bắt đầu"
-                        trailing-icon="lucide:arrow-right"
-                        size="sm"
-                        color="primary"
-                        variant="solid"
-                      />
-                    </template>
-                  </UPageCard>
-                </div>
-                <div
-                  v-else
-                  class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+          <div class="mt-6">
+            <Motion
+              :key="currentPage"
+              :initial="{ opacity: 0, filter: 'blur(6px)', y: 14 }"
+              :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+              :transition="{ duration: 0.5, ease: 'easeInOut' }"
+              :in-view-options="{ once: true }"
+            >
+              <div v-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <UPageCard
+                  v-for="video in displayedVideos"
+                  :key="video.youtubeId"
+                  variant="outline"
+                  class="group h-full"
                 >
-                  <UIcon name="lucide:search-x" class="size-6 text-muted" aria-hidden="true" />
-                  <div>
-                    <p class="text-sm font-semibold">Không tìm thấy Video</p>
-                    <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
-                  </div>
-                  <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
+                  <template #leading>
+                    <div class="overflow-hidden rounded-lg bg-muted">
+                      <NuxtImg
+                        :src="video.thumbnailUrl"
+                        :alt="video.title"
+                        class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+                    </div>
+                  </template>
+                  <template #title>
+                    <span class="line-clamp-2">{{ video.title }}</span>
+                  </template>
+                  <template #description>
+                    <div class="flex min-h-16 flex-wrap items-center gap-2">
+                      <UBadge variant="soft">{{ video.level }}</UBadge>
+                      <UBadge variant="soft">{{ video.topic }}</UBadge>
+                      <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
+                        {{ formatDuration(video.duration) }}
+                      </UBadge>
+                    </div>
+                  </template>
+                  <template #footer>
+                    <UButton
+                      :to="`/practice/${video.youtubeId}`"
+                      label="Bắt đầu"
+                      trailing-icon="lucide:arrow-right"
+                      size="sm"
+                      color="primary"
+                      variant="solid"
+                    />
+                  </template>
+                </UPageCard>
+              </div>
+              <div
+                v-else
+                class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
+              >
+                <UIcon name="lucide:search-x" class="size-6 text-muted" aria-hidden="true" />
+                <div>
+                  <p class="text-sm font-semibold">Không tìm thấy Video</p>
+                  <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
                 </div>
-              </UiBlurReveal>
-            </div>
+                <UButton label="Xóa bộ lọc" size="sm" variant="outline" @click="clearFilters" />
+              </div>
+            </Motion>
+          </div>
 
-            <div class="mt-6 flex flex-col items-center gap-3">
-              <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
-              <UPagination
-                v-model:page="currentPage"
-                :total="totalVideos"
-                :items-per-page="pageSize"
-                size="lg"
-                class="scale-110"
-              />
-            </div>
-          </template>
-        </UPageSection>
-      </UiBlurReveal>
-    </div>
-  </UMain>
+          <div class="mt-6 flex flex-col items-center gap-3">
+            <div class="text-sm text-muted">Trang {{ currentPage }} / {{ pageCount }}</div>
+            <UPagination
+              v-model:page="currentPage"
+              :total="totalVideos"
+              :items-per-page="pageSize"
+              size="lg"
+              class="scale-110"
+            />
+          </div>
+        </template>
+      </UPageSection>
+    </Motion>
+  </div>
 </template>
 
 <script setup lang="ts">

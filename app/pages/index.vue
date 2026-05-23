@@ -1,6 +1,11 @@
 <template>
-  <UMain>
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+  <div>
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
       <UPageHero
         ref="heroRef"
         description="Làm chủ kỹ năng nghe và chính tả với nội dung YouTube yêu thích của bạn. Luyện tập tiếng Anh với độ chính xác cao."
@@ -39,10 +44,15 @@
           </div>
         </template>
       </UPageHero>
-    </UiBlurReveal>
+    </Motion>
 
     <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <Motion
+        :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+        :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+        :transition="{ duration: 0.5, ease: 'easeInOut' }"
+        :in-view-options="{ once: true }"
+      >
         <UPageSection
           id="stats"
           title="Được tin tưởng bởi cộng đồng người học"
@@ -84,23 +94,31 @@
             </div>
           </template>
         </UPageSection>
-      </UiBlurReveal>
+      </Motion>
     </div>
 
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-      <UiStarsBg>
-        <UPageSection
-          id="features"
-          headline="Tính năng"
-          title="Mọi thứ bạn cần để luyện nghe hiệu quả"
-          description="Công cụ luyện nghe chép chính tả tiếng Anh mạnh mẽ, giúp bạn cải thiện kỹ năng nghe một cách hiệu quả nhất"
-          :features="features"
-        />
-      </UiStarsBg>
-    </UiBlurReveal>
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
+      <UPageSection
+        id="features"
+        headline="Tính năng"
+        title="Mọi thứ bạn cần để luyện nghe hiệu quả"
+        description="Công cụ luyện nghe chép chính tả tiếng Anh mạnh mẽ, giúp bạn cải thiện kỹ năng nghe một cách hiệu quả nhất"
+        :features="features"
+      />
+    </Motion>
 
     <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <Motion
+        :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+        :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+        :transition="{ duration: 0.5, ease: 'easeInOut' }"
+        :in-view-options="{ once: true }"
+      >
         <UPageSection
           id="how-to-use"
           headline="Cách sử dụng"
@@ -149,10 +167,15 @@
             </div>
           </template>
         </UPageSection>
-      </UiBlurReveal>
+      </Motion>
     </div>
 
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
       <UPageSection
         id="faq"
         headline="FAQ"
@@ -163,24 +186,27 @@
           <UAccordion :items="faqItems" class="max-w-3xl mx-auto" />
         </template>
       </UPageSection>
-    </UiBlurReveal>
+    </Motion>
 
-    <UiStarsBg>
-      <div class="light:bg-primary-200/20 dark:bg-primary-950/50">
-        <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
-          <div class="relative overflow-hidden">
-            <UPageCTA
-              title="Sẵn sàng luyện nghe ngay?"
-              description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
-              variant="naked"
-              :links="ctaLinks"
-              class="relative z-10"
-            />
-          </div>
-        </UiBlurReveal>
-      </div>
-    </UiStarsBg>
-  </UMain>
+    <div class="light:bg-primary-200/20 dark:bg-primary-950/50">
+      <Motion
+        :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+        :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+        :transition="{ duration: 0.5, ease: 'easeInOut' }"
+        :in-view-options="{ once: true }"
+      >
+        <div class="relative overflow-hidden">
+          <UPageCTA
+            title="Sẵn sàng luyện nghe ngay?"
+            description="Dán link YouTube yêu thích và bắt đầu cải thiện kỹ năng nghe tiếng Anh của bạn ngay hôm nay"
+            variant="naked"
+            :links="ctaLinks"
+            class="relative z-10"
+          />
+        </div>
+      </Motion>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

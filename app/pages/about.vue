@@ -1,8 +1,13 @@
 <template>
-  <UMain>
+  <div>
     <!-- Mission -->
     <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <Motion
+        :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+        :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+        :transition="{ duration: 0.5, ease: 'easeInOut' }"
+        :in-view-options="{ once: true }"
+      >
         <UPageSection
           headline=""
           title="Tại sao NgheGo tồn tại?"
@@ -32,11 +37,16 @@
             </div>
           </template>
         </UPageSection>
-      </UiBlurReveal>
+      </Motion>
     </div>
 
     <!-- Story -->
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
       <UPageSection headline="" title="NgheGo bắt đầu như thế nào?">
         <template #body>
           <div class="max-w-3xl mx-auto space-y-6 text-base leading-relaxed">
@@ -59,11 +69,16 @@
           </div>
         </template>
       </UPageSection>
-    </UiBlurReveal>
+    </Motion>
 
     <!-- How it works recap -->
     <div class="bg-muted">
-      <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+      <Motion
+        :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+        :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+        :transition="{ duration: 0.5, ease: 'easeInOut' }"
+        :in-view-options="{ once: true }"
+      >
         <UPageSection
           headline=""
           title="Học bằng cách làm — không phải ghi nhớ"
@@ -91,11 +106,16 @@
             </div>
           </template>
         </UPageSection>
-      </UiBlurReveal>
+      </Motion>
     </div>
 
     <!-- Team -->
-    <UiBlurReveal :duration="0.5" :stagger-delay="0.3" blur="5px">
+    <Motion
+      :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
+      :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
+      :transition="{ duration: 0.5, ease: 'easeInOut' }"
+      :in-view-options="{ once: true }"
+    >
       <UPageSection
         headline=""
         title="Những người xây dựng NgheGo"
@@ -132,8 +152,8 @@
           </div>
         </template>
       </UPageSection>
-    </UiBlurReveal>
-  </UMain>
+    </Motion>
+  </div>
 </template>
 
 <script setup lang="ts">
