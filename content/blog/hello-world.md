@@ -1,8 +1,11 @@
 ---
-title: "Hello World"
-date: 2025-05-01
-description: "Bài giới thiệu cho blog"
-slug: hello-world
+title: Hello World
+description: Bai viet dau tien
+date: 2026-05-23
+image: /blog/hello.jpg
+tags:
+  - nuxt
+  - vue
 ---
 
-Chào mừng bạn đến với bài viết đầu tiên của blog. Đây là bài ví dụ để kiểm tra tính năng blog của dự án.
+Day la noi dung bai viet.

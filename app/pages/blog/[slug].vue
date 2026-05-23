@@ -1,51 +1,57 @@
 <template>
   <UMain>
-    <article class="prose max-w-none mx-auto py-12 px-4">
-      <header class="mb-6">
-        <h1 class="text-3xl font-bold mb-2">{{ post.title }}</h1>
-        <p class="text-sm text-muted">{{ formatDate(post.date) }}</p>
+    <article v-if="post" class="prose dark:prose-invert max-w-3xl mx-auto py-12 px-4">
+      <header class="mb-10">
+        <h1 class="text-4xl font-bold mb-3">
+          {{ post.title }}
+        </h1>
+
+        <p class="text-sm text-muted">
+          {{ formatDate(post.date) }}
+        </p>
+
+        <!-- <p v-if="post.description" class="mt-4 text-lg text-muted">
+          {{ post.description }}
+        </p> -->
       </header>
 
-      <Content :document="post" />
+      <ContentRenderer :value="post" />
     </article>
   </UMain>
 </template>
 
 <script setup lang="ts">
-import { useAsyncData } from "#imports";
-// queryContent is provided by @nuxt/content at runtime; declare to satisfy TS
-declare const queryContent: any;
 const route = useRoute();
-const slug = String(route.params.slug || "");
 
-const key = `blog-post-${slug}`;
-const postAsync = await useAsyncData(key, () =>
-  queryContent("blog")
-    .where({ slug })
-    .findOne()
-    .then((r: any) => {
-      if (r) return r;
-      // fallback: try matching by filename/path
-      return queryContent("blog")
-        .where({ _path: `/blog/${slug}` })
-        .findOne();
-    }),
-);
+const slug = route.params.slug as string;
 
-const postRaw = postAsync.data?.value as Record<string, any> | undefined;
+const { data: post } = await useAsyncData(`blog-${slug}`, async () => {
+  const posts = await queryCollection("blog").all();
 
-if (!postRaw) {
-  throw createError({ statusCode: 404, statusMessage: "Post not found" });
+  return posts.find((item: any) => {
+    return item.stem?.split("/").pop() === slug;
+  });
+});
+
+if (!post.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Post not found",
+  });
 }
 
-const post = postRaw;
+useSeoMeta({
+  title: post.value.title,
+  description: post.value.description,
+});
 
-function formatDate(iso?: string | number) {
-  if (!iso) return "";
-  try {
-    return new Date(iso).toLocaleDateString();
-  } catch {
-    return String(iso);
-  }
+function formatDate(date?: string) {
+  if (!date) return "";
+
+  return new Date(date).toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 </script>
