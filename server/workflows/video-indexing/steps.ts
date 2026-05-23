@@ -45,6 +45,32 @@ const RS_MODULE = "text-readability";
 let readabilityApi: ReadabilityApi | undefined;
 const MAX_TOPIC_INPUT_LENGTH = 3000;
 
+/** Strip emoji, music symbols, control chars, and collapse whitespace */
+export function cleanTranscript(text: string): string {
+  // eslint-disable-next-line no-control-regex
+  const controlRE = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
+
+  const symbols = ["♪", "♫", "♬", "♩", "𝄞", "𝄢", "🎵", "🎶", "™", "®", "©"];
+
+  let result = text;
+  for (const s of symbols) {
+    result = result.replaceAll(s, "");
+  }
+
+  return result
+    .replace(/\u{200D}/gu, "")
+    .replace(/\u{FE0F}/gu, "")
+    .replace(/[\u{1F300}-\u{1F9FF}]/gu, "")
+    .replace(/[\u{2600}-\u{26FF}]/gu, "")
+    .replace(/[\u{2700}-\u{27BF}]/gu, "")
+    .replace(/[\u{1F600}-\u{1F64F}]/gu, "")
+    .replace(/[\u{1F680}-\u{1F6FF}]/gu, "")
+    .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, "")
+    .replace(controlRE, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 const KEYWORD_BOOST_WEIGHT = 3.0;
 const TITLE_BOOST_WEIGHT = 2.0;
 const TAG_BOOST_WEIGHT = 1.5;
@@ -163,12 +189,10 @@ export async function analyzeVideo(
 
   await writeLog({ level: "info", code: VideoIndexingStepCode.AnalyzeVideoStart });
 
-  const transcript = subtitles
-    .map((subtitle) => subtitle.text)
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, MAX_TRANSCRIPT_LENGTH);
+  const transcript = cleanTranscript(subtitles.map((subtitle) => subtitle.text).join(" ")).slice(
+    0,
+    MAX_TRANSCRIPT_LENGTH,
+  );
 
   const level = await getEnglishLevel(transcript);
   const topic = await labelTopic(transcript, metadata);

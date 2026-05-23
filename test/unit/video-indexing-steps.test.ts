@@ -276,6 +276,54 @@ describe("video indexing steps", () => {
     const aiTopic = TOPIC_CATALOG.find((t) => t.label === "Artificial Intelligence")!;
     const artTopic = TOPIC_CATALOG.find((t) => t.label === "Art")!;
 
+    describe("cleanTranscript", () => {
+      it("strips emoji characters", () => {
+        const result = steps.cleanTranscript("Hello 🎉 world 🌍 test");
+        expect(result).toBe("Hello world test");
+      });
+
+      it("strips music symbols", () => {
+        const result = steps.cleanTranscript("♪ La la ♫ land ♬ song ♩");
+        expect(result).toBe("La la land song");
+      });
+
+      it("replaces control characters with spaces", () => {
+        const result = steps.cleanTranscript("line1\nline2\rline3");
+        expect(result).toBe("line1 line2 line3");
+      });
+
+      it("collapses multiple whitespace", () => {
+        const result = steps.cleanTranscript("hello    world   test");
+        expect(result).toBe("hello world test");
+      });
+
+      it("strips decorative unicode symbols like ™ and ©", () => {
+        const result = steps.cleanTranscript("Hello™ World© Test®");
+        expect(result).toBe("Hello World Test");
+      });
+
+      it("preserves normal English text and punctuation", () => {
+        const result = steps.cleanTranscript("Hello, world! How's it going? (test)");
+        expect(result).toBe("Hello, world! How's it going? (test)");
+      });
+
+      it("handles empty input", () => {
+        expect(steps.cleanTranscript("")).toBe("");
+      });
+
+      it("handles music video subtitle with mixed content", () => {
+        const result = steps.cleanTranscript(
+          "♪ Hey, I was doing just fine ♫\n🎵 Before I met you 🎵\n🎶 I drank too much 🎶",
+        );
+        expect(result).toBe("Hey, I was doing just fine Before I met you I drank too much");
+      });
+
+      it("trims leading/trailing whitespace", () => {
+        const result = steps.cleanTranscript("  hello world  ");
+        expect(result).toBe("hello world");
+      });
+    });
+
     describe("escapeRegex", () => {
       it("escapes regex special characters", () => {
         expect(steps.escapeRegex("hello.world")).toBe("hello\\.world");
