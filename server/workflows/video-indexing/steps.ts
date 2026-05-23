@@ -49,6 +49,11 @@ const KEYWORD_BOOST_WEIGHT = 3.0;
 const TITLE_BOOST_WEIGHT = 2.0;
 const TAG_BOOST_WEIGHT = 1.5;
 
+// Normalize boost by keyword count to prevent bias toward topics with more keywords
+function normalizeBoost(boost: number, topic: TopicDefinition): number {
+  return topic.keywords.length > 0 ? boost / topic.keywords.length : 0;
+}
+
 async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
   const log: VideoIndexingLog = { ...entry, timestamp: new Date().toISOString() };
 
@@ -187,30 +192,31 @@ async function labelTopic(
   const input = buildTopicInput(transcript, metadata);
   tfidf.addDocument(input.toLowerCase());
 
+  const inputTerms = input.toLowerCase().split(/\s+/).filter(Boolean);
+  const tfidfScores = tfidf.tfidfs(inputTerms);
+
   const scores = TOPIC_CATALOG.map((topic, index) => {
-    let score = 0;
-
-    const terms = tfidf.listTerms(index);
-    for (const term of terms) {
-      score += term.tfidf;
-    }
-
-    const keywordMatches = calculateKeywordBoost(input, topic);
-    const titleMatches = calculateTitleBoost(metadata.title, topic);
-    const tagMatches = calculateTagBoost(metadata.tags, topic);
+    const keywordMatches = normalizeBoost(calculateKeywordBoost(input, topic), topic);
+    const titleMatches = normalizeBoost(calculateTitleBoost(metadata.title, topic), topic);
+    const tagMatches = normalizeBoost(calculateTagBoost(metadata.tags, topic), topic);
 
     return {
       label: topic.label,
-      score: score + keywordMatches + titleMatches + tagMatches,
+      score: (tfidfScores[index] ?? 0) + keywordMatches + titleMatches + tagMatches,
     };
   });
 
   scores.sort((a, b) => b.score - a.score);
 
-  return scores[0]?.label ?? "Other";
+  const top = scores[0];
+  if (!top || top.score < 0.01) {
+    return "Other";
+  }
+
+  return top.label;
 }
 
-function calculateKeywordBoost(text: string, topic: TopicDefinition): number {
+export function calculateKeywordBoost(text: string, topic: TopicDefinition): number {
   if (topic.keywords.length === 0) return 0;
 
   const lowerText = text.toLowerCase();
@@ -228,7 +234,7 @@ function calculateKeywordBoost(text: string, topic: TopicDefinition): number {
   return boost;
 }
 
-function calculateTitleBoost(title: string, topic: TopicDefinition): number {
+export function calculateTitleBoost(title: string, topic: TopicDefinition): number {
   if (topic.keywords.length === 0) return 0;
 
   const lowerTitle = title.toLowerCase();
@@ -236,7 +242,8 @@ function calculateTitleBoost(title: string, topic: TopicDefinition): number {
 
   for (const keyword of topic.keywords) {
     const lowerKeyword = keyword.toLowerCase();
-    if (lowerTitle.includes(lowerKeyword)) {
+    const regex = new RegExp(`\\b${escapeRegex(lowerKeyword)}\\b`, "i");
+    if (regex.test(lowerTitle)) {
       boost += TITLE_BOOST_WEIGHT;
     }
   }
@@ -244,7 +251,7 @@ function calculateTitleBoost(title: string, topic: TopicDefinition): number {
   return boost;
 }
 
-function calculateTagBoost(tags: string[], topic: TopicDefinition): number {
+export function calculateTagBoost(tags: string[], topic: TopicDefinition): number {
   if (topic.keywords.length === 0) return 0;
 
   let boost = 0;
@@ -253,7 +260,9 @@ function calculateTagBoost(tags: string[], topic: TopicDefinition): number {
   for (const tag of lowerTags) {
     for (const keyword of topic.keywords) {
       const lowerKeyword = keyword.toLowerCase();
-      if (tag.includes(lowerKeyword) || lowerKeyword.includes(tag)) {
+      const kwRegex = new RegExp(`\\b${escapeRegex(lowerKeyword)}\\b`, "i");
+      const tagRegex = new RegExp(`\\b${escapeRegex(tag)}\\b`, "i");
+      if (kwRegex.test(tag) || tagRegex.test(lowerKeyword)) {
         boost += TAG_BOOST_WEIGHT;
         break;
       }
@@ -263,11 +272,14 @@ function calculateTagBoost(tags: string[], topic: TopicDefinition): number {
   return boost;
 }
 
-function escapeRegex(string: string): string {
+export function escapeRegex(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function buildTopicInput(transcript: string, metadata: { title: string; tags: string[] }): string {
+export function buildTopicInput(
+  transcript: string,
+  metadata: { title: string; tags: string[] },
+): string {
   const title = metadata.title.trim();
   const tags = metadata.tags.filter((item) => item.trim().length > 0).join(", ");
 
