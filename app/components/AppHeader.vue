@@ -54,18 +54,6 @@ const dropdownItems = computed<DropdownMenuItem[][]>(() => [
   ],
   [
     {
-      label: "Trang cá nhân",
-      icon: "i-lucide-user",
-      to: "/profile",
-    },
-    {
-      label: "Cài đặt",
-      icon: "i-lucide-settings",
-      to: "/settings",
-    },
-  ],
-  [
-    {
       label: "Đăng xuất",
       icon: "i-lucide-log-out",
       color: "error",
