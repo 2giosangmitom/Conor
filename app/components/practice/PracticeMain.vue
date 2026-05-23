@@ -182,7 +182,13 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             <span>Tiến độ</span>
             <span>{{ props.progressPercent }}%</span>
           </div>
-          <UProgress :model-value="props.progressValue" :max="100" animation="swing" size="sm" />
+          <UProgress
+            :model-value="props.progressValue"
+            :max="100"
+            animation="swing"
+            size="sm"
+            aria-label="Tiến độ luyện tập"
+          />
         </div>
 
         <div class="mt-4 grid grid-cols-4 gap-3">
@@ -206,7 +212,9 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       </UCard>
 
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="text-sm text-muted">Lặp lại {{ props.replayCount + 1 }}/3</div>
+        <div class="text-sm text-muted" role="status">
+          {{ props.replayCount + 1 }}/3 lần phát lại
+        </div>
         <div class="flex flex-wrap items-center gap-3">
           <UTooltip text="Câu trước" :kbds="['meta', '←']">
             <UButton
@@ -214,9 +222,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               color="neutral"
               icon="i-lucide-chevron-left"
               :disabled="props.activeSentenceIndex === 0"
+              aria-label="Câu trước"
               @click="emit('prevSentence')"
             >
-              Prev
+              Trước
             </UButton>
           </UTooltip>
           <UTooltip text="Phát lại" :kbds="['meta', 'R']">
@@ -224,9 +233,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               variant="soft"
               color="primary"
               icon="i-lucide-repeat"
+              aria-label="Phát lại câu này"
               @click="emit('replaySentence')"
             >
-              Replay
+              Phát lại
             </UButton>
           </UTooltip>
           <UTooltip text="Câu sau" :kbds="['meta', '→']">
@@ -235,9 +245,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               color="neutral"
               trailing-icon="i-lucide-chevron-right"
               :disabled="props.activeSentenceIndex >= props.totalSentences - 1"
+              aria-label="Câu sau"
               @click="emit('nextSentence')"
             >
-              Next
+              Sau
             </UButton>
           </UTooltip>
         </div>
@@ -261,6 +272,8 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                     ? 'error'
                     : 'primary'
               "
+              role="status"
+              aria-live="polite"
             >
               {{
                 props.answerStatus === "correct"
@@ -314,9 +327,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 color="neutral"
                 size="sm"
                 icon="i-lucide-lightbulb"
+                aria-label="Gợi ý chữ cái đầu"
                 @click="emit('hint', 0)"
               >
-                Hint
+                Gợi ý
               </UButton>
             </UTooltip>
             <UTooltip text="Bỏ qua câu này" :kbds="['meta', 'S']">
@@ -325,9 +339,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 color="neutral"
                 size="sm"
                 icon="i-lucide-skip-forward"
+                aria-label="Bỏ qua câu này"
                 @click="emit('skip')"
               >
-                Skip
+                Bỏ qua
               </UButton>
             </UTooltip>
             <UTooltip text="Kiểm tra đáp án" :kbds="['meta', 'Enter']">
@@ -372,6 +387,9 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               'text-dimmed': word.isPlaceholder && !word.isCurrent && !word.isHinted,
               'text-warning': word.isHinted,
             }"
+            :aria-label="
+              !word.isPlaceholder && !word.isCurrent ? (word.isCorrect ? 'Đúng' : 'Sai') : undefined
+            "
           >
             {{ word.text }}
           </UBadge>
@@ -417,6 +435,15 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                         ? 'bg-error'
                         : 'bg-muted',
                 ]"
+                :aria-label="
+                  getAttemptStatus(sentence.sentenceIndex) === 'current'
+                    ? 'Câu hiện tại'
+                    : getAttemptStatus(sentence.sentenceIndex) === 'correct'
+                      ? 'Đã hoàn thành chính xác'
+                      : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                        ? 'Chưa chính xác'
+                        : 'Chưa luyện tập'
+                "
               />
               <span class="text-sm">Câu {{ sentence.sentenceIndex + 1 }}</span>
             </div>

@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   modules: [
     "@nuxthub/core",
@@ -16,11 +16,6 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "motion-v/nuxt",
   ],
-  hints: {
-    features: {
-      htmlValidate: true,
-    },
-  },
   hub: {
     db: {
       dialect: "postgresql",
@@ -29,7 +24,6 @@ export default defineNuxtConfig({
     },
     cache: true,
     kv: true,
-    blob: true,
   },
   ui: {
     experimental: {

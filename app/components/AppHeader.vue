@@ -99,7 +99,7 @@ async function signInWithGoogle() {
     <template #right>
       <template v-if="user">
         <LazyUDropdownMenu :items="dropdownItems" :content="{ align: 'end' }">
-          <UButton variant="ghost" class="gap-2" :aria-label="user.name">
+          <UButton variant="ghost" class="gap-2" :aria-label="`Menu người dùng: ${user.name}`">
             <LazyUAvatar :src="user.image ?? undefined" :alt="user.name" size="sm" />
           </UButton>
         </LazyUDropdownMenu>

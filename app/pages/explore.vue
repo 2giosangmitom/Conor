@@ -97,7 +97,7 @@
                   v-else
                   class="flex flex-col items-start justify-center gap-3 rounded-2xl border border-dashed border-muted px-6 py-10 text-left"
                 >
-                  <UIcon name="lucide:search-x" class="size-6 text-muted" />
+                  <UIcon name="lucide:search-x" class="size-6 text-muted" aria-hidden="true" />
                   <div>
                     <p class="text-sm font-semibold">Không tìm thấy Video</p>
                     <p class="text-sm text-muted">Thử đổi bộ lọc hoặc từ khóa khác</p>
