@@ -34,8 +34,8 @@ CREATE TABLE "practice_session" (
 	"video_id" uuid NOT NULL,
 	"current_sentence_index" integer DEFAULT 0 NOT NULL,
 	"completed" boolean DEFAULT false NOT NULL,
-	"score" integer,
-	"last_practiced_at" timestamp,
+	"score" integer DEFAULT 0 NOT NULL,
+	"last_practiced_at" timestamp NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -48,6 +48,7 @@ CREATE TABLE "user" (
 	"image" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"role" text DEFAULT 'user',
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

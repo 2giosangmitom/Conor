@@ -1,5 +1,5 @@
 {
-  "id": "e608a32e-3cc7-46a0-a840-ee0b4c40c8fa",
+  "id": "ab2d3d65-d9de-4791-81a1-10e1e690bf74",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -290,13 +290,14 @@
           "name": "score",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": 0
         },
         "last_practiced_at": {
           "name": "last_practiced_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -440,6 +441,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
         }
       },
       "indexes": {},

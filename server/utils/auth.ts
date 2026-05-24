@@ -11,6 +11,17 @@ export const auth = betterAuth({
       ...schema,
     },
   }),
+  user: {
+    additionalFields: {
+      role: {
+        type: ["user", "admin"] as const,
+        returned: true,
+        required: false,
+        defaultValue: "user",
+        input: false,
+      },
+    },
+  },
   rateLimit: {
     storage: "secondary-storage",
   },

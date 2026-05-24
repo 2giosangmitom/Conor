@@ -44,18 +44,33 @@ const authProviders: ButtonProps[] = [
   },
 ];
 
-const dropdownItems = computed<DropdownMenuItem[][]>(() => [
-  [
-    {
-      type: "label",
-      label: user.value?.name,
-      avatar: {
-        src: user.value?.image ?? undefined,
-        alt: user.value?.name ?? "User Avatar",
+const isAdmin = computed(() => user.value?.role === "admin");
+
+const dropdownItems = computed<DropdownMenuItem[][]>(() => {
+  const items: DropdownMenuItem[][] = [
+    [
+      {
+        type: "label",
+        label: user.value?.name,
+        avatar: {
+          src: user.value?.image ?? undefined,
+          alt: user.value?.name ?? "User Avatar",
+        },
       },
-    },
-  ],
-  [
+    ],
+  ];
+
+  if (isAdmin.value) {
+    items.push([
+      {
+        label: "Quản trị",
+        icon: "i-lucide-shield",
+        to: "/admin",
+      },
+    ]);
+  }
+
+  items.push([
     {
       label: "Đăng xuất",
       icon: "i-lucide-log-out",
@@ -64,8 +79,10 @@ const dropdownItems = computed<DropdownMenuItem[][]>(() => [
         await signOut();
       },
     },
-  ],
-]);
+  ]);
+
+  return items;
+});
 
 function openAuthModal() {
   isAuthModalOpen.value = true;

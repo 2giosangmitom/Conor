@@ -1,5 +1,6 @@
 <template>
   <div ref="allVideosSectionRef">
+    <h1 class="sr-only">Khám phá bài học</h1>
     <Motion
       :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
       :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
@@ -86,7 +87,7 @@
                     <div class="overflow-hidden rounded-lg bg-muted">
                       <NuxtImg
                         :src="video.thumbnailUrl"
-                        :alt="video.title"
+                        alt="Thumbnail"
                         class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                         loading="lazy"
                       />
