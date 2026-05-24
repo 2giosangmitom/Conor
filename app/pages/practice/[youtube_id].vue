@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Dexie, { type Table } from "dexie";
 import { VideoIndexingStepCode, type VideoIndexingLog } from "~~/shared/types/video-indexing";
 import { useSession } from "~/utils/auth";
 import type {
@@ -101,18 +100,58 @@ const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
 const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
 
-class PracticeDb extends Dexie {
-  sessions!: Table<PracticeLocalSession, string>;
+const DB_NAME = "nghego-practice";
+const DB_VERSION = 1;
+const STORE_NAME = "sessions";
 
-  constructor() {
-    super("nghego-practice");
-    this.version(1).stores({
-      sessions: "youtubeId",
-    });
-  }
+function openDb(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "youtubeId" });
+      }
+    };
+  });
 }
 
-const practiceDb = new PracticeDb();
+const practiceDb = {
+  sessions: {
+    async get(youtubeId: string): Promise<PracticeLocalSession | undefined> {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const store = tx.objectStore(STORE_NAME);
+        const request = store.get(youtubeId);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+      });
+    },
+    async put(session: PracticeLocalSession): Promise<void> {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
+        const request = store.put(session);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve();
+      });
+    },
+    async delete(youtubeId: string): Promise<void> {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
+        const request = store.delete(youtubeId);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve();
+      });
+    },
+  },
+};
 
 const currentSentence = computed(() => sentences.value[activeSentenceIndex.value]);
 const totalSentences = computed(() => sentences.value.length);

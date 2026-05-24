@@ -32,7 +32,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["better-auth/vue", "dexie"],
+      include: ["better-auth/vue"],
     },
   },
   typescript: {

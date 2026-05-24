@@ -4,7 +4,10 @@ import { useSession, signOut, authClient } from "~/utils/auth";
 
 const route = useRoute();
 const isAuthModalOpen = ref(false);
-const { data: session } = await useSession(useFetch);
+const { data: session } = await useAsyncData("header-session", async () => {
+  const result = await useSession(useFetch);
+  return result.data.value;
+});
 const user = computed(() => session.value?.user);
 
 const navigationItems = computed<NavigationMenuItem[]>(() => [
