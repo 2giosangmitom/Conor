@@ -51,12 +51,12 @@
     "@iconify-json/openmoji": "^1.2.27",
     "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/test-utils": "^4.0.3",
-    "@types/youtube": "^0.2.0",
+    "@types/youtube": "^0.1.2",
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
     "oxfmt": "^0.51.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.7",
-    "vue-tsc": "^3.3.1"
+    "vue-tsc": "^3.2.9"
   }
 }
