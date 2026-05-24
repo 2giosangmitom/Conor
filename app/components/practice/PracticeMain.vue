@@ -446,6 +446,12 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 "
               />
               <span class="text-sm">Câu {{ sentence.sentenceIndex + 1 }}</span>
+              <UIcon
+                v-if="getAttemptStatus(sentence.sentenceIndex) === 'correct'"
+                name="i-lucide-circle-check"
+                class="size-4 text-success"
+                aria-label="Đã hoàn thành chính xác"
+              />
             </div>
             <span class="text-xs text-muted">
               {{ formatMs(sentence.startTime) }}

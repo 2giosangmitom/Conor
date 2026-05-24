@@ -14,6 +14,11 @@ import type {
 } from "~/types/practice";
 import { formatMs, normalizeText, splitWords, calculateAccuracy } from "~~/shared/utils/practice";
 
+const PracticeLoader = defineAsyncComponent(
+  () => import("~/components/practice/PracticeLoader.vue"),
+);
+const PracticeMain = defineAsyncComponent(() => import("~/components/practice/PracticeMain.vue"));
+
 definePageMeta({
   layout: "practice",
 });
@@ -30,6 +35,20 @@ const pageDescription = computed(() =>
     : "Luyện nghe chép chính tả tiếng Anh với video YouTube yêu thích. Nghe từng câu và gõ lại chính xác những gì bạn nghe được.",
 );
 
+const youtubeId = computed(() => String(route.params.youtube_id ?? ""));
+const isSignedIn = computed(() => Boolean(session.value?.user));
+const video = shallowRef<VideoInfo | null>(null);
+const sentences = shallowRef<VideoSentence[]>([]);
+
+const runId = ref<string | null>(null);
+const isIndexing = ref(false);
+const isReady = ref(false);
+const isFailed = ref(false);
+const errorReason = ref<string | null>(null);
+const connectionIssue = ref<string | null>(null);
+const lastLog = ref<VideoIndexingLog | null>(null);
+const hasTerminalFailure = ref(false);
+
 useSeoMeta({
   title: pageTitle,
   description: pageDescription,
@@ -43,21 +62,6 @@ useSeoMeta({
   twitterDescription: pageDescription,
   twitterImage: `${origin}/images/logo.svg`,
 });
-
-const youtubeId = computed(() => String(route.params.youtube_id ?? ""));
-const isSignedIn = computed(() => Boolean(session.value?.user));
-
-const runId = ref<string | null>(null);
-const isIndexing = ref(false);
-const isReady = ref(false);
-const isFailed = ref(false);
-const errorReason = ref<string | null>(null);
-const connectionIssue = ref<string | null>(null);
-const lastLog = ref<VideoIndexingLog | null>(null);
-const hasTerminalFailure = ref(false);
-
-const video = shallowRef<VideoInfo | null>(null);
-const sentences = shallowRef<VideoSentence[]>([]);
 
 const stepTemplate: LoaderStep[] = [
   { id: "fetchData", label: "Tải dữ liệu video", status: "pending" },
@@ -93,6 +97,7 @@ const pendingResumeIndex = ref(0);
 const pendingResumeDate = ref<string | null>(null);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
+const attemptedSentenceIndices = ref(new Set<number>());
 const currentWordCharProgress = ref(0);
 const currentWordTypedChars = ref("");
 const revealedWordIndices = ref<number[]>([]);
@@ -155,14 +160,14 @@ const practiceDb = {
 
 const currentSentence = computed(() => sentences.value[activeSentenceIndex.value]);
 const totalSentences = computed(() => sentences.value.length);
-const completedCount = computed(() => Math.min(activeSentenceIndex.value, totalSentences.value));
+const attemptedCount = computed(() => attemptedSentenceIndices.value.size);
 const accuracy = computed(() => {
-  if (completedCount.value === 0) return 0;
-  return Math.round(sessionScore.value / completedCount.value);
+  if (attemptedCount.value === 0) return 0;
+  return Math.round(sessionScore.value / attemptedCount.value);
 });
 const progressPercent = computed(() => {
   if (totalSentences.value === 0) return 0;
-  return Math.round((completedCount.value / totalSentences.value) * 100);
+  return Math.round((activeSentenceIndex.value / totalSentences.value) * 100);
 });
 const progressValue = computed(() => {
   const value = progressPercent.value;
@@ -317,6 +322,7 @@ function setReadyState(payload: { video: VideoInfo; sentences: VideoSentence[] }
   video.value = payload.video;
   sentences.value = payload.sentences;
   sentenceAttempts.value = payload.sentences.map(() => "none" as const);
+  attemptedSentenceIndices.value = new Set();
   isReady.value = true;
   isIndexing.value = false;
   isFailed.value = false;
@@ -407,6 +413,7 @@ async function startNewSession() {
   }
 
   activeSentenceIndex.value = 0;
+  attemptedSentenceIndices.value = new Set();
   answerInput.value = "";
   hintCount.value = 0;
   answerStatus.value = "idle";
@@ -419,6 +426,9 @@ async function resumeSession() {
   resumeModalOpen.value = false;
   if (hasResumeCandidate.value) {
     activeSentenceIndex.value = Math.min(pendingResumeIndex.value, totalSentences.value - 1);
+    for (let i = 0; i < activeSentenceIndex.value; i += 1) {
+      attemptedSentenceIndices.value.add(i);
+    }
   }
 
   if (!isSignedIn.value && video.value) {
@@ -562,6 +572,7 @@ async function checkAnswer() {
     return;
   }
   sessionScore.value += accuracyValue;
+  attemptedSentenceIndices.value.add(activeSentenceIndex.value);
   answerStatus.value = accuracyValue >= 90 ? "correct" : "incorrect";
   sentenceAttempts.value[activeSentenceIndex.value] =
     answerStatus.value === "correct" ? "correct" : "incorrect";
@@ -876,7 +887,7 @@ onBeforeUnmount(() => {
       :hint-count="hintCount"
       :replay-count="replayCount"
       :accuracy="accuracy"
-      :completed-count="completedCount"
+      :completed-count="attemptedCount"
       :total-sentences="totalSentences"
       :progress-value="progressValue"
       :progress-percent="progressPercent"

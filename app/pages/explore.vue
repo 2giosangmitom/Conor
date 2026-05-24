@@ -56,7 +56,26 @@
               :transition="{ duration: 0.5, ease: 'easeInOut' }"
               :in-view-options="{ once: true }"
             >
-              <div v-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              <template v-if="pending">
+                <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  <UPageCard v-for="i in 8" :key="i" variant="outline" class="h-full">
+                    <template #leading>
+                      <USkeleton class="aspect-video w-full rounded-lg" />
+                    </template>
+                    <template #title>
+                      <USkeleton class="h-4 w-full" />
+                    </template>
+                    <template #description>
+                      <div class="flex min-h-16 flex-wrap items-center gap-2">
+                        <USkeleton class="h-5 w-12" />
+                        <USkeleton class="h-5 w-16" />
+                        <USkeleton class="h-5 w-20" />
+                      </div>
+                    </template>
+                  </UPageCard>
+                </div>
+              </template>
+              <div v-else-if="displayedVideos.length" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <UPageCard
                   v-for="video in displayedVideos"
                   :key="video.youtubeId"
@@ -282,7 +301,7 @@ const durationFilterBounds = computed(() => {
   return null;
 });
 
-const { data: videoResponse } = await useFetch<VideoIndexResponse>("/api/video", {
+const { data: videoResponse, status } = useFetch<VideoIndexResponse>("/api/video", {
   query: computed(() => {
     const durationBounds = durationFilterBounds.value;
 
@@ -299,6 +318,7 @@ const { data: videoResponse } = await useFetch<VideoIndexResponse>("/api/video",
   }),
 });
 
+const pending = computed(() => status.value === "pending");
 const displayedVideos = computed(() => videoResponse.value?.videos ?? []);
 const totalVideos = computed(() => videoResponse.value?.total ?? 0);
 const pageCount = computed(() => Math.max(1, Math.ceil(totalVideos.value / pageSize)));
