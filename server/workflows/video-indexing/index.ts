@@ -1,4 +1,11 @@
-import { getInfo, validateVideoInfo, analyzeVideo, persistVideoIndex, emitLogEntry, closeLogStream } from "./steps";
+import {
+  getInfo,
+  validateVideoInfo,
+  analyzeVideo,
+  persistVideoIndex,
+  emitLogEntry,
+  closeLogStream,
+} from "./steps";
 import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 import { kv } from "@nuxthub/kv";
 

@@ -754,7 +754,8 @@ function handlePlayerState(event: { data: number }) {
       replayCount.value += 1;
       const player = getPlayer();
       if (player) {
-        const prevSentence = activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
+        const prevSentence =
+          activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
         player.loadVideoById({
           videoId: youtubeId.value,
           startSeconds: prevSentence ? prevSentence.endTime / 1000 : 0,
@@ -791,7 +792,8 @@ async function playSegment() {
   const player = getPlayer();
   if (!player) return;
   replayCount.value = 0;
-  const prevSentence = activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
+  const prevSentence =
+    activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
   const startSeconds = prevSentence ? prevSentence.endTime / 1000 : 0;
   player.loadVideoById({
     videoId: youtubeId.value,
