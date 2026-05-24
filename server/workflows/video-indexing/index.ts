@@ -1,27 +1,8 @@
-import { getWritable } from "workflow";
-import { getInfo, validateVideoInfo, analyzeVideo, persistVideoIndex } from "./steps";
+import { getInfo, validateVideoInfo, analyzeVideo, persistVideoIndex, emitLogEntry, closeLogStream } from "./steps";
 import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
 import { kv } from "@nuxthub/kv";
 
-const STREAM_NAMESPACE = "logs";
 const INDEXING_KEY_PREFIX = "video-indexing:";
-
-export async function emitLogEntry(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
-  "use step";
-  const log: VideoIndexingLog = { ...entry, timestamp: new Date().toISOString() };
-  const writable = getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE });
-  const writer = writable.getWriter();
-  try {
-    await writer.write(log);
-  } finally {
-    writer.releaseLock();
-  }
-}
-
-export async function closeLogStream(): Promise<void> {
-  "use step";
-  await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
-}
 
 export async function clearIndexingKey(youtubeId: string): Promise<void> {
   "use step";

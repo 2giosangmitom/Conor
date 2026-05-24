@@ -102,6 +102,16 @@ async function writeLog(entry: Omit<VideoIndexingLog, "timestamp">): Promise<voi
   }
 }
 
+export async function emitLogEntry(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
+  "use step";
+  await writeLog(entry);
+}
+
+export async function closeLogStream(): Promise<void> {
+  "use step";
+  await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
+}
+
 export enum VideoIndexingErrors {
   VIDEO_TOO_LONG = "VIDEO_TOO_LONG",
   UNSUPPORTED_LANGUAGE = "UNSUPPORTED_LANGUAGE",
