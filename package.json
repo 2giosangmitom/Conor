@@ -24,11 +24,9 @@
     "@nuxt/scripts": "^1.1.1",
     "@nuxt/ui": "^4.8.0",
     "@nuxthub/core": "^0.10.7",
-    "@unhead/vue": "^3.1.0",
     "@upstash/redis": "^1.38.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "14.3.0",
-    "@workflow/nitro": "^4.0.6",
     "better-auth": "^1.6.11",
     "diff": "^9.0.0",
     "drizzle-kit": "^0.31.10",
@@ -57,7 +55,7 @@
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
     "oxfmt": "^0.51.0",
-    "typescript": "^6.0.3",
+    "typescript": "^5.9.3",
     "vitest": "^4.1.7",
     "vue-tsc": "^3.3.1"
   }

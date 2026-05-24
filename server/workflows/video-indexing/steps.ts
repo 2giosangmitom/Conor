@@ -9,7 +9,6 @@ import { TOPIC_CATALOG, type TopicDefinition } from "./topic-catalog";
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { VideoIndexingStepCode } from "../../../shared/types/video-indexing";
-import { kv } from "@nuxthub/kv";
 
 const { TfIdf } = natural;
 
@@ -38,14 +37,12 @@ const MAX_DURATION = 60 * 60;
 
 const STREAM_NAMESPACE = "logs";
 
-const INDEXING_KEY_PREFIX = "video-indexing:";
-
 const MAX_TRANSCRIPT_LENGTH = 15000;
 const RS_MODULE = "text-readability";
 let readabilityApi: ReadabilityApi | undefined;
 const MAX_TOPIC_INPUT_LENGTH = 3000;
 
-/** Strip emoji, music symbols, control chars, and collapse whitespace */
+/** Strip emoji, music symbols, control chars, HTML entities, bracket patterns, and collapse whitespace */
 export function cleanTranscript(text: string): string {
   // eslint-disable-next-line no-control-regex
   const controlRE = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
@@ -58,6 +55,19 @@ export function cleanTranscript(text: string): string {
   }
 
   return result
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number.parseInt(code, 10)))
+    .replace(/&([a-z]+);/gi, (match, entity) => {
+      const entities: Record<string, string> = {
+        quot: '"',
+        amp: "&",
+        apos: "'",
+        lt: "<",
+        gt: ">",
+        nbsp: " ",
+      };
+      return entities[entity.toLowerCase()] || match;
+    })
+    .replace(/\[[^\]]*\]/g, "")
     .replace(/\u{200D}/gu, "")
     .replace(/\u{FE0F}/gu, "")
     .replace(/[\u{1F300}-\u{1F9FF}]/gu, "")
@@ -391,7 +401,7 @@ export async function persistVideoIndex(params: {
       sentenceIndex: index,
       startTime: Math.round(subtitle.start),
       endTime: Math.round(subtitle.end),
-      text: subtitle.text,
+      text: cleanTranscript(subtitle.text),
     }));
 
     if (transcriptRows.length > 0) {
@@ -402,24 +412,6 @@ export async function persistVideoIndex(params: {
   await writeLog({ level: "info", code: VideoIndexingStepCode.PersistVideoComplete });
 
   return existing;
-}
-
-export async function emitLogEntry(entry: Omit<VideoIndexingLog, "timestamp">): Promise<void> {
-  "use step";
-
-  await writeLog(entry);
-}
-
-export async function closeLogStream(): Promise<void> {
-  "use step";
-
-  await getWritable<VideoIndexingLog>({ namespace: STREAM_NAMESPACE }).close();
-}
-
-export async function clearIndexingKey(youtubeId: string): Promise<void> {
-  "use step";
-
-  await kv.del(`${INDEXING_KEY_PREFIX}${youtubeId}`);
 }
 
 async function getReadabilityApi(): Promise<ReadabilityApi> {
