@@ -25,6 +25,14 @@ interface VideoInfo {
   thumbnailUrl: string;
 }
 
+interface VideoDetailsForm {
+  title: string;
+  topic: string;
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  duration: number;
+  thumbnailUrl: string;
+}
+
 const UInput = resolveComponent("UInput");
 const UButton = resolveComponent("UButton");
 
@@ -38,6 +46,9 @@ const reindexModalOpen = ref(false);
 const isReindexing = ref(false);
 const savingIds = ref(new Set<string>());
 const addFormOpen = ref(false);
+const detailsSaving = ref(false);
+const detailsOpen = ref(false);
+const detailsDirty = ref(false);
 
 const { data, refresh, status } = useFetch<{ video: VideoInfo; sentences: VideoSentence[] }>(
   () => `/api/admin/video/${youtubeId.value}/transcript`,
@@ -63,6 +74,94 @@ watch(
   },
   { immediate: true },
 );
+
+const detailsForm = ref<VideoDetailsForm>({
+  title: "",
+  topic: "",
+  level: "A1",
+  duration: 0,
+  thumbnailUrl: "",
+});
+const originalDetails = ref<VideoDetailsForm | null>(null);
+
+const levelOptions = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+
+function normalizeDetails(info: VideoInfo): VideoDetailsForm {
+  return {
+    title: info.title,
+    topic: info.topic,
+    level: info.level as VideoDetailsForm["level"],
+    duration: info.duration,
+    thumbnailUrl: info.thumbnailUrl,
+  };
+}
+
+watch(
+  () => video.value,
+  (val) => {
+    if (!val) return;
+    const normalized = normalizeDetails(val);
+    detailsForm.value = { ...normalized };
+    originalDetails.value = { ...normalized };
+    detailsDirty.value = false;
+  },
+  { immediate: true },
+);
+
+watch(
+  () => route.hash,
+  (hash) => {
+    if (hash === "#details") {
+      detailsOpen.value = true;
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  detailsForm,
+  (val) => {
+    if (!val || !originalDetails.value) {
+      detailsDirty.value = false;
+      return;
+    }
+    const orig = originalDetails.value;
+    detailsDirty.value =
+      val.title !== orig.title ||
+      val.topic !== orig.topic ||
+      val.level !== orig.level ||
+      val.duration !== orig.duration ||
+      val.thumbnailUrl !== orig.thumbnailUrl;
+  },
+  { deep: true },
+);
+
+function discardDetails() {
+  if (!originalDetails.value) return;
+  detailsForm.value = { ...originalDetails.value };
+  detailsDirty.value = false;
+}
+
+async function saveDetails() {
+  if (!detailsForm.value) return;
+  detailsSaving.value = true;
+  try {
+    const updated = await $fetch<VideoInfo>(`/api/admin/video/${youtubeId.value}`, {
+      method: "PUT",
+      body: detailsForm.value,
+    });
+    const normalized = normalizeDetails(updated);
+    detailsForm.value = { ...normalized };
+    originalDetails.value = { ...normalized };
+    detailsDirty.value = false;
+    toast.add({ title: "Đã lưu chi tiết", color: "success" });
+    await refresh();
+  } catch {
+    toast.add({ title: "Lỗi khi lưu chi tiết", color: "error" });
+  } finally {
+    detailsSaving.value = false;
+  }
+}
 
 const dirtyIds = computed(() => {
   const dirty = new Set<string>();
@@ -196,9 +295,11 @@ async function addSentence() {
 function onKeydown(event: KeyboardEvent) {
   if ((event.metaKey || event.ctrlKey) && event.key === "s") {
     event.preventDefault();
-    if (totalDirty.value > 0) {
-      saveAllDirty();
+    if (detailsOpen.value && detailsDirty.value) {
+      saveDetails();
+      return;
     }
+    if (totalDirty.value > 0) saveAllDirty();
   }
   if (event.key === "Escape") {
     addFormOpen.value = false;
@@ -448,6 +549,79 @@ const meta = computed(
             <span class="font-mono text-xs">{{ video.youtubeId }}</span>
           </p>
         </div>
+      </div>
+
+      <!-- Video details edit -->
+      <div id="details" class="mb-6 scroll-mt-24">
+        <UCard>
+          <template #header>
+            <button
+              class="flex w-full items-center justify-between gap-3 text-left"
+              type="button"
+              @click="detailsOpen = !detailsOpen"
+            >
+              <div>
+                <p class="text-sm font-semibold">Chi tiết video</p>
+                <p class="text-xs text-muted">Cập nhật tiêu đề, chủ đề, level, thời lượng.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <UBadge v-if="detailsDirty" size="xs" color="warning" variant="soft">
+                  Chưa lưu
+                </UBadge>
+                <UIcon
+                  :name="detailsOpen ? 'lucide:chevron-up' : 'lucide:chevron-down'"
+                  class="size-4 text-muted"
+                />
+              </div>
+            </button>
+          </template>
+
+          <div v-if="detailsOpen" class="space-y-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <UInput v-model="detailsForm.title" label="Tiêu đề" placeholder="Nhập tiêu đề" />
+              <UInput v-model="detailsForm.topic" label="Chủ đề" placeholder="Ví dụ: Du lịch" />
+              <USelectMenu
+                v-model="detailsForm.level"
+                label="Level"
+                :options="levelOptions"
+                placeholder="Chọn level"
+              />
+              <UInput
+                v-model.number="detailsForm.duration"
+                label="Thời lượng (giây)"
+                type="number"
+                min="1"
+                placeholder="300"
+              />
+            </div>
+            <UInput
+              v-model="detailsForm.thumbnailUrl"
+              label="Thumbnail URL"
+              placeholder="https://..."
+            />
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="text-xs text-muted">Nhấn ⌘S để lưu khi đang mở phần chi tiết.</p>
+              <div class="flex items-center gap-2">
+                <UButton
+                  variant="outline"
+                  color="neutral"
+                  :disabled="!detailsDirty"
+                  @click="discardDetails"
+                >
+                  Hoàn tác
+                </UButton>
+                <UButton
+                  color="primary"
+                  :loading="detailsSaving"
+                  :disabled="!detailsDirty"
+                  @click="saveDetails"
+                >
+                  Lưu chi tiết
+                </UButton>
+              </div>
+            </div>
+          </div>
+        </UCard>
       </div>
 
       <!-- Add sentence toggle -->

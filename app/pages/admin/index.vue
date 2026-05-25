@@ -52,7 +52,7 @@ function formatDuration(s: number) {
   <div class="mx-auto max-w-7xl px-3 py-6 sm:px-4 lg:px-6">
     <UPageSection
       title="Quản trị"
-      description="Danh sách video. Chọn một video để chỉnh sửa transcript."
+      description="Danh sách video. Chỉnh sửa chi tiết hoặc transcript của từng video."
       :ui="{ wrapper: 'text-left', title: 'text-left', description: 'text-left' }"
     >
       <template #body>
@@ -103,15 +103,26 @@ function formatDuration(s: number) {
                 <td class="px-4 py-3 text-muted">{{ video.topic }}</td>
                 <td class="px-4 py-3 text-muted">{{ formatDuration(video.duration) }}</td>
                 <td class="px-4 py-3">
-                  <UButton
-                    :to="`/admin/video/${video.youtubeId}`"
-                    size="sm"
-                    color="primary"
-                    variant="solid"
-                    icon="lucide:pencil"
-                  >
-                    Chỉnh sửa transcript
-                  </UButton>
+                  <div class="flex flex-wrap gap-2">
+                    <UButton
+                      :to="`/admin/video/${video.youtubeId}#details`"
+                      size="sm"
+                      color="neutral"
+                      variant="outline"
+                      icon="lucide:settings"
+                    >
+                      Chi tiết
+                    </UButton>
+                    <UButton
+                      :to="`/admin/video/${video.youtubeId}`"
+                      size="sm"
+                      color="primary"
+                      variant="solid"
+                      icon="lucide:pencil"
+                    >
+                      Transcript
+                    </UButton>
+                  </div>
                 </td>
               </tr>
             </tbody>
