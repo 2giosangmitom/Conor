@@ -91,16 +91,13 @@ export interface PracticeMainProps {
   currentWordCharProgress: number;
   currentWordTypedChars: string;
   formattedTimeRange: string;
-  resumeModalOpen: boolean;
-  pendingResumeIndex: number;
-  pendingResumeDate: string | null;
   sentenceAttempts: SentenceAttemptStatus[];
   revealedWordIndices: number[];
+  isCompleted: boolean;
 }
 
 export interface PracticeMainEmits {
   (e: "update:answerInput", value: string): void;
-  (e: "update:resumeModalOpen", value: boolean): void;
   (
     e:
       | "checkAnswer"

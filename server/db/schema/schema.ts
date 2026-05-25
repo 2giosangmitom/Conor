@@ -88,7 +88,7 @@ export const practiceSession = pgTable(
   (table) => [
     index("practice_session_user_idx").on(table.userId),
     index("practice_session_video_idx").on(table.videoId),
-    index("practice_session_user_video_idx").on(table.userId, table.videoId),
+    uniqueIndex("practice_session_user_video_unique_idx").on(table.userId, table.videoId),
   ],
 );
 

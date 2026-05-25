@@ -263,6 +263,25 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           </UTooltip>
         </div>
       </div>
+
+      <!-- Practice Again button when session is completed -->
+      <div
+        v-if="props.isCompleted"
+        class="rounded-lg border border-success/30 bg-success/10 p-4 text-center"
+      >
+        <UIcon name="i-lucide-circle-check" class="mx-auto mb-2 size-8 text-success" />
+        <p class="mb-1 text-lg font-semibold text-success">Hoàn thành!</p>
+        <p class="mb-3 text-sm text-muted">Bạn đã hoàn tất luyện tập video này.</p>
+        <UButton
+          color="primary"
+          variant="solid"
+          size="lg"
+          icon="i-lucide-refresh-cw"
+          @click="emit('startNewSession')"
+        >
+          Luyện tập lại
+        </UButton>
+      </div>
     </div>
 
     <!-- Center column: Input + Word chips -->
@@ -313,6 +332,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               size="lg"
               variant="subtle"
               class="text-base leading-relaxed w-full"
+              :disabled="props.isCompleted"
               @update:model-value="emit('update:answerInput', $event)"
             />
             <div class="mt-2 flex items-center justify-between text-xs text-muted">
@@ -340,6 +360,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 variant="ghost"
                 color="neutral"
                 size="sm"
+                :disabled="props.isCompleted"
                 icon="i-lucide-lightbulb"
                 aria-label="Gợi ý chữ cái đầu"
                 @click="emit('hint', 0)"
@@ -352,6 +373,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 variant="ghost"
                 color="neutral"
                 size="sm"
+                :disabled="props.isCompleted"
                 icon="i-lucide-skip-forward"
                 aria-label="Bỏ qua câu này"
                 @click="emit('skip')"
@@ -363,6 +385,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               <UButton
                 color="primary"
                 size="sm"
+                :disabled="props.isCompleted"
                 :loading="props.answerStatus === 'checking'"
                 @click="emit('checkAnswer')"
               >
@@ -481,31 +504,4 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       </UCard>
     </div>
   </div>
-
-  <UModal
-    :open="props.resumeModalOpen"
-    title="Tiếp tục luyện tập?"
-    @update:open="emit('update:resumeModalOpen', $event)"
-  >
-    <template #body>
-      <div class="space-y-4">
-        <p class="text-sm text-muted">
-          Bạn đang có phiên luyện tập chưa hoàn tất. Bạn muốn tiếp tục hay bắt đầu mới?
-        </p>
-        <div class="rounded-lg border border-muted/40 bg-muted/40 p-3 text-sm">
-          <div class="flex items-center justify-between">
-            <span>Segment gần nhất</span>
-            <span class="font-semibold">{{ props.pendingResumeIndex + 1 }}</span>
-          </div>
-          <div v-if="props.pendingResumeDate" class="mt-2 text-xs text-muted">
-            Lần cuối: {{ new Date(props.pendingResumeDate).toLocaleString() }}
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <UButton color="primary" variant="solid" @click="emit('resumeSession')">Tiếp tục</UButton>
-          <UButton variant="ghost" @click="emit('startNewSession')">Bắt đầu mới</UButton>
-        </div>
-      </div>
-    </template>
-  </UModal>
 </template>

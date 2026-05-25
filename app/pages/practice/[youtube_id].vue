@@ -5,7 +5,6 @@ import type {
   VideoInfo,
   VideoSentence,
   PracticeAttemptDraft,
-  PracticeAttemptSummary,
   PracticeLocalSession,
   PracticeSessionResponse,
   PracticeSessionRecord,
@@ -111,12 +110,7 @@ const sessionHintCount = ref(0);
 const replayCount = ref(0);
 const sessionId = ref<string | null>(null);
 const sessionScore = ref(0);
-const resumeModalOpen = ref(false);
-const hasResumeCandidate = ref(false);
-const pendingResumeIndex = ref(0);
-const pendingResumeDate = ref<string | null>(null);
-const pendingAttempts = ref<PracticeAttemptSummary[]>([]);
-const resumeCheckAttempted = ref(false);
+const isCompleted = ref(false);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const attemptedSentenceIndices = ref(new Set<number>());
@@ -380,35 +374,59 @@ async function retryIndexing() {
   await refreshVideo();
 }
 
-async function loadResumeCandidate() {
-  if (!video.value || resumeCheckAttempted.value) return;
-  resumeCheckAttempted.value = true;
+async function loadOrCreateSession() {
+  if (!video.value) return;
   if (isSignedIn.value) {
-    const response = await $fetch<PracticeSessionResponse[]>(
+    const response = await $fetch<PracticeSessionResponse | null>(
       `/api/practice/${video.value.youtubeId}`,
-      {
-        query: { lastest: true },
-      },
-    ).catch(() => []);
+    ).catch(() => null);
 
-    const latest = response[0];
-    if (latest?.practice_session && !latest.practice_session.completed) {
-      hasResumeCandidate.value = true;
-      pendingResumeIndex.value = latest.practice_session.currentSentenceIndex;
-      pendingResumeDate.value = latest.practice_session.lastPracticedAt;
-      sessionId.value = latest.practice_session.id;
-      sessionScore.value = latest.practice_session.score;
-      pendingAttempts.value = latest.attempts ?? [];
-      resumeModalOpen.value = true;
+    if (response?.practice_session) {
+      const sess = response.practice_session;
+      sessionId.value = sess.id;
+      sessionScore.value = sess.score;
+      isCompleted.value = sess.completed;
+      activeSentenceIndex.value = Math.min(sess.currentSentenceIndex, totalSentences.value - 1);
+      const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+        (response.attempts ?? []).map((a) => ({
+          sentenceId: a.transcriptSentenceId,
+          accuracy: a.accuracy,
+          hintsUsed: a.hintsUsed ?? 0,
+        })),
+      );
+      sentenceAccuracyMap.value = accuracyMap;
+      sessionScore.value = score;
+      sessionHintCount.value = totalHints;
+      restoreSentenceAttempts(response.attempts ?? []);
+      await playSegment();
       return;
     }
   } else {
     const localSession = await practiceDb.sessions.get(video.value.youtubeId);
     if (localSession) {
-      hasResumeCandidate.value = true;
-      pendingResumeIndex.value = localSession.currentSentenceIndex;
-      pendingResumeDate.value = localSession.updatedAt;
-      resumeModalOpen.value = true;
+      activeSentenceIndex.value = Math.min(
+        localSession.currentSentenceIndex,
+        totalSentences.value - 1,
+      );
+      if (localSession.attempts) {
+        const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+          localSession.attempts.map((a) => ({
+            sentenceId: a.sentenceId,
+            accuracy: a.accuracy,
+            hintsUsed: a.hintsUsed ?? 0,
+          })),
+        );
+        sentenceAccuracyMap.value = accuracyMap;
+        sessionScore.value = score;
+        sessionHintCount.value = totalHints;
+        restoreSentenceAttempts(
+          localSession.attempts.map((a) => ({
+            transcriptSentenceId: a.sentenceId,
+            accuracy: a.accuracy,
+          })),
+        );
+      }
+      await playSegment();
       return;
     }
   }
@@ -417,10 +435,7 @@ async function loadResumeCandidate() {
 }
 
 async function startNewSession() {
-  resumeModalOpen.value = false;
-  hasResumeCandidate.value = false;
-  pendingResumeIndex.value = 0;
-  pendingResumeDate.value = null;
+  isCompleted.value = false;
 
   if (isSignedIn.value) {
     const sessionRecord = await $fetch<PracticeSessionRecord>("/api/practice", {
@@ -486,62 +501,6 @@ function computeAccuracyFromAttempts(
   return { accuracyMap, score, totalHints };
 }
 
-async function resumeSession() {
-  resumeModalOpen.value = false;
-  if (hasResumeCandidate.value) {
-    activeSentenceIndex.value = Math.min(pendingResumeIndex.value, totalSentences.value - 1);
-  }
-
-  if (!isSignedIn.value && video.value) {
-    const localSession = await practiceDb.sessions.get(video.value.youtubeId);
-    if (localSession?.attempts) {
-      const attempt = localSession.attempts.find(
-        (item) => item.sentenceId === currentSentence.value?.id,
-      );
-      if (attempt) {
-        answerInput.value = attempt.userText;
-      }
-      if (localSession.currentSentenceIndex !== undefined) {
-        activeSentenceIndex.value = Math.min(
-          localSession.currentSentenceIndex,
-          totalSentences.value - 1,
-        );
-      }
-      const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
-        localSession.attempts.map((a) => ({
-          sentenceId: a.sentenceId,
-          accuracy: a.accuracy,
-          hintsUsed: a.hintsUsed ?? 0,
-        })),
-      );
-      sentenceAccuracyMap.value = accuracyMap;
-      sessionScore.value = score;
-      sessionHintCount.value = totalHints;
-      restoreSentenceAttempts(
-        localSession.attempts.map((a) => ({
-          transcriptSentenceId: a.sentenceId,
-          accuracy: a.accuracy,
-        })),
-      );
-    }
-  } else {
-    const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
-      pendingAttempts.value.map((a) => ({
-        sentenceId: a.transcriptSentenceId,
-        accuracy: a.accuracy,
-        hintsUsed: a.hintsUsed ?? 0,
-      })),
-    );
-    sentenceAccuracyMap.value = accuracyMap;
-    sessionScore.value = score;
-    sessionHintCount.value = totalHints;
-    restoreSentenceAttempts(pendingAttempts.value);
-    await persistProgress();
-  }
-
-  await playSegment();
-}
-
 async function saveLocalProgress() {
   if (!video.value) return;
   const session = (await practiceDb.sessions.get(video.value.youtubeId)) ?? {
@@ -592,8 +551,10 @@ async function persistProgress() {
     });
     sessionId.value = response.id;
     sessionScore.value = response.score;
+    isCompleted.value = response.completed;
   } else {
     await saveLocalProgress();
+    isCompleted.value = activeSentenceIndex.value >= totalSentences.value - 1;
   }
 }
 
@@ -738,7 +699,7 @@ watch(
   () => isReady.value,
   async (ready) => {
     if (!ready) return;
-    await loadResumeCandidate();
+    await loadOrCreateSession();
   },
 );
 
@@ -746,7 +707,6 @@ watch(
   () => youtubeId.value,
   () => {
     resetLoader();
-    resumeCheckAttempted.value = false;
     if (youtubeId.value) {
       refreshVideo();
     }
@@ -972,13 +932,10 @@ onBeforeUnmount(() => {
       :current-word-char-progress="currentWordCharProgress"
       :current-word-typed-chars="currentWordTypedChars"
       :formatted-time-range="formattedTimeRange"
-      :resume-modal-open="resumeModalOpen"
-      :pending-resume-index="pendingResumeIndex"
-      :pending-resume-date="pendingResumeDate"
+      :is-completed="isCompleted"
       :sentence-attempts="sentenceAttempts"
       :revealed-word-indices="revealedWordIndices"
       @update:answer-input="answerInput = $event"
-      @update:resume-modal-open="resumeModalOpen = $event"
       @check-answer="checkAnswer"
       @next-sentence="nextSentence"
       @prev-sentence="prevSentence"
@@ -986,7 +943,6 @@ onBeforeUnmount(() => {
       @move-to-sentence="moveToSentence"
       @hint="useHint"
       @skip="nextSentence"
-      @resume-session="resumeSession"
       @start-new-session="startNewSession"
       @player-ready="handlePlayerReady"
       @player-state-change="handlePlayerState"

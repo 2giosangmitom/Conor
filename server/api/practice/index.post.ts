@@ -7,50 +7,72 @@ const bodySchema = z.object({
   youtubeId: z.string().min(1).max(20),
 });
 
-// Create new practice session
+// Create or reset practice session (one session per video)
 export default defineProtectedEventHandler(async (event, session) => {
   const body = await readValidatedBody(event, bodySchema.parse);
 
-  const video = await db
+  const [video] = await db
     .select()
     .from(schema.video)
     .where(eq(schema.video.youtubeId, body.youtubeId))
     .limit(1);
 
-  if (video.length === 0 || !video[0]) {
+  if (!video) {
     throw createError({ statusCode: 404, statusMessage: "VIDEO_NOT_FOUND" });
   }
 
-  const videoId = video[0].id;
+  const videoId = video.id;
 
-  // Mark last practice session as finished
-  await db
-    .update(schema.practiceSession)
-    .set({
-      completed: true,
-    })
+  // Look for existing session for this user + video
+  const [existing] = await db
+    .select()
+    .from(schema.practiceSession)
     .where(
       and(
         eq(schema.practiceSession.userId, session.user.id),
         eq(schema.practiceSession.videoId, videoId),
-        eq(schema.practiceSession.completed, false),
       ),
-    );
+    )
+    .limit(1);
 
-  // Create new practice session
-  const [newSession] = await db
+  if (existing) {
+    // Reset existing session: delete attempts, reset fields
+    await db
+      .delete(schema.practiceAttempt)
+      .where(eq(schema.practiceAttempt.practiceSessionId, existing.id));
+
+    const [updated] = await db
+      .update(schema.practiceSession)
+      .set({
+        currentSentenceIndex: 0,
+        completed: false,
+        score: 0,
+        lastPracticedAt: new Date(),
+      })
+      .where(eq(schema.practiceSession.id, existing.id))
+      .returning();
+
+    if (!updated) {
+      throw createError({ statusCode: 500, statusMessage: "PRACTICE_SESSION_RESET_FAILED" });
+    }
+
+    return updated;
+  }
+
+  // No existing session — create new
+  const [created] = await db
     .insert(schema.practiceSession)
     .values({
       userId: session.user.id,
-      videoId: videoId,
+      videoId,
       lastPracticedAt: new Date(),
     })
     .returning();
 
-  if (!newSession) {
+  if (!created) {
     throw createError({ statusCode: 500, statusMessage: "PRACTICE_SESSION_CREATION_FAILED" });
   }
 
   setResponseStatus(event, 201);
-  return newSession;
+  return created;
 });

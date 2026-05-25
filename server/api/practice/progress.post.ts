@@ -27,6 +27,7 @@ export default defineProtectedEventHandler(async (event: H3Event, session: Sessi
     throw createError({ statusCode: 404, statusMessage: "VIDEO_NOT_FOUND" });
   }
 
+  // Look up the single session by userId + videoId (unique constraint ensures at most one)
   const [existingSession] = await db
     .select()
     .from(schema.practiceSession)
@@ -34,7 +35,6 @@ export default defineProtectedEventHandler(async (event: H3Event, session: Sessi
       and(
         eq(schema.practiceSession.userId, session.user.id),
         eq(schema.practiceSession.videoId, videoRow.id),
-        eq(schema.practiceSession.completed, false),
       ),
     )
     .limit(1);

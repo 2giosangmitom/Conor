@@ -1,20 +1,16 @@
 import { z } from "zod";
 import { db, schema } from "@nuxthub/db";
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
+import { defineProtectedEventHandler } from "~~/server/utils/auth";
 
 const paramsSchema = z.object({
   youtube_id: z.string().min(1).max(20),
 });
 
-const querySchema = z.object({
-  lastest: z.boolean().optional(),
-});
-
 export default defineProtectedEventHandler(async (event, session) => {
   const params = await getValidatedRouterParams(event, paramsSchema.parse);
-  const query = await getValidatedQuery(event, querySchema.parse);
 
-  const userPracticeSessions = await db
+  const [result] = await db
     .select()
     .from(schema.practiceSession)
     .innerJoin(schema.video, eq(schema.practiceSession.videoId, schema.video.id))
@@ -22,27 +18,26 @@ export default defineProtectedEventHandler(async (event, session) => {
       and(
         eq(schema.practiceSession.userId, session.user.id),
         eq(schema.video.youtubeId, params.youtube_id),
-        query.lastest ? eq(schema.practiceSession.completed, false) : undefined,
       ),
     )
-    .orderBy(desc(schema.practiceSession.lastPracticedAt));
+    .limit(1);
 
-  const sessionIds = userPracticeSessions.map((s) => s.practice_session.id);
-  const attempts =
-    sessionIds.length > 0
-      ? await db
-          .select({
-            transcriptSentenceId: schema.practiceAttempt.transcriptSentenceId,
-            accuracy: schema.practiceAttempt.accuracy,
-            hintsUsed: schema.practiceAttempt.hintsUsed,
-          })
-          .from(schema.practiceAttempt)
-          .where(inArray(schema.practiceAttempt.practiceSessionId, sessionIds))
-          .orderBy(desc(schema.practiceAttempt.createdAt))
-      : [];
+  if (!result) {
+    return null;
+  }
 
-  return userPracticeSessions.map((s) => ({
-    ...s,
+  const attempts = await db
+    .select({
+      transcriptSentenceId: schema.practiceAttempt.transcriptSentenceId,
+      accuracy: schema.practiceAttempt.accuracy,
+      hintsUsed: schema.practiceAttempt.hintsUsed,
+    })
+    .from(schema.practiceAttempt)
+    .where(eq(schema.practiceAttempt.practiceSessionId, result.practice_session.id))
+    .orderBy(desc(schema.practiceAttempt.createdAt));
+
+  return {
+    ...result,
     attempts,
-  }));
+  };
 });
