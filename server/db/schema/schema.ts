@@ -5,7 +5,6 @@ import {
   varchar,
   pgEnum,
   integer,
-  jsonb,
   uuid,
   boolean,
   index,
@@ -107,12 +106,9 @@ export const practiceAttempt = pgTable(
         onDelete: "cascade",
       })
       .notNull(),
-    expectedText: text("expected_text").notNull(),
     userText: text("user_text").notNull(),
     accuracy: integer("accuracy").notNull(), // 0-100
     hintsUsed: integer("hints_used").default(0).notNull(),
-    timeTaken: integer("time_taken").default(0).notNull(), // seconds
-    metadata: jsonb("metadata"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [

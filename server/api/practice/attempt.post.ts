@@ -6,11 +6,9 @@ import type { H3Event } from "h3";
 const bodySchema = z.object({
   practiceSessionId: z.string().min(1),
   transcriptSentenceId: z.string().min(1),
-  expectedText: z.string().min(1),
   userText: z.string().min(1),
   accuracy: z.number().int().min(0).max(100),
   hintsUsed: z.number().int().min(0).optional(),
-  timeTaken: z.number().int().min(0).optional(),
 });
 
 export default defineProtectedEventHandler(async (event: H3Event) => {
@@ -21,11 +19,9 @@ export default defineProtectedEventHandler(async (event: H3Event) => {
     .values({
       practiceSessionId: body.practiceSessionId,
       transcriptSentenceId: body.transcriptSentenceId,
-      expectedText: body.expectedText,
       userText: body.userText,
       accuracy: body.accuracy,
       hintsUsed: body.hintsUsed ?? 0,
-      timeTaken: body.timeTaken ?? 0,
     })
     .returning();
 

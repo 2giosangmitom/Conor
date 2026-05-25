@@ -33,7 +33,6 @@ export interface PracticeAttemptDraft {
   userText: string;
   accuracy: number;
   hintsUsed: number;
-  timeTaken: number;
 }
 
 export interface PracticeLocalSession {

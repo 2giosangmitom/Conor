@@ -87,7 +87,6 @@ const activeSentenceIndex = ref(0);
 const answerInput = ref("");
 const answerStatus = ref<AnswerStatus>("idle");
 const hintCount = ref(0);
-const attemptStart = ref<number | null>(null);
 const replayCount = ref(0);
 const sessionId = ref<string | null>(null);
 const sessionScore = ref(0);
@@ -418,7 +417,6 @@ async function startNewSession() {
   hintCount.value = 0;
   answerStatus.value = "idle";
   replayCount.value = 0;
-  attemptStart.value = Date.now();
   await playSegment();
 }
 
@@ -451,7 +449,6 @@ async function resumeSession() {
     await persistProgress();
   }
 
-  attemptStart.value = Date.now();
   await playSegment();
 }
 
@@ -517,9 +514,6 @@ async function persistAttempt(accuracyValue: number, userText: string) {
     userText,
     accuracy: accuracyValue,
     hintsUsed: hintCount.value,
-    timeTaken: attemptStart.value
-      ? Math.max(0, Math.round((Date.now() - attemptStart.value) / 1000))
-      : 0,
   };
 
   if (isSignedIn.value && sessionId.value) {
@@ -528,11 +522,9 @@ async function persistAttempt(accuracyValue: number, userText: string) {
       body: {
         practiceSessionId: sessionId.value,
         transcriptSentenceId: currentSentence.value.id,
-        expectedText: currentSentence.value.text,
         userText,
         accuracy: accuracyValue,
         hintsUsed: hintCount.value,
-        timeTaken: attempt.timeTaken,
       },
     });
   } else {
@@ -616,7 +608,6 @@ async function moveToSentence(index: number) {
   currentWordTypedChars.value = "";
   revealedWordIndices.value = [];
   sentenceAttempts.value[safeIndex] = "none";
-  attemptStart.value = Date.now();
   await persistProgress();
   await playSegment();
 }
@@ -722,7 +713,6 @@ watch(
   () => currentSentence.value,
   () => {
     replayCount.value = 0;
-    attemptStart.value = Date.now();
   },
 );
 
