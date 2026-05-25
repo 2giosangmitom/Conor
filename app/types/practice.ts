@@ -42,6 +42,11 @@ export interface PracticeLocalSession {
   updatedAt: string;
 }
 
+export interface PracticeAttemptSummary {
+  transcriptSentenceId: string;
+  accuracy: number;
+}
+
 export interface PracticeSessionResponse {
   practice_session: {
     id: string;
@@ -53,6 +58,7 @@ export interface PracticeSessionResponse {
   video: {
     youtubeId: string;
   };
+  attempts: PracticeAttemptSummary[];
 }
 
 export interface PracticeSessionRecord {

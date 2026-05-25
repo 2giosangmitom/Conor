@@ -5,6 +5,7 @@ import type {
   VideoInfo,
   VideoSentence,
   PracticeAttemptDraft,
+  PracticeAttemptSummary,
   PracticeLocalSession,
   PracticeSessionResponse,
   PracticeSessionRecord,
@@ -94,6 +95,7 @@ const resumeModalOpen = ref(false);
 const hasResumeCandidate = ref(false);
 const pendingResumeIndex = ref(0);
 const pendingResumeDate = ref<string | null>(null);
+const pendingAttempts = ref<PracticeAttemptSummary[]>([]);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const attemptedSentenceIndices = ref(new Set<number>());
@@ -371,6 +373,7 @@ async function loadResumeCandidate() {
       pendingResumeDate.value = latest.practice_session.lastPracticedAt;
       sessionId.value = latest.practice_session.id;
       sessionScore.value = latest.practice_session.score;
+      pendingAttempts.value = latest.attempts ?? [];
       resumeModalOpen.value = true;
       return;
     }
@@ -420,6 +423,19 @@ async function startNewSession() {
   await playSegment();
 }
 
+function restoreSentenceAttempts(
+  attempts: Array<{ transcriptSentenceId: string; accuracy: number }>,
+) {
+  const newStatuses: SentenceAttemptStatus[] = sentences.value.map(() => "none" as const);
+  for (const attempt of attempts) {
+    const sentence = sentences.value.find((s) => s.id === attempt.transcriptSentenceId);
+    if (sentence) {
+      newStatuses[sentence.sentenceIndex] = attempt.accuracy >= 90 ? "correct" : "incorrect";
+    }
+  }
+  sentenceAttempts.value = newStatuses;
+}
+
 async function resumeSession() {
   resumeModalOpen.value = false;
   if (hasResumeCandidate.value) {
@@ -444,8 +460,15 @@ async function resumeSession() {
           totalSentences.value - 1,
         );
       }
+      restoreSentenceAttempts(
+        localSession.attempts.map((a) => ({
+          transcriptSentenceId: a.sentenceId,
+          accuracy: a.accuracy,
+        })),
+      );
     }
   } else {
+    restoreSentenceAttempts(pendingAttempts.value);
     await persistProgress();
   }
 
@@ -607,7 +630,6 @@ async function moveToSentence(index: number) {
   currentWordCharProgress.value = 0;
   currentWordTypedChars.value = "";
   revealedWordIndices.value = [];
-  sentenceAttempts.value[safeIndex] = "none";
   await persistProgress();
   await playSegment();
 }
@@ -736,6 +758,7 @@ const practiceMainRef = ref<{
       endSeconds?: number;
     }) => void;
   };
+  triggerPlayer: () => void;
 } | null>(null);
 
 function getPlayer() {
@@ -791,7 +814,10 @@ function stopTimeCheck() {
 async function playSegment() {
   if (!currentSentence.value) return;
   const player = getPlayer();
-  if (!player) return;
+  if (!player) {
+    practiceMainRef.value?.triggerPlayer();
+    return;
+  }
   replayCount.value = 0;
   const prevSentence =
     activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
@@ -817,11 +843,11 @@ defineShortcuts({
       }
     },
   },
-  meta_arrowleft: {
+  meta_j: {
     usingInput: true,
     handler: () => prevSentence(),
   },
-  meta_arrowright: {
+  meta_k: {
     usingInput: true,
     handler: () => nextSentence(),
   },

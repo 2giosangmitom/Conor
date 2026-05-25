@@ -80,17 +80,26 @@
                 <UPageCard
                   v-for="video in displayedVideos"
                   :key="video.youtubeId"
+                  :to="`/practice/${video.youtubeId}`"
                   variant="outline"
-                  class="group h-full"
+                  class="group h-full cursor-pointer"
                 >
                   <template #leading>
-                    <div class="overflow-hidden rounded-lg bg-muted">
+                    <div class="relative overflow-hidden rounded-lg bg-muted">
                       <NuxtImg
                         :src="video.thumbnailUrl"
                         alt="Thumbnail"
-                        class="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                        class="aspect-video w-full object-cover transition duration-300 group-hover:scale-110"
                         loading="lazy"
                       />
+                      <div
+                        class="absolute inset-0 flex items-center justify-center bg-black/0 transition duration-300 group-hover:bg-black/30"
+                      >
+                        <UIcon
+                          name="lucide:play"
+                          class="size-12 text-white opacity-0 transition duration-300 group-hover:opacity-100"
+                        />
+                      </div>
                     </div>
                   </template>
                   <template #title>
@@ -104,16 +113,6 @@
                         {{ formatDuration(video.duration) }}
                       </UBadge>
                     </div>
-                  </template>
-                  <template #footer>
-                    <UButton
-                      :to="`/practice/${video.youtubeId}`"
-                      label="Bắt đầu"
-                      trailing-icon="lucide:arrow-right"
-                      size="sm"
-                      color="primary"
-                      variant="solid"
-                    />
                   </template>
                 </UPageCard>
               </div>

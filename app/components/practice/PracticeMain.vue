@@ -16,8 +16,16 @@ const emit = defineEmits<Emits>();
 
 const playerRef = useTemplateRef("scriptYouTubePlayer");
 
+function triggerPlayer() {
+  const el = (playerRef.value as unknown as { $el: HTMLElement })?.$el;
+  if (el) {
+    el.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+  }
+}
+
 defineExpose({
   player: computed(() => playerRef.value?.player),
+  triggerPlayer,
 });
 
 function getAttemptStatus(index: number) {
@@ -212,11 +220,9 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       </UCard>
 
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="text-sm text-muted" role="status">
-          {{ props.replayCount + 1 }}/3 lần phát lại
-        </div>
+        <div class="text-sm text-muted" role="status">Lượt {{ props.replayCount + 1 }}/3</div>
         <div class="flex flex-wrap items-center gap-3">
-          <UTooltip text="Câu trước" :kbds="['meta', '←']">
+          <UTooltip text="Câu trước" :kbds="['meta', 'J']">
             <UButton
               variant="soft"
               color="neutral"
@@ -239,7 +245,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               Phát lại
             </UButton>
           </UTooltip>
-          <UTooltip text="Câu sau" :kbds="['meta', '→']">
+          <UTooltip text="Câu sau" :kbds="['meta', 'K']">
             <UButton
               variant="soft"
               color="neutral"
@@ -269,7 +275,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 props.answerStatus === 'correct'
                   ? 'success'
                   : props.answerStatus === 'incorrect'
-                    ? 'error'
+                    ? 'warning'
                     : 'primary'
               "
               role="status"
@@ -414,11 +420,11 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
             :class="[
               getAttemptStatus(sentence.sentenceIndex) === 'current'
-                ? 'bg-primary/10 border-primary/40'
+                ? 'bg-secondary/10 border-secondary/40'
                 : getAttemptStatus(sentence.sentenceIndex) === 'correct'
                   ? 'bg-success/10 border-success/30'
                   : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
-                    ? 'bg-error/10 border-error/30'
+                    ? 'bg-warning/10 border-warning/30'
                     : 'bg-background/60',
             ]"
             @click="emit('moveToSentence', sentence.sentenceIndex)"
@@ -428,11 +434,11 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 class="size-2 rounded-full"
                 :class="[
                   getAttemptStatus(sentence.sentenceIndex) === 'current'
-                    ? 'bg-primary'
+                    ? 'bg-secondary'
                     : getAttemptStatus(sentence.sentenceIndex) === 'correct'
                       ? 'bg-success'
                       : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
-                        ? 'bg-error'
+                        ? 'bg-warning'
                         : 'bg-muted',
                 ]"
                 :aria-label="
@@ -451,6 +457,12 @@ const wordDisplay = computed<WordDisplay[]>(() => {
                 name="i-lucide-circle-check"
                 class="size-4 text-success"
                 aria-label="Đã hoàn thành chính xác"
+              />
+              <UIcon
+                v-else-if="getAttemptStatus(sentence.sentenceIndex) === 'incorrect'"
+                name="i-lucide-alert-circle"
+                class="size-4 text-warning"
+                aria-label="Chưa chính xác"
               />
             </div>
             <span class="text-xs text-muted">

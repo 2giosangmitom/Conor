@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { db, schema } from "@nuxthub/db";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 const paramsSchema = z.object({
   youtube_id: z.string().min(1).max(20),
@@ -22,5 +22,20 @@ export default defineProtectedEventHandler(async (event, session) => {
       ),
     );
 
-  return userPracticeSessions;
+  const sessionIds = userPracticeSessions.map((s) => s.practice_session.id);
+  const attempts =
+    sessionIds.length > 0
+      ? await db
+          .select({
+            transcriptSentenceId: schema.practiceAttempt.transcriptSentenceId,
+            accuracy: schema.practiceAttempt.accuracy,
+          })
+          .from(schema.practiceAttempt)
+          .where(inArray(schema.practiceAttempt.practiceSessionId, sessionIds))
+      : [];
+
+  return userPracticeSessions.map((s) => ({
+    ...s,
+    attempts,
+  }));
 });
