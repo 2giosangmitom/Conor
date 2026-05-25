@@ -111,6 +111,9 @@
                       <UBadge variant="outline" color="neutral" icon="lucide:clock-3">
                         {{ formatDuration(video.duration) }}
                       </UBadge>
+                      <UBadge variant="soft" color="neutral" icon="lucide:users">
+                        {{ formatLearnedCount(video.learnedCount) }}
+                      </UBadge>
                     </div>
                   </template>
                 </UPageCard>
@@ -173,6 +176,7 @@ interface ApiVideo {
   thumbnailUrl: string;
   createdAt: string;
   updatedAt: string;
+  learnedCount: number;
 }
 
 interface VideoIndexResponse {
@@ -333,6 +337,10 @@ function formatDuration(durationSeconds: number) {
   const minutes = Math.floor(durationSeconds / 60);
   const seconds = durationSeconds % 60;
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function formatLearnedCount(count: number) {
+  return new Intl.NumberFormat("vi-VN").format(count);
 }
 
 function clearFilters() {

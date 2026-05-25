@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { asc, eq } from "drizzle-orm";
+import { asc, countDistinct, eq } from "drizzle-orm";
 import { start, getRun } from "workflow/api";
 import { kv } from "@nuxthub/kv";
 import { handleIndexVideo } from "~~/server/workflows/video-indexing";
@@ -30,9 +30,20 @@ export default defineEventHandler(async (event) => {
 
   // Return video if found with transcript sentences, ensuring it's fully indexed
   if (firstRow) {
+    const [learnedResult] = await db
+      .select({ learnedCount: countDistinct(schema.practiceSession.userId) })
+      .from(schema.practiceSession)
+      .where(eq(schema.practiceSession.videoId, firstRow.video.id));
+
     const sentences = rows.map((row) => row.video_transcript_sentence);
     setResponseStatus(event, 200);
-    return { video: firstRow.video, sentences };
+    return {
+      video: {
+        ...firstRow.video,
+        learnedCount: learnedResult?.learnedCount ?? 0,
+      },
+      sentences,
+    };
   }
 
   // Video not indexed, check if there's an ongoing indexing run for this YouTube ID

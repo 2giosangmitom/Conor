@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { and, count, desc, eq, gte, ilike, lte } from "drizzle-orm";
+import { and, count, countDistinct, desc, eq, gte, ilike, lte } from "drizzle-orm";
 import { z } from "zod";
 
 const querySchema = z.object({
@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
       .where(trendingWhere);
 
     const practiceCount = count(schema.practiceSession.id);
+    const learnedCount = countDistinct(schema.practiceSession.userId);
 
     const videos = await db
       .select({
@@ -72,6 +73,7 @@ export default defineEventHandler(async (event) => {
         createdAt: schema.video.createdAt,
         updatedAt: schema.video.updatedAt,
         practiceCount,
+        learnedCount,
       })
       .from(schema.video)
       .leftJoin(schema.practiceSession, eq(schema.video.id, schema.practiceSession.videoId))
@@ -89,6 +91,8 @@ export default defineEventHandler(async (event) => {
 
   const [totalResult] = await db.select({ total: count() }).from(schema.video).where(whereClause);
 
+  const learnedCount = countDistinct(schema.practiceSession.userId);
+
   const videos = await db
     .select({
       id: schema.video.id,
@@ -100,9 +104,12 @@ export default defineEventHandler(async (event) => {
       thumbnailUrl: schema.video.thumbnailUrl,
       createdAt: schema.video.createdAt,
       updatedAt: schema.video.updatedAt,
+      learnedCount,
     })
     .from(schema.video)
+    .leftJoin(schema.practiceSession, eq(schema.video.id, schema.practiceSession.videoId))
     .where(whereClause)
+    .groupBy(schema.video.id)
     .orderBy(desc(schema.video.createdAt))
     .limit(query.limit)
     .offset(query.offset);
