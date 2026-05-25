@@ -45,6 +45,7 @@ export interface PracticeLocalSession {
 export interface PracticeAttemptSummary {
   transcriptSentenceId: string;
   accuracy: number;
+  hintsUsed: number;
 }
 
 export interface PracticeSessionResponse {

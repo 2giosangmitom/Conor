@@ -1,6 +1,5 @@
 <template>
   <div ref="allVideosSectionRef">
-    <h1 class="sr-only">Khám phá bài học</h1>
     <Motion
       :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
       :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"

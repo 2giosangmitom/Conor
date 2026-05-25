@@ -1,17 +1,15 @@
 <template>
   <ClientOnly>
-    <span class="relative inline-block" :class="className">
-      <span
-        class="animate-aurora relative bg-clip-text text-transparent"
-        :style="gradientStyle"
-        aria-hidden="true"
-      >
+    <h1 class="relative inline-block" :class="className">
+      <span class="animate-aurora relative bg-clip-text text-transparent" :style="gradientStyle">
         <slot />
       </span>
-    </span>
+    </h1>
 
     <template #fallback>
-      <span><slot /></span>
+      <h1 :class="className">
+        <slot />
+      </h1>
     </template>
   </ClientOnly>
 </template>

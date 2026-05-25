@@ -207,7 +207,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           />
         </div>
 
-        <div class="mt-4 grid grid-cols-4 gap-3">
+        <div class="mt-4 grid grid-cols-3 gap-3">
           <div class="rounded-lg border border-muted/40 p-3 text-center">
             <p class="text-xs text-muted">Chính xác</p>
             <p class="text-lg font-semibold">{{ props.accuracy }}%</p>
@@ -215,10 +215,6 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           <div class="rounded-lg border border-muted/40 p-3 text-center">
             <p class="text-xs text-muted">Đã xong</p>
             <p class="text-lg font-semibold">{{ props.completedCount }}</p>
-          </div>
-          <div class="rounded-lg border border-muted/40 p-3 text-center">
-            <p class="text-xs text-muted">Tổng cộng</p>
-            <p class="text-lg font-semibold">{{ props.totalSentences }}</p>
           </div>
           <div class="rounded-lg border border-muted/40 p-3 text-center">
             <p class="text-xs text-muted">Gợi ý</p>

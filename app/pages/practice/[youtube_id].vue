@@ -78,16 +78,36 @@ const steps = ref<LoaderStep[]>(stepTemplate.map((step) => ({ ...step })));
 
 const eventSource = shallowRef<EventSource | null>(null);
 
-const { data: fetchResponse, refresh: refreshVideo } = await useAsyncData(
-  () => `video-${youtubeId.value}`,
-  () => $fetch.raw(`/api/video/${youtubeId.value}`),
-  { server: false, immediate: true, watch: [youtubeId] },
-);
+async function refreshVideo() {
+  try {
+    const res = await $fetch.raw(`/api/video/${youtubeId.value}`);
+    processVideoResponse(res);
+  } catch {
+    setFailedState("Không thể tải thông tin video.");
+  }
+}
+
+function processVideoResponse(response: { status: number; _data: unknown }) {
+  if (!response) return;
+  if (response.status === 200) {
+    const payload = response._data as { video: VideoInfo; sentences: VideoSentence[] };
+    setReadyState(payload);
+    return;
+  }
+  if (response.status === 202) {
+    const payload = response._data as { runId: string };
+    if (hasTerminalFailure.value) return;
+    setIndexingState(payload);
+    return;
+  }
+  setFailedState("Không thể tải thông tin video.");
+}
 
 const activeSentenceIndex = ref(0);
 const answerInput = ref("");
 const answerStatus = ref<AnswerStatus>("idle");
 const hintCount = ref(0);
+const sessionHintCount = ref(0);
 const replayCount = ref(0);
 const sessionId = ref<string | null>(null);
 const sessionScore = ref(0);
@@ -96,6 +116,7 @@ const hasResumeCandidate = ref(false);
 const pendingResumeIndex = ref(0);
 const pendingResumeDate = ref<string | null>(null);
 const pendingAttempts = ref<PracticeAttemptSummary[]>([]);
+const resumeCheckAttempted = ref(false);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
 const attemptedSentenceIndices = ref(new Set<number>());
@@ -105,6 +126,7 @@ const revealedWordIndices = ref<number[]>([]);
 const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
 const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
+const sentenceAccuracyMap = ref<Record<number, number>>({});
 
 const DB_NAME = "nghego-practice";
 const DB_VERSION = 1;
@@ -161,10 +183,12 @@ const practiceDb = {
 
 const currentSentence = computed(() => sentences.value[activeSentenceIndex.value]);
 const totalSentences = computed(() => sentences.value.length);
-const attemptedCount = computed(() => attemptedSentenceIndices.value.size);
+const attemptedCount = computed(() => Object.keys(sentenceAccuracyMap.value).length);
 const accuracy = computed(() => {
-  if (attemptedCount.value === 0) return 0;
-  return Math.round(sessionScore.value / attemptedCount.value);
+  const values = Object.values(sentenceAccuracyMap.value);
+  if (values.length === 0) return 0;
+  const sum = values.reduce((a, b) => a + b, 0);
+  return Math.round(sum / values.length);
 });
 const progressPercent = computed(() => {
   if (totalSentences.value === 0) return 0;
@@ -357,7 +381,8 @@ async function retryIndexing() {
 }
 
 async function loadResumeCandidate() {
-  if (!video.value) return;
+  if (!video.value || resumeCheckAttempted.value) return;
+  resumeCheckAttempted.value = true;
   if (isSignedIn.value) {
     const response = await $fetch<PracticeSessionResponse[]>(
       `/api/practice/${video.value.youtubeId}`,
@@ -418,6 +443,8 @@ async function startNewSession() {
   attemptedSentenceIndices.value = new Set();
   answerInput.value = "";
   hintCount.value = 0;
+  sessionHintCount.value = 0;
+  sentenceAccuracyMap.value = {};
   answerStatus.value = "idle";
   replayCount.value = 0;
   await playSegment();
@@ -436,13 +463,33 @@ function restoreSentenceAttempts(
   sentenceAttempts.value = newStatuses;
 }
 
+function computeAccuracyFromAttempts(
+  attempts: Array<{ sentenceId: string; accuracy: number; hintsUsed: number }>,
+) {
+  const latestPerSentence: Record<string, { accuracy: number; hintsUsed: number }> = {};
+  for (const a of attempts) {
+    if (!(a.sentenceId in latestPerSentence)) {
+      latestPerSentence[a.sentenceId] = { accuracy: a.accuracy, hintsUsed: a.hintsUsed };
+    }
+  }
+  const accuracyMap: Record<number, number> = {};
+  let score = 0;
+  let totalHints = 0;
+  for (const [sentId, data] of Object.entries(latestPerSentence)) {
+    const sentence = sentences.value.find((s) => s.id === sentId);
+    if (sentence) {
+      accuracyMap[sentence.sentenceIndex] = data.accuracy;
+      score += data.accuracy;
+      totalHints += data.hintsUsed;
+    }
+  }
+  return { accuracyMap, score, totalHints };
+}
+
 async function resumeSession() {
   resumeModalOpen.value = false;
   if (hasResumeCandidate.value) {
     activeSentenceIndex.value = Math.min(pendingResumeIndex.value, totalSentences.value - 1);
-    for (let i = 0; i < activeSentenceIndex.value; i += 1) {
-      attemptedSentenceIndices.value.add(i);
-    }
   }
 
   if (!isSignedIn.value && video.value) {
@@ -460,6 +507,16 @@ async function resumeSession() {
           totalSentences.value - 1,
         );
       }
+      const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+        localSession.attempts.map((a) => ({
+          sentenceId: a.sentenceId,
+          accuracy: a.accuracy,
+          hintsUsed: a.hintsUsed ?? 0,
+        })),
+      );
+      sentenceAccuracyMap.value = accuracyMap;
+      sessionScore.value = score;
+      sessionHintCount.value = totalHints;
       restoreSentenceAttempts(
         localSession.attempts.map((a) => ({
           transcriptSentenceId: a.sentenceId,
@@ -468,6 +525,16 @@ async function resumeSession() {
       );
     }
   } else {
+    const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+      pendingAttempts.value.map((a) => ({
+        sentenceId: a.transcriptSentenceId,
+        accuracy: a.accuracy,
+        hintsUsed: a.hintsUsed ?? 0,
+      })),
+    );
+    sentenceAccuracyMap.value = accuracyMap;
+    sessionScore.value = score;
+    sessionHintCount.value = totalHints;
     restoreSentenceAttempts(pendingAttempts.value);
     await persistProgress();
   }
@@ -567,6 +634,7 @@ function useHint() {
     if (typedWord !== expectedWord) {
       revealedWordIndices.value.push(i);
       hintCount.value += 1;
+      sessionHintCount.value += 1;
       return;
     }
   }
@@ -586,6 +654,11 @@ async function checkAnswer() {
     }
     return;
   }
+  const prevAccuracy = sentenceAccuracyMap.value[activeSentenceIndex.value];
+  if (prevAccuracy !== undefined) {
+    sessionScore.value -= prevAccuracy;
+  }
+  sentenceAccuracyMap.value[activeSentenceIndex.value] = accuracyValue;
   sessionScore.value += accuracyValue;
   attemptedSentenceIndices.value.add(activeSentenceIndex.value);
   answerStatus.value = accuracyValue >= 90 ? "correct" : "incorrect";
@@ -662,31 +735,23 @@ const currentStepLabel = computed(() => {
 });
 
 watch(
-  () => fetchResponse.value,
-  (response) => {
-    if (!response) return;
-    if (response.status === 200) {
-      const payload = response._data as { video: VideoInfo; sentences: VideoSentence[] };
-      setReadyState(payload);
-      return;
-    }
-    if (response.status === 202) {
-      const payload = response._data as { runId: string };
-      if (hasTerminalFailure.value) return;
-      setIndexingState(payload);
-      return;
-    }
-    setFailedState("Không thể tải thông tin video.");
-  },
-  { immediate: true },
-);
-
-watch(
   () => isReady.value,
   async (ready) => {
     if (!ready) return;
     await loadResumeCandidate();
   },
+);
+
+watch(
+  () => youtubeId.value,
+  () => {
+    resetLoader();
+    resumeCheckAttempted.value = false;
+    if (youtubeId.value) {
+      refreshVideo();
+    }
+  },
+  { immediate: true },
 );
 
 watch(
@@ -735,13 +800,6 @@ watch(
   () => currentSentence.value,
   () => {
     replayCount.value = 0;
-  },
-);
-
-watch(
-  () => youtubeId.value,
-  () => {
-    resetLoader();
   },
 );
 
@@ -900,7 +958,7 @@ onBeforeUnmount(() => {
       :active-sentence-index="activeSentenceIndex"
       :answer-input="answerInput"
       :answer-status="answerStatus"
-      :hint-count="hintCount"
+      :hint-count="sessionHintCount"
       :replay-count="replayCount"
       :accuracy="accuracy"
       :completed-count="attemptedCount"

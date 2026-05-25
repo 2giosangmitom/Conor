@@ -50,7 +50,6 @@ function formatDuration(s: number) {
 
 <template>
   <div class="mx-auto max-w-7xl px-3 py-6 sm:px-4 lg:px-6">
-    <h1 class="sr-only">Quản trị</h1>
     <UPageSection
       title="Quản trị"
       description="Danh sách video. Chọn một video để chỉnh sửa transcript."
