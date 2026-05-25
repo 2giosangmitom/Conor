@@ -15,6 +15,7 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const playerRef = useTemplateRef("scriptYouTubePlayer");
+const answerTextareaRef = useTemplateRef("answerTextarea");
 
 function triggerPlayer() {
   const el = (playerRef.value as unknown as { $el: HTMLElement })?.$el;
@@ -23,9 +24,16 @@ function triggerPlayer() {
   }
 }
 
+function focusInput() {
+  nextTick(() => {
+    answerTextareaRef.value?.textareaRef?.focus();
+  });
+}
+
 defineExpose({
   player: computed(() => playerRef.value?.player),
   triggerPlayer,
+  focusInput,
 });
 
 function getAttemptStatus(index: number) {
@@ -266,8 +274,11 @@ const wordDisplay = computed<WordDisplay[]>(() => {
       <UCard class="border-muted/40 bg-background/80">
         <template #header>
           <div class="flex items-center justify-between">
-            <div>
+            <div class="flex items-center gap-2">
               <h2 class="text-lg font-semibold">Nhập câu bạn nghe được</h2>
+              <UTooltip text="Tập trung vào ô nhập">
+                <UKbd size="sm">Ctrl+I</UKbd>
+              </UTooltip>
             </div>
             <UBadge
               variant="soft"
@@ -295,6 +306,7 @@ const wordDisplay = computed<WordDisplay[]>(() => {
         <div class="space-y-3">
           <div class="relative">
             <UTextarea
+              ref="answerTextarea"
               :model-value="props.answerInput"
               name="answerInput"
               aria-label="Nhập câu bạn nghe được"

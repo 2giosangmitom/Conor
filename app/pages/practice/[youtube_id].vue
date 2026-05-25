@@ -759,6 +759,7 @@ const practiceMainRef = ref<{
     }) => void;
   };
   triggerPlayer: () => void;
+  focusInput: () => void;
 } | null>(null);
 
 function getPlayer() {
@@ -774,20 +775,6 @@ function handlePlayerState(event: { data: number }) {
     startTimeCheck();
   } else if (event.data === PLAYER_STATE_PAUSED || event.data === PLAYER_STATE_ENDED) {
     stopTimeCheck();
-    if (replayCount.value < 2 && currentSentence.value) {
-      replayCount.value += 1;
-      const player = getPlayer();
-      if (player) {
-        const prevSentence =
-          activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
-        player.loadVideoById({
-          videoId: youtubeId.value,
-          startSeconds: prevSentence ? prevSentence.endTime / 1000 : 0,
-          endSeconds: currentSentence.value.endTime / 1000,
-        });
-        startTimeCheck();
-      }
-    }
   }
 }
 
@@ -799,7 +786,18 @@ function startTimeCheck() {
     const currentTime = player.getCurrentTime();
     const endTime = currentSentence.value.endTime / 1000;
     if (currentTime >= endTime && currentTime > 0) {
-      player.pauseVideo();
+      stopTimeCheck();
+      if (replayCount.value < 2) {
+        replayCount.value += 1;
+        const prevSentence =
+          activeSentenceIndex.value > 0 ? sentences.value[activeSentenceIndex.value - 1] : null;
+        const startSeconds = prevSentence ? prevSentence.endTime / 1000 : 0;
+        player.seekTo(startSeconds, true);
+        player.playVideo();
+        startTimeCheck();
+      } else {
+        player.pauseVideo();
+      }
     }
   }, 250);
 }
@@ -825,7 +823,6 @@ async function playSegment() {
   player.loadVideoById({
     videoId: youtubeId.value,
     startSeconds,
-    endSeconds: currentSentence.value.endTime / 1000,
   });
   startTimeCheck();
 }
@@ -845,11 +842,11 @@ defineShortcuts({
   },
   meta_j: {
     usingInput: true,
-    handler: () => prevSentence(),
+    handler: () => nextSentence(),
   },
   meta_k: {
     usingInput: true,
-    handler: () => nextSentence(),
+    handler: () => prevSentence(),
   },
   meta_r: {
     usingInput: true,
@@ -862,6 +859,9 @@ defineShortcuts({
   meta_s: {
     usingInput: true,
     handler: () => nextSentence(),
+  },
+  ctrl_i: {
+    handler: () => practiceMainRef.value?.focusInput(),
   },
 });
 
