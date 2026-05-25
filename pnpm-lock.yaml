@@ -19,19 +19,19 @@ importers:
         version: 1.15.2(@typescript-eslint/utils@8.59.4(eslint@10.4.0(jiti@2.7.0))(typescript@5.9.3))(@vue/compiler-sfc@3.5.34)(eslint@10.4.0(jiti@2.7.0))(magicast@0.5.3)(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       '@nuxt/hints':
         specifier: ^1.1.2
-        version: 1.1.2(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))
+        version: 1.1.2(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))
       '@nuxt/image':
         specifier: ^2.0.0
-        version: 2.0.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(srvx@0.11.16)
+        version: 2.0.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(srvx@0.11.16)
       '@nuxt/scripts':
         specifier: ^1.1.1
-        version: 1.1.1(@types/youtube@0.1.2)(@unhead/vue@2.1.15(vue@3.5.34(typescript@5.9.3)))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))
+        version: 1.1.1(@types/youtube@0.1.2)(@unhead/vue@2.1.15(vue@3.5.34(typescript@5.9.3)))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))
       '@nuxt/ui':
         specifier: ^4.8.0
-        version: 4.8.0(@internationalized/date@3.12.1)(@internationalized/number@3.6.6)(@tiptap/extensions@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6))(@tiptap/y-tiptap@3.0.3(prosemirror-model@1.25.7)(prosemirror-state@1.4.4)(prosemirror-view@1.41.8)(y-protocols@1.0.7(yjs@13.6.30))(yjs@13.6.30))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(change-case@5.4.4)(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(embla-carousel@8.6.0)(ioredis@5.10.1)(magicast@0.5.3)(tailwindcss@4.3.0)(typescript@5.9.3)(valibot@1.4.0(typescript@5.9.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue-router@5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@5.9.3)))(vue@3.5.34(typescript@5.9.3))(yjs@13.6.30)(zod@4.4.3)
+        version: 4.8.0(@internationalized/date@3.12.1)(@internationalized/number@3.6.6)(@tiptap/extensions@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6))(@tiptap/y-tiptap@3.0.3(prosemirror-model@1.25.7)(prosemirror-state@1.4.4)(prosemirror-view@1.41.8)(y-protocols@1.0.7(yjs@13.6.30))(yjs@13.6.30))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(change-case@5.4.4)(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(embla-carousel@8.6.0)(ioredis@5.10.1)(magicast@0.5.3)(tailwindcss@4.3.0)(typescript@5.9.3)(valibot@1.4.1(typescript@5.9.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue-router@5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@5.9.3)))(vue@3.5.34(typescript@5.9.3))(yjs@13.6.30)(zod@4.4.3)
       '@nuxthub/core':
         specifier: ^0.10.7
-        version: 0.10.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))
+        version: 0.10.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))
       '@upstash/redis':
         specifier: ^1.38.0
         version: 1.38.0
@@ -40,10 +40,10 @@ importers:
         version: 14.3.0(vue@3.5.34(typescript@5.9.3))
       '@vueuse/nuxt':
         specifier: 14.3.0
-        version: 14.3.0(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(vue@3.5.34(typescript@5.9.3))
+        version: 14.3.0(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(vue@3.5.34(typescript@5.9.3))
       better-auth:
         specifier: ^1.6.11
-        version: 1.6.11(@cloudflare/workers-types@4.20260524.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(mongodb@7.2.0)(pg@8.21.0)(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))
+        version: 1.6.11(@cloudflare/workers-types@4.20260525.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(mongodb@7.2.0)(pg@8.21.0)(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))
       diff:
         specifier: ^9.0.0
         version: 9.0.0
@@ -52,7 +52,7 @@ importers:
         version: 0.31.10
       drizzle-orm:
         specifier: ^0.45.2
-        version: 0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
+        version: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
       eslint:
         specifier: ^10.4.0
         version: 10.4.0(jiti@2.7.0)
@@ -64,7 +64,7 @@ importers:
         version: 8.1.1
       nuxt:
         specifier: ^4.4.6
-        version: 4.4.6(4f052913a17967e65a14d9a6a2142d7f)
+        version: 4.4.6(b4a350cf34545fc077d990c5058490dd)
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.0
@@ -76,7 +76,7 @@ importers:
         version: 1.4.0
       unstorage:
         specifier: ^1.17.5
-        version: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+        version: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       vue:
         specifier: ^3.5.34
         version: 3.5.34(typescript@5.9.3)
@@ -127,7 +127,7 @@ importers:
         specifier: ^4.1.7
         version: 4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       vue-tsc:
-        specifier: ^3.2.9
+        specifier: ~3.2.9
         version: 3.2.9(typescript@5.9.3)
 
 packages:
@@ -481,8 +481,8 @@ packages:
     resolution: {integrity: sha512-SIOD2DxrRRwQ+jgzlXCqoEFiKOFqaPjhnNTGKXSRLvp1HiOvapLaFG2kEr9dYQTYe8rKrd9uvDUzmAITeNyaHQ==}
     engines: {node: '>=18.0.0'}
 
-  '@cloudflare/workers-types@4.20260524.1':
-    resolution: {integrity: sha512-9o939wce6hAlfNAIG4W58bySW7twgkqgPkxmSNrk/DV0eEexjTPyqChGdsQeKZEXJAjxSUFklaebMYJWg1GM0g==}
+  '@cloudflare/workers-types@4.20260525.1':
+    resolution: {integrity: sha512-vQSjvQINGx2i3dovvVyszew4HU3+82eAuD2ryNmedBIzLcLwluKsnPLTAuL4FDVRyz+MikQEihEBsUmcTElEVQ==}
 
   '@colordx/core@5.4.3':
     resolution: {integrity: sha512-kIxYSfA5T8HXjav55UaaH/o/cKivF6jCCGIb8eqtcsfI46wsvlSiT8jMDyrl779qLec3c2c2oHBZo4oAhvbjrQ==}
@@ -8244,8 +8244,8 @@ packages:
     resolution: {integrity: sha512-vzi9uRZ926x4XV73S/4qQaTwPXM2JBj6/6lI/byHH1jOpCzb0zDbfytgA9LcN/hzb2l7WQSQnxITOVx5un/wGw==}
     hasBin: true
 
-  valibot@1.4.0:
-    resolution: {integrity: sha512-iC/x7fVcSyOwlm/VSt7RlHnzNGLGvR9GnxdifUeWoCJo0q4ZZvrVkIHC6faTlkxG47I2Y4UrFquPuVHCrOnrLg==}
+  valibot@1.4.1:
+    resolution: {integrity: sha512-klCmFTz2jeDluy9RwX+F884TCiogtdBJ/YaxSx1EOBYXa3NXNWj8kR1jjN8rzluwojJVWWaHJ4r1U5LfICnM3g==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -8981,7 +8981,7 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0-rc.5
       '@babel/helper-validator-identifier': 8.0.0-rc.5
 
-  '@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)':
+  '@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)':
     dependencies:
       '@better-auth/utils': 0.4.0
       '@better-fetch/fetch': 1.1.21
@@ -8993,42 +8993,42 @@ snapshots:
       nanostores: 1.3.0
       zod: 4.4.3
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20260524.1
+      '@cloudflare/workers-types': 4.20260525.1
 
-  '@better-auth/drizzle-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))':
+  '@better-auth/drizzle-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
     optionalDependencies:
-      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
+      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
 
-  '@better-auth/kysely-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(kysely@0.28.17)':
+  '@better-auth/kysely-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(kysely@0.28.17)':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
     optionalDependencies:
       kysely: 0.28.17
 
-  '@better-auth/memory-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)':
+  '@better-auth/memory-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
 
-  '@better-auth/mongo-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(mongodb@7.2.0)':
+  '@better-auth/mongo-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(mongodb@7.2.0)':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
     optionalDependencies:
       mongodb: 7.2.0
 
-  '@better-auth/prisma-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)':
+  '@better-auth/prisma-adapter@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
 
-  '@better-auth/telemetry@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)':
+  '@better-auth/telemetry@1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)':
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
       '@better-auth/utils': 0.4.0
       '@better-fetch/fetch': 1.1.21
 
@@ -9093,7 +9093,7 @@ snapshots:
 
   '@cloudflare/kv-asset-handler@0.4.2': {}
 
-  '@cloudflare/workers-types@4.20260524.1': {}
+  '@cloudflare/workers-types@4.20260525.1': {}
 
   '@colordx/core@5.4.3': {}
 
@@ -10062,13 +10062,13 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@nuxt/fonts@0.14.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))':
+  '@nuxt/fonts@0.14.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))':
     dependencies:
       '@nuxt/devtools-kit': 3.2.4(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       consola: 3.4.2
       defu: 6.1.7
-      fontless: 0.2.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
+      fontless: 0.2.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       h3: 1.15.11
       magic-regexp: 0.10.0
       ofetch: 1.5.1
@@ -10078,7 +10078,7 @@ snapshots:
       ufo: 1.6.4
       unifont: 0.7.4
       unplugin: 3.0.0
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10102,7 +10102,7 @@ snapshots:
       - uploadthing
       - vite
 
-  '@nuxt/hints@1.1.2(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))':
+  '@nuxt/hints@1.1.2(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3))':
     dependencies:
       '@nuxt/devtools-kit': 3.2.4(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
@@ -10113,14 +10113,14 @@ snapshots:
       html-validate: 10.17.0(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))
       knitwork: 1.3.0
       magic-string: 0.30.21
-      nitropack: 2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.130.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)
+      nitropack: 2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.130.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)
       oxc-parser: 0.130.0
       prettier: 3.8.3
       sirv: 3.0.2
       ufo: 1.6.4
       unplugin: 3.0.0
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
-      valibot: 1.4.0(typescript@5.9.3)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      valibot: 1.4.1(typescript@5.9.3)
       vite-plugin-vue-tracer: 1.4.0(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))
       web-vitals: 5.2.0
     transitivePeerDependencies:
@@ -10188,7 +10188,7 @@ snapshots:
       - vite
       - vue
 
-  '@nuxt/image@2.0.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(srvx@0.11.16)':
+  '@nuxt/image@2.0.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(srvx@0.11.16)':
     dependencies:
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       consola: 3.4.2
@@ -10201,7 +10201,7 @@ snapshots:
       std-env: 3.10.0
       ufo: 1.6.4
     optionalDependencies:
-      ipx: 3.1.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(srvx@0.11.16)
+      ipx: 3.1.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(srvx@0.11.16)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10301,7 +10301,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/nitro-server@4.4.6(@babel/plugin-syntax-typescript@7.28.6(@babel/core@7.29.0))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)':
+  '@nuxt/nitro-server@4.4.6(@babel/plugin-syntax-typescript@7.28.6(@babel/core@7.29.0))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)':
     dependencies:
       '@nuxt/devalue': 2.0.2
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
@@ -10318,8 +10318,8 @@ snapshots:
       impound: 1.1.5
       klona: 2.0.6
       mocked-exports: 0.1.1
-      nitropack: 2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)
-      nuxt: 4.4.6(4f052913a17967e65a14d9a6a2142d7f)
+      nitropack: 2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)
+      nuxt: 4.4.6(b4a350cf34545fc077d990c5058490dd)
       nypm: 0.6.6
       ohash: 2.0.11
       pathe: 2.0.3
@@ -10327,7 +10327,7 @@ snapshots:
       std-env: 4.1.0
       ufo: 1.6.4
       unctx: 2.5.0
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       vue: 3.5.34(typescript@5.9.3)
       vue-bundle-renderer: 2.2.0
       vue-devtools-stub: 0.1.0
@@ -10383,7 +10383,7 @@ snapshots:
       pkg-types: 2.3.1
       std-env: 4.1.0
 
-  '@nuxt/scripts@1.1.1(@types/youtube@0.1.2)(@unhead/vue@2.1.15(vue@3.5.34(typescript@5.9.3)))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))':
+  '@nuxt/scripts@1.1.1(@types/youtube@0.1.2)(@unhead/vue@2.1.15(vue@3.5.34(typescript@5.9.3)))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(typescript@5.9.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))':
     dependencies:
       '@nuxt/devtools-kit': 3.2.4(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       '@unhead/vue': 2.1.15(vue@3.5.34(typescript@5.9.3))
@@ -10404,8 +10404,8 @@ snapshots:
       ufo: 1.6.4
       ultrahtml: 1.6.0
       unplugin: 3.0.0
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
-      valibot: 1.4.0(typescript@5.9.3)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      valibot: 1.4.1(typescript@5.9.3)
     optionalDependencies:
       '@types/youtube': 0.1.2
     transitivePeerDependencies:
@@ -10484,11 +10484,11 @@ snapshots:
       - typescript
       - vite
 
-  '@nuxt/ui@4.8.0(@internationalized/date@3.12.1)(@internationalized/number@3.6.6)(@tiptap/extensions@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6))(@tiptap/y-tiptap@3.0.3(prosemirror-model@1.25.7)(prosemirror-state@1.4.4)(prosemirror-view@1.41.8)(y-protocols@1.0.7(yjs@13.6.30))(yjs@13.6.30))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(change-case@5.4.4)(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(embla-carousel@8.6.0)(ioredis@5.10.1)(magicast@0.5.3)(tailwindcss@4.3.0)(typescript@5.9.3)(valibot@1.4.0(typescript@5.9.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue-router@5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@5.9.3)))(vue@3.5.34(typescript@5.9.3))(yjs@13.6.30)(zod@4.4.3)':
+  '@nuxt/ui@4.8.0(@internationalized/date@3.12.1)(@internationalized/number@3.6.6)(@tiptap/extensions@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6))(@tiptap/y-tiptap@3.0.3(prosemirror-model@1.25.7)(prosemirror-state@1.4.4)(prosemirror-view@1.41.8)(y-protocols@1.0.7(yjs@13.6.30))(yjs@13.6.30))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(change-case@5.4.4)(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(embla-carousel@8.6.0)(ioredis@5.10.1)(magicast@0.5.3)(tailwindcss@4.3.0)(typescript@5.9.3)(valibot@1.4.1(typescript@5.9.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue-router@5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@5.9.3)))(vue@3.5.34(typescript@5.9.3))(yjs@13.6.30)(zod@4.4.3)':
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@iconify/vue': 5.0.1(vue@3.5.34(typescript@5.9.3))
-      '@nuxt/fonts': 0.14.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
+      '@nuxt/fonts': 0.14.0(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
       '@nuxt/icon': 2.2.2(magicast@0.5.3)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       '@nuxt/schema': 4.4.6
@@ -10553,7 +10553,7 @@ snapshots:
     optionalDependencies:
       '@internationalized/date': 3.12.1
       '@internationalized/number': 3.6.6
-      valibot: 1.4.0(typescript@5.9.3)
+      valibot: 1.4.1(typescript@5.9.3)
       vue-router: 5.0.7(@vue/compiler-sfc@3.5.34)(vue@3.5.34(typescript@5.9.3))
       zod: 4.4.3
     transitivePeerDependencies:
@@ -10598,7 +10598,7 @@ snapshots:
       - vue
       - yjs
 
-  '@nuxt/vite-builder@4.4.6(@babel/plugin-syntax-jsx@7.28.6(@babel/core@7.29.0))(@types/node@25.9.1)(eslint@10.4.0(jiti@2.7.0))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(optionator@0.9.4)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup-plugin-visualizer@7.0.1(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup@4.60.4))(rollup@4.60.4)(terser@5.48.0)(tsx@4.22.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))(vue@3.5.34(typescript@5.9.3))(yaml@2.9.0)':
+  '@nuxt/vite-builder@4.4.6(@babel/plugin-syntax-jsx@7.28.6(@babel/core@7.29.0))(@types/node@25.9.1)(eslint@10.4.0(jiti@2.7.0))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(optionator@0.9.4)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup-plugin-visualizer@7.0.1(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup@4.60.4))(rollup@4.60.4)(terser@5.48.0)(tsx@4.22.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))(vue@3.5.34(typescript@5.9.3))(yaml@2.9.0)':
     dependencies:
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       '@rollup/plugin-replace': 6.0.3(rollup@4.60.4)
@@ -10616,7 +10616,7 @@ snapshots:
       magic-string: 0.30.21
       mlly: 1.8.2
       mocked-exports: 0.1.1
-      nuxt: 4.4.6(4f052913a17967e65a14d9a6a2142d7f)
+      nuxt: 4.4.6(b4a350cf34545fc077d990c5058490dd)
       nypm: 0.6.6
       pathe: 2.0.3
       pkg-types: 2.3.1
@@ -10659,9 +10659,9 @@ snapshots:
       - vue-tsc
       - yaml
 
-  '@nuxthub/core@0.10.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))':
+  '@nuxthub/core@0.10.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(magicast@0.5.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))':
     dependencies:
-      '@cloudflare/workers-types': 4.20260524.1
+      '@cloudflare/workers-types': 4.20260525.1
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       '@uploadthing/mime-types': 0.3.6
       c12: 3.3.4(magicast@0.5.3)
@@ -10684,7 +10684,7 @@ snapshots:
       tsdown: 0.18.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))
       ufo: 1.6.4
       uncrypto: 0.1.3
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       zod: 4.4.3
     transitivePeerDependencies:
       - '@arethetypeswrong/core'
@@ -12477,13 +12477,13 @@ snapshots:
 
   '@vueuse/metadata@14.3.0': {}
 
-  '@vueuse/nuxt@14.3.0(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(vue@3.5.34(typescript@5.9.3))':
+  '@vueuse/nuxt@14.3.0(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(vue@3.5.34(typescript@5.9.3))':
     dependencies:
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
       '@vueuse/core': 14.3.0(vue@3.5.34(typescript@5.9.3))
       '@vueuse/metadata': 14.3.0
       local-pkg: 1.2.1
-      nuxt: 4.4.6(4f052913a17967e65a14d9a6a2142d7f)
+      nuxt: 4.4.6(b4a350cf34545fc077d990c5058490dd)
       vue: 3.5.34(typescript@5.9.3)
     transitivePeerDependencies:
       - magicast
@@ -13011,15 +13011,15 @@ snapshots:
 
   baseline-browser-mapping@2.10.32: {}
 
-  better-auth@1.6.11(@cloudflare/workers-types@4.20260524.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(mongodb@7.2.0)(pg@8.21.0)(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3)):
+  better-auth@1.6.11(@cloudflare/workers-types@4.20260525.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(mongodb@7.2.0)(pg@8.21.0)(vitest@4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)))(vue@3.5.34(typescript@5.9.3)):
     dependencies:
-      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
-      '@better-auth/drizzle-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
-      '@better-auth/kysely-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(kysely@0.28.17)
-      '@better-auth/memory-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)
-      '@better-auth/mongo-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(mongodb@7.2.0)
-      '@better-auth/prisma-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)
-      '@better-auth/telemetry': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260524.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)
+      '@better-auth/core': 1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0)
+      '@better-auth/drizzle-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
+      '@better-auth/kysely-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(kysely@0.28.17)
+      '@better-auth/memory-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)
+      '@better-auth/mongo-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(mongodb@7.2.0)
+      '@better-auth/prisma-adapter': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)
+      '@better-auth/telemetry': 1.6.11(@better-auth/core@1.6.11(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260525.1)(better-call@1.3.5(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.3.0))(@better-auth/utils@0.4.0)(@better-fetch/fetch@1.1.21)
       '@better-auth/utils': 0.4.0
       '@better-fetch/fetch': 1.1.21
       '@noble/ciphers': 2.2.0
@@ -13032,7 +13032,7 @@ snapshots:
       zod: 4.4.3
     optionalDependencies:
       drizzle-kit: 0.31.10
-      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
+      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
       mongodb: 7.2.0
       pg: 8.21.0
       vitest: 4.1.7(@types/node@25.9.1)(happy-dom@20.9.0)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))
@@ -13449,9 +13449,9 @@ snapshots:
 
   date-fns@4.1.0: {}
 
-  db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)):
+  db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)):
     optionalDependencies:
-      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
+      drizzle-orm: 0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)
 
   debug@2.6.9:
     dependencies:
@@ -13538,9 +13538,9 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.22.3
 
-  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0):
+  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20260524.1
+      '@cloudflare/workers-types': 4.20260525.1
       '@neondatabase/serverless': 1.1.0
       '@upstash/redis': 1.38.0
       kysely: 0.28.17
@@ -14220,7 +14220,7 @@ snapshots:
     dependencies:
       tiny-inflate: 1.0.3
 
-  fontless@0.2.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)):
+  fontless@0.2.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)):
     dependencies:
       consola: 3.4.2
       css-tree: 3.2.1
@@ -14234,7 +14234,7 @@ snapshots:
       pathe: 2.0.3
       ufo: 1.6.4
       unifont: 0.7.4
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
     optionalDependencies:
       vite: 7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0)
     transitivePeerDependencies:
@@ -14552,7 +14552,7 @@ snapshots:
 
   ipaddr.js@1.9.1: {}
 
-  ipx@3.1.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(srvx@0.11.16):
+  ipx@3.1.1(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)(srvx@0.11.16):
     dependencies:
       '@fastify/accept-negotiator': 2.0.1
       citty: 0.1.6
@@ -14568,7 +14568,7 @@ snapshots:
       sharp: 0.34.5
       svgo: 4.0.1
       ufo: 1.6.4
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       xss: 1.0.15
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -15112,7 +15112,7 @@ snapshots:
 
   negotiator@0.6.3: {}
 
-  nitropack@2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.130.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16):
+  nitropack@2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.130.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@rollup/plugin-alias': 6.0.0(rollup@4.60.4)
@@ -15133,7 +15133,7 @@ snapshots:
       cookie-es: 2.0.1
       croner: 10.0.1
       crossws: 0.3.5
-      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
+      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
       defu: 6.1.7
       destr: 2.0.5
       dot-prop: 10.1.0
@@ -15179,7 +15179,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       unimport: 6.3.0(oxc-parser@0.130.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))
       unplugin-utils: 0.3.1
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       untyped: 2.0.0
       unwasm: 0.5.3
       youch: 4.1.1
@@ -15217,7 +15217,7 @@ snapshots:
       - supports-color
       - uploadthing
 
-  nitropack@2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16):
+  nitropack@2.13.4(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@rollup/plugin-alias': 6.0.0(rollup@4.60.4)
@@ -15238,7 +15238,7 @@ snapshots:
       cookie-es: 2.0.1
       croner: 10.0.1
       crossws: 0.3.5
-      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
+      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
       defu: 6.1.7
       destr: 2.0.5
       dot-prop: 10.1.0
@@ -15284,7 +15284,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       unimport: 6.3.0(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))
       unplugin-utils: 0.3.1
-      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1)
       untyped: 2.0.0
       unwasm: 0.5.3
       youch: 4.1.1
@@ -15370,16 +15370,16 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f):
+  nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd):
     dependencies:
       '@dxup/nuxt': 0.4.1(magicast@0.5.3)(typescript@5.9.3)
       '@nuxt/cli': 3.35.2(@nuxt/schema@4.4.6)(cac@6.7.14)(magicast@0.5.3)
       '@nuxt/devtools': 3.2.4(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.3)(yaml@2.9.0))(vue@3.5.34(typescript@5.9.3))
       '@nuxt/kit': 4.4.6(magicast@0.5.3)
-      '@nuxt/nitro-server': 4.4.6(@babel/plugin-syntax-typescript@7.28.6(@babel/core@7.29.0))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)
+      '@nuxt/nitro-server': 4.4.6(@babel/plugin-syntax-typescript@7.28.6(@babel/core@7.29.0))(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))(ioredis@5.10.1)(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(oxc-parser@0.131.0)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(srvx@0.11.16)(typescript@5.9.3)
       '@nuxt/schema': 4.4.6
       '@nuxt/telemetry': 2.8.0(@nuxt/kit@4.4.6(magicast@0.5.3))
-      '@nuxt/vite-builder': 4.4.6(@babel/plugin-syntax-jsx@7.28.6(@babel/core@7.29.0))(@types/node@25.9.1)(eslint@10.4.0(jiti@2.7.0))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt@4.4.6(4f052913a17967e65a14d9a6a2142d7f))(optionator@0.9.4)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup-plugin-visualizer@7.0.1(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup@4.60.4))(rollup@4.60.4)(terser@5.48.0)(tsx@4.22.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))(vue@3.5.34(typescript@5.9.3))(yaml@2.9.0)
+      '@nuxt/vite-builder': 4.4.6(@babel/plugin-syntax-jsx@7.28.6(@babel/core@7.29.0))(@types/node@25.9.1)(eslint@10.4.0(jiti@2.7.0))(lightningcss@1.32.0)(magicast@0.5.3)(nuxt@4.4.6(b4a350cf34545fc077d990c5058490dd))(optionator@0.9.4)(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup-plugin-visualizer@7.0.1(rolldown@1.0.0-beta.57(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))(rollup@4.60.4))(rollup@4.60.4)(terser@5.48.0)(tsx@4.22.3)(typescript@5.9.3)(vue-tsc@3.2.9(typescript@5.9.3))(vue@3.5.34(typescript@5.9.3))(yaml@2.9.0)
       '@unhead/vue': 2.1.15(vue@3.5.34(typescript@5.9.3))
       '@vue/shared': 3.5.34
       chokidar: 5.0.0
@@ -17158,7 +17158,7 @@ snapshots:
     dependencies:
       rolldown: 1.0.0-rc.17
 
-  unstorage@1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1):
+  unstorage@1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13))(db0@0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0)))(ioredis@5.10.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 5.0.0
@@ -17171,7 +17171,7 @@ snapshots:
     optionalDependencies:
       '@upstash/redis': 1.38.0
       '@vercel/functions': 3.6.0(@aws-sdk/credential-provider-web-identity@3.972.13)
-      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260524.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
+      db0: 0.3.4(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260525.1)(@neondatabase/serverless@1.1.0)(@upstash/redis@1.38.0)(kysely@0.28.17)(pg@8.21.0))
       ioredis: 5.10.1
 
   untun@0.1.3:
@@ -17215,7 +17215,7 @@ snapshots:
 
   uuid@13.0.2: {}
 
-  valibot@1.4.0(typescript@5.9.3):
+  valibot@1.4.1(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 
