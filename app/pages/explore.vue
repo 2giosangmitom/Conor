@@ -21,6 +21,14 @@
         <template #body>
           <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div class="flex flex-wrap items-center gap-2">
+              <UDropdownMenu :items="sortMenuItems" :content="{ align: 'start' }">
+                <UButton
+                  variant="outline"
+                  size="sm"
+                  trailing-icon="lucide:chevron-down"
+                  :label="sortFilterLabel"
+                />
+              </UDropdownMenu>
               <UDropdownMenu :items="levelMenuItems" :content="{ align: 'start' }">
                 <UButton
                   variant="outline"
@@ -187,8 +195,9 @@ interface VideoIndexResponse {
 const searchQuery = ref("");
 const selectedLevel = ref<string | null>(null);
 const selectedDuration = ref<string | null>(null);
+const selectedSort = ref<"newest" | "learned">("newest");
 const pageIndex = ref(0);
-const pageSize = 8;
+const pageSize = 16;
 const allVideosSectionRef = ref<HTMLElement | null>(null);
 
 async function scrollToSection() {
@@ -257,6 +266,23 @@ const levelMenuItems = computed(() => [
   },
 ]);
 
+const sortMenuItems = computed(() => [
+  {
+    label: "Mới nhất",
+    onSelect: () => {
+      selectedSort.value = "newest";
+      scrollToSection();
+    },
+  },
+  {
+    label: "Nhiều học viên",
+    onSelect: () => {
+      selectedSort.value = "learned";
+      scrollToSection();
+    },
+  },
+]);
+
 const durationMenuItems = computed(() => [
   {
     label: "Tất cả",
@@ -295,6 +321,10 @@ const durationFilterLabel = computed(() => {
   return "Thời lượng";
 });
 
+const sortFilterLabel = computed(() =>
+  selectedSort.value === "learned" ? "Sắp xếp: Nhiều học viên" : "Sắp xếp: Mới nhất",
+);
+
 const normalizedQuery = computed(() => searchQuery.value.trim().toLowerCase());
 
 const durationFilterBounds = computed(() => {
@@ -309,7 +339,7 @@ const { data: videoResponse, status } = useFetch<VideoIndexResponse>("/api/video
     const durationBounds = durationFilterBounds.value;
 
     return {
-      sort: "newest",
+      sort: selectedSort.value,
       period: "all",
       level: selectedLevel.value ?? undefined,
       q: normalizedQuery.value || undefined,
@@ -347,10 +377,11 @@ function clearFilters() {
   selectedLevel.value = null;
   selectedDuration.value = null;
   searchQuery.value = "";
+  selectedSort.value = "newest";
   pageIndex.value = 0;
 }
 
-watch([selectedLevel, selectedDuration, searchQuery], () => {
+watch([selectedLevel, selectedDuration, selectedSort, searchQuery], () => {
   pageIndex.value = 0;
 });
 

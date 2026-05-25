@@ -3,7 +3,7 @@ import { and, count, countDistinct, desc, eq, gte, ilike, lte } from "drizzle-or
 import { z } from "zod";
 
 const querySchema = z.object({
-  sort: z.enum(["trending", "newest"]).default("newest"),
+  sort: z.enum(["trending", "newest", "learned"]).default("newest"),
   period: z.enum(["7d", "30d", "90d", "all"]).default("all"),
   level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).optional(),
   q: z.string().min(1).optional(),
@@ -110,7 +110,10 @@ export default defineEventHandler(async (event) => {
     .leftJoin(schema.practiceSession, eq(schema.video.id, schema.practiceSession.videoId))
     .where(whereClause)
     .groupBy(schema.video.id)
-    .orderBy(desc(schema.video.createdAt))
+    .orderBy(
+      query.sort === "learned" ? desc(learnedCount) : desc(schema.video.createdAt),
+      desc(schema.video.createdAt),
+    )
     .limit(query.limit)
     .offset(query.offset);
 
