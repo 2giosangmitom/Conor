@@ -195,7 +195,7 @@ interface VideoIndexResponse {
 const searchQuery = ref("");
 const selectedLevel = ref<string | null>(null);
 const selectedDuration = ref<string | null>(null);
-const selectedSort = ref<"newest" | "learned">("newest");
+const selectedSort = ref<"newest" | "learned">("learned");
 const pageIndex = ref(0);
 const pageSize = 16;
 const allVideosSectionRef = ref<HTMLElement | null>(null);
