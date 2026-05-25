@@ -53,20 +53,19 @@ export interface PracticeSessionResponse {
     id: string;
     currentSentenceIndex: number;
     completed: boolean;
-    score: number;
     lastPracticedAt: string;
   };
   video: {
     youtubeId: string;
   };
   attempts: PracticeAttemptSummary[];
+  overallAccuracy: number;
 }
 
 export interface PracticeSessionRecord {
   id: string;
   currentSentenceIndex: number;
   completed: boolean;
-  score: number;
   lastPracticedAt: string;
 }
 

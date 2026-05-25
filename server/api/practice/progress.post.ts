@@ -9,7 +9,6 @@ const bodySchema = z.object({
   youtubeId: z.string().min(1).max(20),
   currentSentenceIndex: z.number().int().min(0),
   completed: z.boolean().optional(),
-  score: z.number().int().min(0).optional(),
 });
 
 type SessionPayload = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
@@ -47,7 +46,6 @@ export default defineProtectedEventHandler(async (event: H3Event, session: Sessi
         videoId: videoRow.id,
         currentSentenceIndex: body.currentSentenceIndex,
         completed: body.completed ?? false,
-        score: body.score ?? 0,
         lastPracticedAt: new Date(),
       })
       .returning();
@@ -65,7 +63,6 @@ export default defineProtectedEventHandler(async (event: H3Event, session: Sessi
     .set({
       currentSentenceIndex: body.currentSentenceIndex,
       completed: body.completed ?? existingSession.completed,
-      score: body.score ?? existingSession.score,
       lastPracticedAt: new Date(),
     })
     .where(eq(schema.practiceSession.id, existingSession.id))

@@ -1,0 +1,1 @@
+ALTER TABLE "practice_session" DROP COLUMN "score";

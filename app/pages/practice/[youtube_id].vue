@@ -86,7 +86,7 @@ async function refreshVideo() {
   }
 }
 
-function processVideoResponse(response: { status: number; _data: unknown }) {
+function processVideoResponse(response: { status: number; _data?: unknown }) {
   if (!response) return;
   if (response.status === 200) {
     const payload = response._data as { video: VideoInfo; sentences: VideoSentence[] };
@@ -109,7 +109,6 @@ const hintCount = ref(0);
 const sessionHintCount = ref(0);
 const replayCount = ref(0);
 const sessionId = ref<string | null>(null);
-const sessionScore = ref(0);
 const isCompleted = ref(false);
 const revealedWords = ref(0);
 const errorWordIndices = ref(new Set<number>());
@@ -121,6 +120,7 @@ const errorAudio = shallowRef<HTMLAudioElement | null>(null);
 const successAudio = shallowRef<HTMLAudioElement | null>(null);
 const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
 const sentenceAccuracyMap = ref<Record<number, number>>({});
+const sessionAttemptAccuracies = ref<number[]>([]);
 
 const DB_NAME = "nghego-practice";
 const DB_VERSION = 1;
@@ -179,7 +179,7 @@ const currentSentence = computed(() => sentences.value[activeSentenceIndex.value
 const totalSentences = computed(() => sentences.value.length);
 const attemptedCount = computed(() => Object.keys(sentenceAccuracyMap.value).length);
 const accuracy = computed(() => {
-  const values = Object.values(sentenceAccuracyMap.value);
+  const values = sessionAttemptAccuracies.value;
   if (values.length === 0) return 0;
   const sum = values.reduce((a, b) => a + b, 0);
   return Math.round(sum / values.length);
@@ -384,18 +384,17 @@ async function loadOrCreateSession() {
     if (response?.practice_session) {
       const sess = response.practice_session;
       sessionId.value = sess.id;
-      sessionScore.value = sess.score;
       isCompleted.value = sess.completed;
       activeSentenceIndex.value = Math.min(sess.currentSentenceIndex, totalSentences.value - 1);
-      const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+      const { accuracyMap, totalHints } = computeAccuracyFromAttempts(
         (response.attempts ?? []).map((a) => ({
           sentenceId: a.transcriptSentenceId,
           accuracy: a.accuracy,
           hintsUsed: a.hintsUsed ?? 0,
         })),
       );
+      sessionAttemptAccuracies.value = (response.attempts ?? []).map((a) => a.accuracy);
       sentenceAccuracyMap.value = accuracyMap;
-      sessionScore.value = score;
       sessionHintCount.value = totalHints;
       restoreSentenceAttempts(response.attempts ?? []);
       await playSegment();
@@ -409,15 +408,15 @@ async function loadOrCreateSession() {
         totalSentences.value - 1,
       );
       if (localSession.attempts) {
-        const { accuracyMap, score, totalHints } = computeAccuracyFromAttempts(
+        const { accuracyMap, totalHints } = computeAccuracyFromAttempts(
           localSession.attempts.map((a) => ({
             sentenceId: a.sentenceId,
             accuracy: a.accuracy,
             hintsUsed: a.hintsUsed ?? 0,
           })),
         );
+        sessionAttemptAccuracies.value = localSession.attempts.map((a) => a.accuracy);
         sentenceAccuracyMap.value = accuracyMap;
-        sessionScore.value = score;
         sessionHintCount.value = totalHints;
         restoreSentenceAttempts(
           localSession.attempts.map((a) => ({
@@ -443,7 +442,6 @@ async function startNewSession() {
       body: { youtubeId: youtubeId.value },
     });
     sessionId.value = sessionRecord.id;
-    sessionScore.value = sessionRecord.score;
   } else if (video.value) {
     await practiceDb.sessions.delete(video.value.youtubeId);
     await practiceDb.sessions.put({
@@ -460,6 +458,7 @@ async function startNewSession() {
   hintCount.value = 0;
   sessionHintCount.value = 0;
   sentenceAccuracyMap.value = {};
+  sessionAttemptAccuracies.value = [];
   answerStatus.value = "idle";
   replayCount.value = 0;
   await playSegment();
@@ -488,17 +487,15 @@ function computeAccuracyFromAttempts(
     }
   }
   const accuracyMap: Record<number, number> = {};
-  let score = 0;
   let totalHints = 0;
   for (const [sentId, data] of Object.entries(latestPerSentence)) {
     const sentence = sentences.value.find((s) => s.id === sentId);
     if (sentence) {
       accuracyMap[sentence.sentenceIndex] = data.accuracy;
-      score += data.accuracy;
       totalHints += data.hintsUsed;
     }
   }
-  return { accuracyMap, score, totalHints };
+  return { accuracyMap, totalHints };
 }
 
 async function saveLocalProgress() {
@@ -546,11 +543,9 @@ async function persistProgress() {
         youtubeId: youtubeId.value,
         currentSentenceIndex: activeSentenceIndex.value,
         completed: activeSentenceIndex.value >= totalSentences.value - 1,
-        score: sessionScore.value,
       },
     });
     sessionId.value = response.id;
-    sessionScore.value = response.score;
     isCompleted.value = response.completed;
   } else {
     await saveLocalProgress();
@@ -615,12 +610,8 @@ async function checkAnswer() {
     }
     return;
   }
-  const prevAccuracy = sentenceAccuracyMap.value[activeSentenceIndex.value];
-  if (prevAccuracy !== undefined) {
-    sessionScore.value -= prevAccuracy;
-  }
   sentenceAccuracyMap.value[activeSentenceIndex.value] = accuracyValue;
-  sessionScore.value += accuracyValue;
+  sessionAttemptAccuracies.value.push(accuracyValue);
   attemptedSentenceIndices.value.add(activeSentenceIndex.value);
   answerStatus.value = accuracyValue >= 90 ? "correct" : "incorrect";
   sentenceAttempts.value[activeSentenceIndex.value] =

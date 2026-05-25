@@ -77,7 +77,6 @@ export const practiceSession = pgTable(
       .notNull(),
     currentSentenceIndex: integer("current_sentence_index").default(0).notNull(),
     completed: boolean("completed").default(false).notNull(),
-    score: integer("score").default(0).notNull(),
     lastPracticedAt: timestamp("last_practiced_at").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

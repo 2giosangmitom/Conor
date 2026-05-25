@@ -46,7 +46,6 @@ export default defineProtectedEventHandler(async (event, session) => {
       .set({
         currentSentenceIndex: 0,
         completed: false,
-        score: 0,
         lastPracticedAt: new Date(),
       })
       .where(eq(schema.practiceSession.id, existing.id))
