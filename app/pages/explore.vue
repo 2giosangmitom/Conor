@@ -68,16 +68,22 @@
                 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   <UPageCard v-for="i in 8" :key="i" variant="outline" class="h-full">
                     <template #leading>
-                      <USkeleton class="aspect-video w-full rounded-lg" />
+                      <div class="relative overflow-hidden rounded-lg">
+                        <USkeleton class="aspect-video w-full" />
+                      </div>
                     </template>
                     <template #title>
-                      <USkeleton class="h-4 w-full" />
+                      <div class="space-y-2">
+                        <USkeleton class="h-5 w-full" />
+                        <USkeleton class="h-5 w-[70%]" />
+                      </div>
                     </template>
                     <template #description>
                       <div class="flex min-h-16 flex-wrap items-center gap-2">
-                        <USkeleton class="h-5 w-12" />
-                        <USkeleton class="h-5 w-16" />
-                        <USkeleton class="h-5 w-20" />
+                        <USkeleton class="h-5.5 w-9" />
+                        <USkeleton class="h-5.5 w-14" />
+                        <USkeleton class="h-5.5 w-20" />
+                        <USkeleton class="h-5.5 w-12" />
                       </div>
                     </template>
                   </UPageCard>
@@ -96,8 +102,10 @@
                       <NuxtImg
                         :src="video.thumbnailUrl"
                         alt="Thumbnail"
-                        class="aspect-video w-full object-cover transition duration-300 group-hover:scale-110"
+                        class="aspect-video w-full object-cover transition-all duration-300 group-hover:scale-110"
                         loading="lazy"
+                        placeholder
+                        placeholder-class="blur-md"
                       />
                       <div
                         class="absolute inset-0 flex items-center justify-center bg-black/0 transition duration-300 group-hover:bg-black/30"

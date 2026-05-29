@@ -92,7 +92,9 @@ function formatDuration(s: number) {
                       :src="video.thumbnailUrl"
                       alt=""
                       role="presentation"
-                      class="h-10 w-16 rounded object-cover"
+                      class="h-10 w-16 rounded object-cover transition-all duration-300"
+                      placeholder
+                      placeholder-class="blur-sm"
                     />
                     <span class="line-clamp-2 max-w-md font-medium">{{ video.title }}</span>
                   </div>

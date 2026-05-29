@@ -538,7 +538,9 @@ const meta = computed(
         <NuxtImg
           :src="video.thumbnailUrl"
           alt="Thumbnail"
-          class="h-14 w-24 shrink-0 rounded-lg object-cover shadow-xs"
+          class="h-14 w-24 shrink-0 rounded-lg object-cover shadow-xs transition-all duration-300"
+          placeholder
+          placeholder-class="blur-sm"
         />
         <div class="min-w-0 flex-1">
           <h1 class="truncate text-lg font-bold leading-tight">{{ video.title }}</h1>
