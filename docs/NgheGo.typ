@@ -101,7 +101,7 @@
       #text(fill: rgb("#c8ff00"), size: 36pt, weight: "black")[NgheGo]
       #v(0.3em)
       #text(fill: white, size: 14pt, style: "italic")[
-        Nền tảng luyện nghe chép chính tả tiếng Anh với video YouTube
+        Nền tảng luyện nghe gõ chính tả tiếng Anh với video YouTube
       ]
     ]
 
@@ -156,9 +156,9 @@
 #page(numbering: none)[
   #heading(level: 1, numbering: none)[Tóm tắt]
 
-  NgheGo là nền tảng luyện nghe chép chính tả tiếng Anh dựa trên nội dung video YouTube. Hệ thống tự động lập chỉ mục, tách câu, đồng bộ transcript và tạo luồng luyện tập theo câu để người học nghe, gõ lại và nhận phản hồi tức thì. Người dùng có thể luyện tập ngay không cần đăng nhập, sau đó đồng bộ tiến độ khi cần.
+  NgheGo là nền tảng luyện nghe và gõ chính tả Tiếng Anh dựa trên nội dung video YouTube. Hệ thống tự động lập chỉ mục, tách câu, đồng bộ Transcript và tạo luồng luyện tập theo câu để người học nghe, gõ lại và nhận phản hồi tức thì. Người dùng có thể luyện tập ngay không cần đăng nhập, sau đó đồng bộ tiến độ khi cần.
 
-  Điểm nhấn của dự án nằm ở trang practice: toàn bộ thao tác có thể thực hiện bằng bàn phím, phím tắt được thiết kế theo luồng luyện tập và hiển thị ngay trong giao diện. Các thành phần tương tác có focus rõ ràng, trạng thái được thông báo qua trợ năng, và nội dung được tổ chức theo chuẩn WCAG 2.2 mức AA.
+  Điểm nhấn của dự án nằm ở trang Practice: toàn bộ thao tác có thể thực hiện bằng bàn phím, phím tắt được thiết kế theo luồng luyện tập và hiển thị ngay trong giao diện. Các thành phần tương tác có focus rõ ràng, trạng thái được thông báo qua trợ năng, và nội dung được tổ chức theo chuẩn WCAG 2.2 mức AA.
 ]
 
 #page(numbering: none)[
@@ -169,13 +169,13 @@
 
 == Tổng quan
 
-*NgheGo* là nền tảng học tiếng Anh trực tuyến cho phép người dùng luyện nghe và chép chính tả (dictation) thông qua các video YouTube thực tế. Thay vì sử dụng nội dung học thuật khô khan, NgheGo tận dụng kho nội dung phong phú từ YouTube — âm nhạc, tin tức, bài giảng, podcast — để tạo ra trải nghiệm học tập tự nhiên, sinh động và hiệu quả.
+*NgheGo* là nền tảng học Tiếng Anh trực tuyến cho phép người dùng luyện nghe và gõ chính tả (Dictation) thông qua các video YouTube thực tế. Thay vì sử dụng nội dung học thuật khô khan, NgheGo tận dụng kho nội dung phong phú từ YouTube: Âm nhạc, tin tức, bài giảng, podcast. Để tạo ra trải nghiệm học tập tự nhiên, sinh động và hiệu quả.
 
-Người dùng có thể dán link YouTube bất kỳ hoặc chọn từ thư viện video được phân loại theo trình độ CEFR (A1 đến C2). Hệ thống tự động lấy transcript, tách thành từng câu, cho phép người học lắng nghe, gõ lại và nhận phản hồi tức thì theo từng từ. Không yêu cầu đăng nhập để bắt đầu luyện tập, giảm thiểu rào cản tiếp cận cho mọi đối tượng.
+Người dùng có thể dán link YouTube bất kỳ hoặc chọn từ thư viện video được phân loại theo trình độ CEFR (A1 đến C2). Hệ thống tự động lấy Transcript, tách thành từng câu, cho phép người học lắng nghe, gõ lại và nhận phản hồi tức thì theo từng từ. Không yêu cầu đăng nhập để bắt đầu luyện tập, giảm thiểu rào cản tiếp cận cho mọi đối tượng.
 
 #callout(
   "Điểm khác biệt cốt lõi",
-  [NgheGo sử dụng *Vercel Workflow SDK* để xử lý video bất đồng bộ — tự động lấy transcript, phân tích độ khó, phân loại chủ đề và lưu vào database. Người dùng có thể dán bất kỳ link YouTube nào và bắt đầu luyện tập trong vài giây. Toàn bộ hệ thống được thiết kế tuân thủ *WCAG 2.2 cấp AA*, đảm bảo người học khuyết tật có thể tiếp cận đầy đủ các tính năng.],
+  [NgheGo sử dụng *Vercel Workflow SDK* để xử lý video bất đồng bộ, tự động lấy Transcript, phân tích độ khó, phân loại chủ đề và lưu vào database. Người dùng có thể dán bất kỳ link YouTube nào và bắt đầu luyện tập trong vài giây. Toàn bộ hệ thống được thiết kế tuân thủ *WCAG 2.2 cấp AA*, đảm bảo người học khuyết tật có thể tiếp cận đầy đủ các tính năng.],
   accent: rgb("#1e40af"),
 )
 
@@ -192,7 +192,7 @@ Người dùng có thể dán link YouTube bất kỳ hoặc chọn từ thư vi
   )[
     *Mục tiêu giáo dục*
     #v(4pt)
-    - Cải thiện kỹ năng nghe và chép chính tả tiếng Anh
+    - Cải thiện kỹ năng nghe và gõ chính tả Tiếng Anh
     - Hỗ trợ người học chuẩn bị IELTS, TOEIC
     - Tăng cường từ vựng qua ngữ cảnh thực tế
     - Theo dõi tiến độ học tập theo thời gian
@@ -216,7 +216,7 @@ Người dùng có thể dán link YouTube bất kỳ hoặc chọn từ thư vi
 
 Dự án hướng đến *ba nhóm người dùng chính*:
 
-+ *Người học tiếng Anh phổ thông* (16–35 tuổi): Học sinh, sinh viên và người đi làm muốn cải thiện kỹ năng nghe nói tiếng Anh qua nội dung yêu thích.
++ *Người học Tiếng Anh phổ thông* (16–35 tuổi): Học sinh, sinh viên và người đi làm muốn cải thiện kỹ năng nghe nói Tiếng Anh qua nội dung yêu thích.
 
 + *Người dùng khuyết tật*: Bao gồm người khiếm thị (sử dụng trình đọc màn hình), người khiếm thính (cần phụ đề song ngữ) và người hạn chế vận động (điều hướng bằng bàn phím hoặc thiết bị thay thế).
 
@@ -224,7 +224,7 @@ Dự án hướng đến *ba nhóm người dùng chính*:
 
 = Tính năng hệ thống
 
-== Nhóm 1 — Nội dung & Video
+== Nhóm 1: Nội dung & Video
 
 #table(
   columns: (2fr, 5fr),
@@ -233,16 +233,16 @@ Dự án hướng đến *ba nhóm người dùng chính*:
   inset: 10pt,
   [*Tính năng*], [*Mô tả*],
   [Thư viện video YouTube],
-  [Kho video được phân loại theo cấp độ CEFR (A1–C2), chủ đề và thời lượng. Mỗi video có transcript được xử lý tự động và lưu trữ sẵn trong database.],
+  [Kho video được phân loại theo cấp độ CEFR (A1–C2), chủ đề và thời lượng. Mỗi video có Transcript được xử lý tự động và lưu trữ sẵn trong database.],
 
   [Dán link YouTube tức thì],
-  [Người dùng dán bất kỳ link YouTube nào — hệ thống tự động lấy transcript, phân tích độ khó, phân loại chủ đề và tạo bài dictation trong vài giây thông qua Vercel Workflow.],
+  [Người dùng dán link Youtube bất kì, hệ thống tự động lấy Transcript, phân tích độ khó, phân loại chủ đề và tạo bài dictation trong vài giây thông qua Vercel Workflow.],
 
   [Dictation theo câu],
-  [Hệ thống tách transcript thành từng câu với timestamp chính xác. Người học nghe và gõ lại, nhận phản hồi tức thì theo từng từ bằng trạng thái và biểu tượng rõ ràng.],
+  [Hệ thống tách Transcript thành từng câu với timestamp chính xác. Người học nghe và gõ lại, nhận phản hồi tức thì theo từng từ bằng trạng thái và biểu tượng rõ ràng.],
 
   [Phụ đề đồng bộ],
-  [Hiển thị phụ đề tiếng Anh đồng bộ với audio, có thể bật/tắt bằng bàn phím. Transcript đầy đủ luôn hiển thị bên cạnh player.],
+  [Hiển thị phụ đề Tiếng Anh đồng bộ với audio, có thể bật/tắt bằng bàn phím. Transcript đầy đủ luôn hiển thị bên cạnh player.],
 
   [Gợi ý thông minh],
   [Hệ thống gợi ý chữ cái đầu của từ khi người học gặp khó khăn, giúp tiếp tục luyện tập mà không bị kẹt.],
@@ -251,7 +251,7 @@ Dự án hướng đến *ba nhóm người dùng chính*:
   [Lưu lại từng lần thử (attempt) trên mỗi câu, tính độ chính xác, số lần gợi ý sử dụng và thời gian hoàn thành. Hỗ trợ nhiều phiên luyện tập trên cùng một video.],
 )
 
-== Nhóm 2 — Người dùng & Gamification
+== Nhóm 2: Người dùng & Gamification
 
 #table(
   columns: (2fr, 5fr),
@@ -275,12 +275,12 @@ Dự án hướng đến *ba nhóm người dùng chính*:
   [Tài khoản admin có thể quản lý video, cập nhật metadata, xem thống kê sử dụng thông qua giao diện admin riêng biệt.],
 )
 
-== Trang practice — Trải nghiệm luyện tập cốt lõi
+== Trang Practice: Trải nghiệm luyện tập cốt lõi
 
-Trang practice được tối ưu cho thao tác liên tục, giảm nhiễu và hỗ trợ tối đa cho người dùng chỉ sử dụng bàn phím:
+Trang Practice được tối ưu cho thao tác liên tục, giảm nhiễu và hỗ trợ tối đa cho người dùng chỉ sử dụng bàn phím:
 
 - Luồng luyện tập theo câu với điều khiển phát lại, bỏ qua và kiểm tra đáp án ngay trong ô nhập
-- Phím tắt theo ngữ cảnh giúp thao tác không rời tay khỏi bàn phím (Meta = Cmd/Win)
+- Phím tắt theo ngữ cảnh giúp thao tác không rời tay khỏi bàn phím (Meta = Ctrl trên Windows/Cmd trên Mac)
 - Tổ hợp chính: Meta + Enter (kiểm tra), Meta + J/K (điều hướng), Meta + R (phát lại), Meta + H (gợi ý), Meta + S (bỏ qua), Ctrl + I (focus ô nhập)
 - Trạng thái luyện tập hiển thị rõ ràng, có thông báo trợ năng và thứ tự focus nhất quán
 - Tiến độ, độ chính xác và gợi ý được cập nhật theo thời gian thực
@@ -348,7 +348,7 @@ Hệ thống sử dụng PostgreSQL (Neon serverless) với Drizzle ORM, thiết
 
 - *video*: Lưu metadata video (title, youtubeId, duration, topic, level, thumbnailUrl)
 - *video_transcript_sentence*: Từng câu trong transcript kèm timestamp (startTime, endTime) tính bằng milliseconds
-- *practice_session*: Phiên luyện tập của người dùng — mỗi video có thể có nhiều session, lưu vị trí câu hiện tại và trạng thái hoàn thành
+- *practice_session*: Phiên luyện tập của người dùng, mỗi video có thể có nhiều session, lưu vị trí câu hiện tại và trạng thái hoàn thành
 - *practice_attempt*: Kết quả từng lần gõ một câu, lưu văn bản người dùng nhập, độ chính xác (0-100), số lần gợi ý sử dụng
 - *word_mistake*: Từng từ sai cụ thể với vị trí, từ mong đợi và từ người dùng nhập để phân tích lỗi chi tiết
 
@@ -358,7 +358,7 @@ Ngoài ra, Better Auth tự động tạo các bảng xác thực: *user*, *sess
 
 NgheGo được thiết kế tuân thủ bốn nguyên tắc POUR của WCAG 2.2 ở mức *Cấp AA*. Phần này trình bày cách từng nguyên tắc được triển khai cụ thể trong sản phẩm.
 
-== Nguyên tắc 1: Perceivable — Có thể nhận biết được
+== Nguyên tắc 1: Perceivable: Có thể nhận biết được
 
 Mọi thông tin và thành phần giao diện phải được trình bày theo cách người dùng có thể cảm nhận được, bất kể họ sử dụng giác quan nào.
 
@@ -386,11 +386,11 @@ Phản hồi kết quả dictation sử dụng kết hợp biểu tượng và v
 
 Tất cả trạng thái tương tác (hover, focus, lỗi, thành công) được thiết kế với tương phản đủ rõ, dễ nhận diện và không phụ thuộc vào một kênh thị giác đơn lẻ. Văn bản, biểu tượng và nhãn trợ giúp luôn đảm bảo khả năng đọc ở mọi kích thước màn hình, kể cả khi phóng to 200%.
 
-== Nguyên tắc 2: Operable — Có thể vận hành được
+== Nguyên tắc 2: Operable: Có thể vận hành được
 
 Mọi chức năng phải có thể thao tác bằng nhiều phương thức nhập liệu khác nhau.
 
-=== 2.1 Điều hướng hoàn toàn bằng bàn phím (trọng tâm: trang practice)
+=== 2.1 Điều hướng hoàn toàn bằng bàn phím (trọng tâm: trang Practice)
 
 NgheGo được thiết kế để người dùng có thể thực hiện *toàn bộ quy trình học tập chỉ bằng bàn phím*:
 
@@ -433,7 +433,7 @@ Không sử dụng hiệu ứng nhấp nháy với tần số trên 3 lần/giâ
 
 Tất cả chức năng kéo thả đều có thao tác thay thế bằng click/tap đơn giản (tiêu chí 2.5.7 — mới trong WCAG 2.2). Input dictation hỗ trợ cả bàn phím vật lý lẫn bàn phím ảo trên mobile.
 
-== Nguyên tắc 3: Understandable — Có thể hiểu được
+== Nguyên tắc 3: Understandable: Có thể hiểu được
 
 Nội dung và giao diện phải dễ hiểu và hoạt động theo cách có thể dự đoán được.
 
@@ -456,7 +456,7 @@ Nội dung và giao diện phải dễ hiểu và hoạt động theo cách có 
 - Thông báo lỗi liên kết trực tiếp với trường bị lỗi bằng `aria-describedby`
 - Xác thực đăng nhập sử dụng Google OAuth, không yêu cầu CAPTCHA nhận thức; người dùng vẫn có thể luyện tập mà không cần đăng nhập
 
-== Nguyên tắc 4: Robust — Mạnh mẽ
+== Nguyên tắc 4: Robust mạnh mẽ
 
 Nội dung phải hoạt động đáng tin cậy trên nhiều tác nhân người dùng khác nhau, bao gồm công nghệ hỗ trợ.
 
@@ -482,177 +482,6 @@ NgheGo đã được kiểm thử với các tổ hợp trình đọc màn hình
   [VoiceOver (macOS)], [Safari], [#badge("Đạt ✓", rgb("#16a34a"))],
   [VoiceOver (iOS)], [Safari Mobile], [#badge("Đạt ✓", rgb("#16a34a"))],
   [TalkBack (Android)], [Chrome Mobile], [#badge("Đạt ✓", rgb("#16a34a"))],
-)
-
-= Bảng tổng hợp tuân thủ WCAG 2.2
-
-#v(0.5em)
-
-#table(
-  columns: (1.2fr, 3fr, 0.8fr, 3fr),
-  stroke: 0.5pt + rgb("#e2e8f0"),
-  fill: (col, row) => if row == 0 { rgb("#0f172a") } else if calc.odd(row) { white } else { rgb("#f8fafc") },
-  inset: 8pt,
-  text(fill: white, weight: "bold")[Nguyên tắc],
-  text(fill: white, weight: "bold")[Tiêu chí thành công],
-  text(fill: white, weight: "bold")[Cấp],
-  text(fill: white, weight: "bold")[Triển khai],
-
-  [*P — Perceivable*],
-  [1.1.1 Nội dung phi văn bản],
-  [#badge("A", rgb("#16a34a"))],
-  [Alt text đầy đủ cho tất cả hình ảnh, aria-hidden cho biểu tượng trang trí],
-
-  [], [1.2.2 Phụ đề (Đã thu âm)], [#badge("A", rgb("#16a34a"))], [Phụ đề song ngữ đồng bộ với audio trong tất cả video],
-
-  [],
-  [1.2.3 Mô tả âm thanh hoặc Phương tiện thay thế],
-  [#badge("A", rgb("#16a34a"))],
-  [Transcript đầy đủ hiển thị song song với player],
-
-  [], [1.3.1 Thông tin và Quan hệ], [#badge("A", rgb("#16a34a"))], [Cấu trúc HTML semantic, heading hierarchy rõ ràng],
-
-  [], [1.3.3 Đặc điểm cảm giác], [#badge("A", rgb("#16a34a"))], [Hướng dẫn không chỉ dựa vào dấu hiệu thị giác đơn lẻ],
-
-  [], [1.3.4 Hướng màn hình], [#badge("AA", rgb("#1e40af"))], [Giao diện hoạt động tốt cả portrait lẫn landscape],
-
-  [],
-  [1.4.1 Sử dụng tín hiệu thị giác],
-  [#badge("A", rgb("#16a34a"))],
-  [Phản hồi dictation kết hợp biểu tượng + văn bản],
-
-  [],
-  [1.4.3 Tương phản (Tối thiểu)],
-  [#badge("AA", rgb("#1e40af"))],
-  [Tỷ lệ tương phản tối thiểu 4.5:1 cho văn bản thường, đã kiểm tra đạt],
-
-  [], [1.4.4 Thay đổi kích thước văn bản], [#badge("AA", rgb("#1e40af"))], [Giao diện không bị vỡ khi phóng to 200%],
-
-  [], [1.4.10 Reflow], [#badge("AA", rgb("#1e40af"))], [Không cần cuộn ngang ở viewport 320px],
-
-  [],
-  [1.4.11 Tương phản thành phần phi văn bản],
-  [#badge("AA", rgb("#1e40af"))],
-  [Viền input, biểu tượng trạng thái đạt tỷ lệ 3:1],
-
-  [*O — Operable*],
-  [2.1.1 Bàn phím],
-  [#badge("A", rgb("#16a34a"))],
-  [Toàn bộ chức năng thao tác được bằng bàn phím, có phím tắt riêng],
-
-  [], [2.1.2 Không có bẫy bàn phím], [#badge("A", rgb("#16a34a"))], [Focus không bị kẹt trong bất kỳ thành phần nào],
-
-  [],
-  [2.2.1 Có thể điều chỉnh thời gian],
-  [#badge("A", rgb("#16a34a"))],
-  [Không giới hạn thời gian phiên luyện, tự động lưu tiến độ],
-
-  [], [2.3.1 Ba lần nháy hoặc dưới ngưỡng], [#badge("A", rgb("#16a34a"))], [Không có nội dung nháy trên 3 lần/giây],
-
-  [],
-  [2.4.3 Thứ tự focus],
-  [#badge("A", rgb("#16a34a"))],
-  [Thứ tự tab theo luồng đọc tự nhiên từ trên xuống, trái sang phải],
-
-  [],
-  [2.4.7 Focus có thể nhìn thấy],
-  [#badge("AA", rgb("#1e40af"))],
-  [Focus indicator rõ ràng trên tất cả thành phần tương tác],
-
-  [],
-  [2.4.11 Focus không bị che (Tối thiểu) — *WCAG 2.2 mới*],
-  [#badge("AA", rgb("#1e40af"))],
-  [Thành phần được focus không bị sticky header hoặc overlay che hoàn toàn],
-
-  [], [2.5.3 Nhãn trong tên], [#badge("A", rgb("#16a34a"))], [Accessible name của nút chứa text label hiển thị],
-
-  [],
-  [2.5.7 Chuyển động kéo — *WCAG 2.2 mới*],
-  [#badge("AA", rgb("#1e40af"))],
-  [Tất cả thao tác kéo thả có thao tác thay thế bằng click đơn],
-
-  [],
-  [2.5.8 Kích thước mục tiêu (Tối thiểu) — *WCAG 2.2 mới*],
-  [#badge("AA", rgb("#1e40af"))],
-  [Vùng nhấn tối thiểu 24×24px, nút chính tối thiểu 44×44px],
-
-  [*U — Understandable*],
-  [3.1.1 Ngôn ngữ trang],
-  [#badge("A", rgb("#16a34a"))],
-  [lang="vi" trên html, lang="en" cho nội dung tiếng Anh],
-
-  [], [3.2.1 Khi focus], [#badge("A", rgb("#16a34a"))], [Không thay đổi ngữ cảnh khi thành phần nhận focus],
-
-  [], [3.2.3 Điều hướng nhất quán], [#badge("AA", rgb("#1e40af"))], [Navigation nhất quán trên mọi trang],
-
-  [],
-  [3.3.1 Xác định lỗi],
-  [#badge("A", rgb("#16a34a"))],
-  [Lỗi form được mô tả bằng văn bản và liên kết đến trường bị lỗi],
-
-  [],
-  [3.3.2 Nhãn hoặc hướng dẫn],
-  [#badge("A", rgb("#16a34a"))],
-  [Tất cả trường nhập liệu có label và hướng dẫn rõ ràng],
-
-  [],
-  [3.3.7 Nhập liệu dư thừa — *WCAG 2.2 mới*],
-  [#badge("A", rgb("#16a34a"))],
-  [Thông tin đã nhập trong cùng phiên không yêu cầu nhập lại],
-
-  [],
-  [3.3.8 Xác thực truy cập (Không phải ngoại lệ) — *WCAG 2.2 mới*],
-  [#badge("AA", rgb("#1e40af"))],
-  [Đăng nhập bằng Google OAuth, không yêu cầu CAPTCHA nhận thức. Luyện tập không cần đăng nhập.],
-
-  [*R — Robust*],
-  [4.1.2 Tên, Vai trò, Giá trị],
-  [#badge("A", rgb("#16a34a"))],
-  [Tất cả thành phần UI có accessible name, role và state qua ARIA],
-
-  [],
-  [4.1.3 Thông báo trạng thái],
-  [#badge("AA", rgb("#1e40af"))],
-  [Thông báo lỗi và cập nhật dùng aria-live để thông báo cho trình đọc màn hình],
-)
-
-= Kiểm thử khả năng tiếp cận
-
-== Phương pháp kiểm thử
-
-NgheGo áp dụng chiến lược kiểm thử kết hợp giữa tự động và thủ công theo khuyến nghị của WCAG:
-
-=== Kiểm thử tự động
-
-- *axe-core* tích hợp vào CI/CD pipeline — tự động kiểm tra mỗi lần deploy
-- *Lighthouse Accessibility* score tối thiểu 95/100 trên mọi trang chính
-- *W3C Markup Validator* kiểm tra HTML hợp lệ
-- Công cụ kiểm tra tương phản để đảm bảo dễ đọc ở mọi bối cảnh hiển thị
-
-=== Kiểm thử thủ công
-
-- Điều hướng toàn bộ luồng học tập chỉ bằng bàn phím (không dùng chuột)
-- Kiểm thử với NVDA + Chrome, VoiceOver + Safari, TalkBack + Chrome Mobile
-- Kiểm thử phóng to 200%, 400% và chế độ reflow ở 320px
-- Kiểm thử với chế độ High Contrast của Windows và macOS
-
-=== Kiểm thử người dùng thực tế
-
-Dự án thực hiện kiểm thử với nhóm người dùng đa dạng trước khi ra mắt, bao gồm người dùng khiếm thị sử dụng trình đọc màn hình và người dùng chỉ dùng bàn phím để thu thập phản hồi thực tế.
-
-== Kết quả kiểm thử tự động
-
-#table(
-  columns: (3fr, 2fr, 2fr),
-  stroke: 0.5pt + rgb("#e2e8f0"),
-  fill: (col, row) => if row == 0 { rgb("#f8fafc") } else { white },
-  inset: 9pt,
-  [*Công cụ / Trang*], [*Điểm số*], [*Kết quả*],
-  [Lighthouse — Trang chủ], [98/100], [#badge("Đạt ✓", rgb("#16a34a"))],
-  [Lighthouse — Trang practice], [96/100], [#badge("Đạt ✓", rgb("#16a34a"))],
-  [Lighthouse — Trang video library], [97/100], [#badge("Đạt ✓", rgb("#16a34a"))],
-  [axe-core — Toàn site], [0 lỗi critical], [#badge("Đạt ✓", rgb("#16a34a"))],
-  [W3C Markup Validator], [0 lỗi, 0 cảnh báo], [#badge("Đạt ✓", rgb("#16a34a"))],
 )
 
 = Tuyên bố tuân thủ
