@@ -1,4 +1,4 @@
-#set document(title: "NgheGo – Giải pháp áp dụng tiêu chuẩn WCAG 2.2", author: "Nhóm NgheGo")
+#set document(title: "NgheGo - Giải pháp áp dụng tiêu chuẩn WCAG 2.2", author: "Nhóm NgheGo")
 #set page(
   paper: "a4",
   margin: (top: 2.5cm, bottom: 2.5cm, left: 3cm, right: 2.5cm),
