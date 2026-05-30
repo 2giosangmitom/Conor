@@ -309,9 +309,20 @@ const features: PageFeatureProps[] = [
 
 const howToUseSteps: HowToUseStep[] = [
   {
+    icon: "lucide:search",
+    title: "Tìm video bạn thích",
+    description: "Chọn nội dung yêu thích để việc học thú vị hơn",
+    points: [
+      "Tìm video YouTube phù hợp với sở thích của bạn",
+      "Học từ podcast, TED Talk, vlog, phim hoặc tin tức",
+    ],
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
     icon: "lucide:link",
     title: "Dán link YouTube",
-    description: "Chọn video YouTube bạn muốn luyện nghe",
+    description: "Thêm video vào NgheGo chỉ trong vài giây",
     points: [
       "Dán URL video YouTube vào ô nhập liệu",
       "Hệ thống tự động tải video và chuẩn bị audio",
@@ -340,7 +351,7 @@ const howToUseSteps: HowToUseStep[] = [
   },
   {
     icon: "lucide:circle-check",
-    title: "Kiểm tra & sửa lỗi",
+    title: "Nhận phản hồi tức thì",
     description: "So sánh với transcript và sửa lỗi ngay",
     points: ["Tìm những chỗ bỏ sót trong bài nghe", "Sửa lỗi từng dòng trước khi chuyển câu tiếp"],
     color: "text-primary",
@@ -348,7 +359,7 @@ const howToUseSteps: HowToUseStep[] = [
   },
   {
     icon: "lucide:trending-up",
-    title: "Theo dõi tiến trình",
+    title: "Theo dõi tiến độ",
     description: "Xem thống kê chi tiết và cải thiện mỗi ngày",
     points: [
       "Xem điểm Accuracy cho từng câu luyện tập",
@@ -392,7 +403,7 @@ const faqItems = ref<AccordionItem[]>([
   {
     label: "Làm sao để bắt đầu luyện nghe?",
     content:
-      "Chỉ cần dán link YouTube vào ô nhập liệu trên trang chủ và nhấn 'Bắt đầu'. Hệ thống sẽ tự động xử lý và chuẩn bị bài luyện tập cho bạn.",
+      "Chỉ cần dán link YouTube vào ô nhập liệu trên trang chủ và nhấn 'Bắt đầu'. Hệ thống sẽ tự động xử lý và chuẩn bị bài luyện tập cho bạn. Bạn cũng có thể bấm vào mục 'Khám phá' để xem các video có sẵn và bắt đầu luyện tập ngay.",
   },
   {
     label: "Tôi có thể luyện nghe với video bất kỳ không?",
