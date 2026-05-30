@@ -1,4 +1,4 @@
-#set document(title: "NgheGo – Giải pháp áp dụng tiêu chuẩn WCAG 2.2", author: "Nhóm NgheGo")
+#set document(title: "NgheGo - Giải pháp áp dụng tiêu chuẩn WCAG 2.2", author: "Nhóm NgheGo")
 #set page(
   paper: "a4",
   margin: (top: 2.5cm, bottom: 2.5cm, left: 3cm, right: 2.5cm),
@@ -19,7 +19,6 @@
   v(0.3em)
 }
 
-// ─── Trang bìa ───────────────────────────────────────────────────────────────
 #align(center)[
   #v(3cm)
   #text(size: 22pt, weight: "bold")[NgheGo]
@@ -34,19 +33,16 @@
   ]
   #v(2cm)
   #text(size: 11pt)[
-    Nhóm tác giả: Võ Văn Duy · Võ Quang Chiến\ \
-    Tháng 6 năm 2026
+    Nhóm tác giả: Võ Văn Duy - Võ Quang Chiến - Nguyễn Gia Hưng\
   ]
 ]
 
 #pagebreak()
 
-// ─── Mục lục ─────────────────────────────────────────────────────────────────
 #outline(title: "Mục lục", indent: 1.5em)
 
 #pagebreak()
 
-// ─── 1. Giới thiệu sản phẩm ──────────────────────────────────────────────────
 = Giới thiệu sản phẩm
 
 == Tổng quan
@@ -77,7 +73,6 @@ NgheGo phục vụ đa dạng người dùng, bao gồm:
 
 #pagebreak()
 
-// ─── 2. Giải pháp áp dụng WCAG 2.2 ──────────────────────────────────────────
 = Giải pháp áp dụng tiêu chuẩn WCAG 2.2
 
 NgheGo được thiết kế và phát triển với mục tiêu đạt mức tuân thủ *WCAG 2.2 cấp AA* trên toàn bộ ứng dụng. Bốn nguyên tắc cốt lõi của WCAG: *Perceivable, Operable, Understandable, Robust* được tích hợp xuyên suốt từ giai đoạn thiết kế đến triển khai.
@@ -232,7 +227,6 @@ Các thay đổi trạng thái động như kết quả kiểm tra câu, tiến 
 
 #pagebreak()
 
-// ─── 3. Bảng tổng hợp tuân thủ WCAG 2.2 ─────────────────────────────────────
 = Bảng tổng hợp tuân thủ WCAG 2.2
 
 Bảng dưới đây tóm tắt các tiêu chí WCAG 2.2 được áp dụng trong NgheGo, tập trung vào cấp A và AA, bao gồm cả 9 tiêu chí mới bổ sung trong WCAG 2.2.
