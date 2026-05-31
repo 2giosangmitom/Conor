@@ -41,7 +41,7 @@
     "unstorage": "^1.17.5",
     "vue": "^3.5.35",
     "vue-router": "^5.1.0",
-    "workflow": "^4.2.5",
+    "workflow": "^4.2.6",
     "youtube-transcript-plus": "^2.0.0",
     "zod": "^4.4.3"
   },
