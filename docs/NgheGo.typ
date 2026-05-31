@@ -1,300 +1,284 @@
-// ===========================================================================
-// CẤU HÌNH TRANG & BIẾN TOÀN CỤC
-// ===========================================================================
-
-#set document(title: "NgheGo - Giải pháp WCAG 2.2", author: "Nhóm NgheGo")
-
-// Bảng màu hệ thống (Design Tokens)
-#let brand = (
-  primary: rgb("#1d4ed8"), // Accent blue
-  secondary: rgb("#1e3a5f"), // Deep blue for headings
-  dark: rgb("#374151"), // Slate dark for text/subheadings
-  muted: rgb("#6b7280"), // Gray for captions
-  light: rgb("#f0f4ff"), // Light blue background
-  border: rgb("#cbd5e1"), // Light gray for lines
-  table-bg: rgb("#f9fafb"), // Zebra striping color
-)
-
+#set text(font: "Liberation Serif", size: 11pt, lang: "vi")
 #set page(
-  paper: "a4",
-  margin: (top: 2.5cm, bottom: 2.5cm, left: 3cm, right: 2.5cm),
+  margin: (top: 2.2cm, bottom: 2.2cm, left: 2.5cm, right: 2.5cm),
   numbering: "1",
-  header: context {
-    if counter(page).get().first() > 2 {
-      set text(size: 9pt, fill: brand.muted)
-      grid(
-        columns: (1fr, auto),
-        align: (left, right),
-        [NgheGo -- Giải pháp WCAG 2.2], counter(page).display("1"),
-      )
-      line(length: 100%, stroke: 0.4pt + rgb("#d1d5db"))
-    }
-  },
 )
 
-// --- Typography -------------------------------------------------------------
-#set text(font: "Crimson Pro", size: 11.5pt, lang: "vi")
-#set par(justify: true, leading: 0.8em, spacing: 1.2em)
+#set par(justify: true, leading: 0.65em)
 #set heading(numbering: "1.1.")
 
-// ===========================================================================
-// ĐỊNH DẠNG COMPONENT (CUSTOM FUNCTIONS)
-// ===========================================================================
+#align(center)[
+  #text(size: 20pt, weight: "bold")[TÀI LIỆU DỰ THI]
 
-// Tiêu đề các cấp
-#show heading.where(level: 1): it => {
-  v(1.4em)
-  block(
-    fill: brand.light,
-    radius: 4pt,
-    inset: (x: 10pt, y: 7pt),
-    width: 100%,
-    text(size: 14pt, weight: "bold", fill: brand.primary, it),
-  )
-  v(0.4em)
-}
+  #v(0.3cm)
 
-#show heading.where(level: 2): it => {
-  v(0.9em)
-  text(size: 12.5pt, weight: "bold", fill: brand.secondary, it)
-  v(0.2em)
-  line(length: 100%, stroke: 0.5pt + brand.border)
-  v(0.2em)
-}
+  #text(size: 17pt, weight: "bold")[
+    CUỘC THI XÂY DỰNG WEBSITE/ỨNG DỤNG SỐ
+    ĐẠT TIÊU CHUẨN TIẾP CẬN WCAG 2.2
+  ]
 
-#show heading.where(level: 3): it => {
-  v(0.6em)
-  text(size: 11.5pt, weight: "bold", style: "italic", fill: brand.dark, it)
-  v(0.1em)
-}
+  #v(0.5cm)
 
-// Định dạng bảng chuẩn WCAG đồng bộ
-#let wcag-table(columns, ..cells) = table(
-  columns: columns,
-  inset: 8pt,
-  stroke: 0.4pt + rgb("#e5e7eb"),
-  fill: (_, row) => if row == 0 { brand.light } else if calc.odd(row) { brand.table-bg } else { white },
-  ..cells
-)
+  #text(size: 18pt, weight: "bold", fill: rgb("#1d7a5b"))[
+    NgheGo
+  ]
 
-// Thẻ bọc thông tin công nghệ (Grid Card)
-#let tech-card(title, description) = block(
-  fill: brand.light,
-  radius: 4pt,
-  inset: (x: 10pt, y: 9pt),
-  width: 100%,
-  [
-    #text(weight: "bold", fill: brand.secondary)[#title] \
-    #text(size: 10pt)[#description]
-  ],
-)
+  #v(0.2cm)
 
+  #text(size: 12pt, style: "italic")[
+    Ứng dụng web luyện nghe chép chính tả tiếng Anh từ nội dung YouTube
+  ]
 
-// ===========================================================================
-// TRANG BÌA
-// ===========================================================================
-#page(numbering: none, header: none)[
-  #v(2.5cm)
-  #align(center)[
-    #block(
-      fill: brand.primary,
-      radius: 8pt,
-      inset: (x: 24pt, y: 16pt),
-      text(size: 32pt, weight: "bold", fill: white)[NgheGo],
-    )
-    #v(0.6cm)
-    #text(size: 14pt, fill: brand.dark)[
-      Ứng dụng luyện Nghe và Gõ chính tả Tiếng Anh với video YouTube
-    ]
-    #v(1.2cm)
-    #line(length: 55%, stroke: 1.5pt + brand.primary)
-    #v(1.2cm)
+  #v(0.6cm)
 
-    #block(
-      fill: brand.light,
-      radius: 6pt,
-      inset: (x: 20pt, y: 14pt),
-      width: 80%,
-      [
-        #text(size: 10pt, fill: brand.muted)[TÀI LIỆU DỰ THI] \
-        #v(0.3em)
-        #text(size: 12pt, weight: "bold")[
-          Cuộc thi Thiết kế Website / Ứng dụng số \
-          đảm bảo tiêu chuẩn tiếp cận WCAG 2.2
-        ]
-      ],
-    )
-
-    #v(2cm)
-    #text(size: 10.5pt, fill: brand.muted)[
-      *Nhóm tác giả* \
-      Võ Văn Duy -- Võ Quang Chiến -- Nguyễn Gia Hưng
-    ]
+  #text(size: 11pt)[
+    #strong[Nhóm tác giả:] Võ Văn Duy, Võ Quang Chiến, Nguyễn Gia Hưng
   ]
 ]
 
-// ===========================================================================
-// MỤC LỤC
-// ===========================================================================
-#page(numbering: none, header: none)[
-  #v(1cm)
-  #text(size: 16pt, weight: "bold", fill: brand.primary)[Mục lục]
-  #v(0.5em)
-  #line(length: 100%, stroke: 1pt + brand.primary)
-  #v(0.5em)
-  #outline(title: none, indent: 1.5em, depth: 3)
-]
+#pagebreak()
 
-// ===========================================================================
-= Giới thiệu sản phẩm
+= Tóm tắt dự án
 
-== Tổng quan
-*NgheGo* là ứng dụng web miễn phí hỗ trợ người học tiếng Anh tại Việt Nam cải thiện kỹ năng nghe thông qua phương pháp gõ chính tả (dictation) với video YouTube. Người dùng dán URL video vào ứng dụng; hệ thống tự động tạo transcript bằng AI, chia thành từng câu để nghe và gõ lại. Kết quả được đối chiếu tức thì với transcript gốc, giúp người học nhận biết và khắc phục lỗi sai hiệu quả.
+NgheGo là nền tảng học tiếng Anh thông qua phương pháp luyện nghe chép chính tả từ các video YouTube. Người học có thể lựa chọn nội dung yêu thích, từ công nghệ, khoa học, giáo dục đến giải trí, sau đó luyện tập theo từng câu với phản hồi tức thời về mức độ chính xác.
 
-*Đối tượng hướng đến:* sinh viên, người đi làm muốn nâng cao kỹ năng nghe tiếng Anh thực tế; người dùng khiếm thị sử dụng trình đọc màn hình; người dùng chỉ dùng bàn phím; người cao tuổi cần chữ lớn và tương phản cao; người dùng trên thiết bị di động.
+Khác với nhiều nền tảng học tập hiện nay, NgheGo được thiết kế theo định hướng #emph[accessibility-first] ngay từ đầu. Các quyết định về giao diện, điều hướng và tương tác đều được xây dựng nhằm bảo đảm người dùng có thể tiếp cận và sử dụng hệ thống bằng nhiều phương thức khác nhau, bao gồm bàn phím, trình đọc màn hình và các công nghệ hỗ trợ phổ biến.
 
-== Tính năng chính
-- *Nhập video tùy ý:* hỗ trợ mọi URL YouTube công khai.
-- *Transcript AI:* nhận dạng chính xác nhiều giọng tiếng Anh.
-- *Luyện từng câu:* nghe và gõ lại từng đoạn ngắn, có thể phát lại nhiều lần.
-- *Phản hồi tức thì:* tô màu đúng/sai theo từng từ sau mỗi lần nộp.
-- *Theo dõi tiến trình:* điểm accuracy từng câu và thống kê tổng hợp theo phiên.
-- *Đăng nhập Google:* đồng bộ lịch sử luyện tập giữa các thiết bị.
-- *Miễn phí hoàn toàn:* không giới hạn số lượng video, không phí ẩn.
+Mục tiêu của dự án không chỉ là hỗ trợ học tiếng Anh hiệu quả mà còn góp phần xây dựng một môi trường học tập số bình đẳng, nơi mọi người đều có cơ hội tiếp cận tri thức mà không bị giới hạn bởi khả năng vận động, thị giác hoặc các rào cản công nghệ khác.
+
+= Giới thiệu dự án
+
+== Bối cảnh
+
+Kỹ năng nghe là một trong những kỹ năng khó nhất khi học tiếng Anh. Mặc dù hiện nay có nhiều nền tảng học tập trực tuyến, phần lớn vẫn tồn tại một số hạn chế:
+
+- Nội dung học tập cố định và khó cá nhân hóa.
+- Người học khó tìm được chủ đề phù hợp với sở thích cá nhân.
+- Thiếu phản hồi chi tiết trong quá trình luyện tập.
+- Chưa chú trọng đầy đủ đến khả năng tiếp cận cho người khuyết tật.
+
+Trong khi đó, YouTube sở hữu kho nội dung tiếng Anh phong phú và luôn được cập nhật. Tuy nhiên, việc chuyển đổi các video này thành tài liệu học tập có cấu trúc vẫn là một thách thức đối với phần lớn người học.
+
+== Giải pháp
+
+NgheGo cho phép người dùng sử dụng trực tiếp video YouTube để tạo thành các bài luyện nghe chép chính tả.
+
+Sau khi nhận liên kết video, hệ thống tự động:
+
+- Phân tích nội dung video.
+- Trích xuất và xử lý transcript.
+- Chia nội dung thành từng câu luyện tập.
+- Xác định chủ đề nội dung.
+- Ước lượng cấp độ CEFR từ A1 đến C2.
+- Tạo môi trường luyện tập với phản hồi tức thời.
+
+Người học có thể luyện tập theo từng câu, nghe lại nhiều lần, nhận gợi ý khi cần thiết và theo dõi tiến độ học tập của mình.
 
 == Công nghệ sử dụng
-NgheGo được xây dựng trên nền tảng *Nuxt* -- framework fullstack dựa trên Vue.js, cung cấp Server-Side Rendering (SSR) và file-based routing. Phía server sử dụng engine *Nitro*, cho phép triển khai linh hoạt trên nhiều môi trường (Node.js, edge, serverless) và xử lý API routes ngay trong cùng dự án. Giao diện được xây dựng với thư viện component *Nuxt UI*, tích hợp sẵn TailwindCSS và hỗ trợ dark mode; các component đã được xây dựng theo chuẩn WAI-ARIA, giảm thiểu nhân lực cần thiết để tuân thủ các yêu cầu trợ năng.
 
-#v(0.3em)
-#grid(
-  columns: (1fr, 1fr, 1fr),
-  gutter: 8pt,
-  tech-card(
-    "Nuxt",
-    "Framework fullstack Vue.js; SSR với Nitro; file-based routing; NuxtAnnouncer và NuxtRouteAnnouncer hỗ trợ trợ năng tích hợp sẵn.",
-  ),
-  tech-card(
-    "Nitro",
-    "Server engine đa nền tảng; xử lý API routes và middleware trong cùng dự án; hỗ trợ triển khai serverless và edge computing.",
-  ),
-  tech-card(
-    "Nuxt UI",
-    "Thư viện component tích hợp TailwindCSS; các component tuân thủ WAI-ARIA; hỗ trợ dark mode và theming nhất quán qua design tokens.",
-  ),
-)
-#v(0.5em)
+NgheGo được phát triển trên nền tảng web hiện đại với các công nghệ chính:
 
+- Nuxt 4 và Vue 3 cho giao diện người dùng.
+- PostgreSQL phục vụ lưu trữ dữ liệu.
+- Better Auth cho xác thực người dùng.
+- TailwindCSS và Nuxt UI hỗ trợ xây dựng giao diện nhất quán.
+- Các thư viện xử lý ngôn ngữ tự nhiên phục vụ phân loại chủ đề và xác định cấp độ CEFR.
 
-// ===========================================================================
-= Giải pháp áp dụng tiêu chuẩn WCAG 2.2
+#pagebreak()
 
-NgheGo được thiết kế và phát triển đạt mức tuân thủ *WCAG 2.2 cấp AA* trên toàn ứng dụng. Bốn nguyên tắc cốt lõi -- *Perceivable, Operable, Understandable, Robust* -- được tích hợp xuyên suốt từ giai đoạn thiết kế đến triển khai.
+= Triển khai tiêu chuẩn WCAG 2.2
 
-== Có thể nhận biết (Perceivable)
+== Phương pháp tiếp cận
 
-=== Văn bản thay thế và đa phương tiện
-Toàn bộ hình ảnh mang thông tin có thuộc tính `alt` mô tả nội dung; icon trang trí được đánh dấu `aria-hidden="true"`. Vì âm thanh là trung tâm ứng dụng, nội dung được trình bày song song qua nhiều kênh:
-- *Transcript hiển thị đồng thời:* bản chép lời đầy đủ xuất hiện ngay trên giao diện luyện tập, đóng vai trò bản ghi nội dung theo yêu cầu tiêu chí 1.2.1.
-- *Phản hồi đa kênh:* kết quả đúng/sai thể hiện bằng cả màu sắc lẫn gạch chân và biểu tượng -- không phụ thuộc duy nhất vào màu (tiêu chí 1.4.1).
-- *Thông báo văn bản:* mọi trạng thái xử lý hiển thị qua nhãn văn bản rõ ràng, không chỉ qua âm thanh.
+NgheGo được xây dựng theo định hướng "accessibility-first", nghĩa là khả năng tiếp cận được xem như một yêu cầu cốt lõi của sản phẩm thay vì một tính năng bổ sung.
 
-=== Cấu trúc thích ứng
-HTML ngữ nghĩa được áp dụng nhất quán: tiêu đề phân cấp `h1` đến `h3` đúng thứ tự; landmark ARIA (`header`, `main`, `nav`, `footer`); danh sách dùng `ol`/`ul`; nhãn form liên kết qua thuộc tính `for`/`id` hoặc `aria-label`. Ô nhập URL khai báo `aria-label` để trình đọc màn hình thông báo mục đích trường nhập liệu.
+Quá trình thiết kế và phát triển được thực hiện dựa trên bốn nguyên tắc của WCAG:
 
-=== Phân biệt và tương phản
-#wcag-table(
-  (2.6cm, 1fr),
-  [*Tiêu chí*],
-  [*Giải pháp*],
-  [1.4.3 và 1.4.11],
-  [TailwindCSS kết hợp design tokens đảm bảo tỉ lệ tương phản tối thiểu 4.5:1 cho văn bản thông thường và 3:1 cho thành phần giao diện. Kiểm tra cả chế độ sáng và tối.],
-  [1.4.4],
-  [Toàn bộ kích thước chữ dùng đơn vị tương đối (rem, em); giao diện không mất nội dung khi phóng to lên 200%.],
-  [1.4.2],
-  [Không tự động phát âm thanh khi tải trang; mọi phát lại âm thanh đều do người dùng chủ động kích hoạt.],
-)
+- Perceivable (Có thể nhận biết)
+- Operable (Có thể vận hành)
+- Understandable (Có thể hiểu)
+- Robust (Vững chắc)
 
+Mọi chức năng chính đều được đánh giá theo các nguyên tắc này trước khi đưa vào sử dụng.
 
-== Có thể vận hành (Operable)
+== Perceivable - Có thể nhận biết
 
-=== Điều hướng bàn phím
-Toàn bộ chức năng sử dụng được chỉ bằng bàn phím, không cần chuột:
-- `Tab` / `Shift+Tab` di chuyển qua các phần tử tương tác theo thứ tự logic từ trên xuống dưới.
-- `Enter` / `Space` kích hoạt nút bấm và liên kết; `Esc` thoát khỏi modal và dropdown -- không có bẫy bàn phím.
-- `Ctrl+Enter` nộp câu trả lời trong ô luyện tập; phím tắt bổ sung (`Ctrl+I`, `Meta+J/K`) được thông báo qua tooltip và hoạt động hoàn toàn bằng bàn phím.
-- Modal, dropdown, accordion triển khai theo chuẩn WAI-ARIA Authoring Practices, đảm bảo hành vi nhất quán.
+NgheGo bảo đảm nội dung và trạng thái giao diện có thể được nhận biết bởi nhiều nhóm người dùng khác nhau.
 
-=== Định vị và điều hướng
-#wcag-table(
-  (3.2cm, 1fr),
-  [*Tiêu chí*],
-  [*Giải pháp*],
-  [2.4.1 -- Skip link],
-  [Liên kết "Bỏ qua điều hướng" ẩn (`.sr-only-focusable`, `position: fixed`) hiện ra khi nhận focus bàn phím, dẫn đến `main-content` với `tabindex="-1"`. Không gây layout shift.],
-  [2.4.2 -- Tiêu đề trang],
-  [Mỗi trang có `title` riêng biệt mô tả nội dung. Trang luyện tập: "Luyện nghe chép chính tả: [Tên video] - NgheGo".],
-  [2.4.7 và 2.4.11],
-  [Chỉ báo focus rõ ràng, tương phản tối thiểu 3:1; `scroll-margin-top` ngăn header cố định che khuất vùng focus.],
-  [2.4.4 -- Liên kết],
-  [Mọi liên kết có văn bản mô tả mục đích cụ thể; nút chỉ có icon được bổ sung `aria-label` mô tả hành động.],
-)
+Các biện pháp đã triển khai gồm:
 
-=== Phương thức nhập liệu (tiêu chí mới trong WCAG 2.2)
-- *2.5.8 -- Kích thước vùng chạm:* nút bấm tối thiểu 24x24 px; các nút chính đạt 44x44 px để thao tác thoải mái trên thiết bị di động.
-- *2.5.7 -- Không kéo:* mọi tương tác thực hiện bằng nhấp/chạm đơn; không có chức năng nào yêu cầu thao tác kéo thả.
-- *2.5.2 -- Hủy con trỏ:* hành động quan trọng kích hoạt tại sự kiện `pointerup`, cho phép người dùng hủy bằng cách kéo con trỏ ra ngoài trước khi thả.
+- Tương phản màu đáp ứng mức AA của WCAG 2.2.
+- Không sử dụng màu sắc như phương thức duy nhất để truyền tải thông tin.
+- Hình ảnh mang ý nghĩa đều có mô tả thay thế phù hợp.
+- Các trạng thái đúng, sai, hoàn thành hoặc lỗi được thể hiện đồng thời bằng màu sắc, biểu tượng và văn bản.
+- Giao diện vẫn sử dụng hiệu quả khi phóng to hoặc thay đổi kích thước hiển thị.
+- Nội dung được trình bày rõ ràng, có cấu trúc và khoảng cách hợp lý.
 
-=== Chuyển động và hoạt ảnh
-Thư viện Motion Vue điều khiển hiệu ứng fade-in và blur. Toàn bộ hoạt ảnh tôn trọng cài đặt hệ thống `prefers-reduced-motion: reduce` -- tắt hoàn toàn khi người dùng bật chế độ giảm chuyển động.
+Các tiêu chí WCAG liên quan:
 
+- 1.1.1 Non-text Content
+- 1.3.1 Info and Relationships
+- 1.4.1 Use of Color
+- 1.4.3 Contrast (Minimum)
+- 1.4.10 Reflow
 
-== Có thể hiểu (Understandable)
+== Operable - Có thể vận hành
 
-=== Ngôn ngữ
-Thẻ `html` khai báo `lang="vi"` để trình đọc màn hình sử dụng đúng bộ tổng hợp giọng nói tiếng Việt. Các đoạn văn bản tiếng Anh được bao bọc trong phần tử có `lang="en"` để trình đọc màn hình chuyển sang giọng tiếng Anh phù hợp.
+Đây là nhóm tiêu chí được đầu tư nhiều nhất trong NgheGo.
 
-=== Hành vi nhất quán
-- Header, footer và thứ tự menu đồng nhất trên mọi trang (tiêu chí 3.2.3).
-- Ứng dụng không tự chuyển trang hay gửi form khi người dùng chỉ di chuyển focus hoặc thay đổi giá trị input (3.2.1 và 3.2.2).
-- Liên kết FAQ và thông tin liên hệ luôn hiển thị ở footer trên toàn bộ các trang -- trợ giúp nhất quán theo tiêu chí 3.2.6 (mới trong WCAG 2.2).
+Toàn bộ chức năng chính của hệ thống đều có thể sử dụng bằng bàn phím mà không yêu cầu chuột.
 
-=== Hỗ trợ nhập liệu và xử lý lỗi
-#wcag-table(
-  (3.6cm, 1fr),
-  [*Tiêu chí*],
-  [*Giải pháp*],
-  [3.3.1 -- Nhận diện lỗi],
-  [https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/alert_role],
-  [3.3.2 -- Nhãn và hướng dẫn],
-  [Mọi trường nhập có nhãn rõ ràng. Ô nhập URL có placeholder mô tả định dạng mong đợi: "https://www.youtube.com/watch?v=example".],
-  [3.3.7 -- Không nhập lại],
-  [Tiến trình lưu qua IndexedDB; khi người dùng quay lại video đã luyện, hệ thống tự động khôi phục vị trí câu cuối, không yêu cầu bắt đầu lại từ đầu.],
-  [3.3.8 -- Xác thực dễ dàng],
-  [Đăng nhập qua Google OAuth -- không mật khẩu, không CAPTCHA; trình duyệt có thể tự động điền thông tin đăng nhập.],
+Các giải pháp nổi bật gồm:
+
+- Hỗ trợ điều hướng hoàn toàn bằng bàn phím.
+- Skip navigation giúp bỏ qua các vùng lặp lại.
+- Hiển thị trạng thái focus rõ ràng.
+- Không tạo bẫy bàn phím.
+- Hỗ trợ thao tác trong hộp thoại và menu theo luồng focus hợp lý.
+- Không áp đặt giới hạn thời gian trong quá trình nhập liệu.
+- Hỗ trợ giảm hiệu ứng chuyển động theo thiết lập hệ điều hành.
+
+=== Hệ thống phím tắt
+
+#table(
+  columns: (1fr, 2fr),
+  inset: 8pt,
+  stroke: 0.8pt + rgb("#e5e7eb"),
+  fill: (row, _) => if row == 0 { rgb("#f9fafb") } else { none },
+
+  [#strong[Phím tắt]], [#strong[Chức năng]],
+
+  [`Cmd + Enter`], [Kiểm tra đáp án],
+  [`Cmd + J`], [Chuyển sang câu tiếp theo],
+  [`Cmd + K`], [Quay về câu trước],
+  [`Cmd + R`], [Phát lại câu hiện tại],
+  [`Cmd + H`], [Hiển thị gợi ý],
+  [`Cmd + S`], [Bỏ qua câu hiện tại],
+  [`Ctrl + I`], [Di chuyển tới ô nhập liệu],
 )
 
+Các tiêu chí WCAG liên quan:
 
-== Mạnh mẽ (Robust)
+- 2.1.1 Keyboard
+- 2.1.2 No Keyboard Trap
+- 2.4.1 Bypass Blocks
+- 2.4.3 Focus Order
+- 2.4.7 Focus Visible
+- 2.5.3 Label in Name
+- 2.5.8 Target Size (Minimum)
 
-=== HTML ngữ nghĩa và ARIA
-NgheGo ưu tiên phần tử HTML gốc (`button`, `input`, `nav`, `main`) thay vì `div` với ARIA role. Khi cần dùng ARIA, các thuộc tính `role`, `aria-label`, `aria-describedby`, `aria-expanded`, `aria-live` được áp dụng đúng theo đặc tả WAI-ARIA. Đã kiểm tra tương thích với VoiceOver (macOS và iOS) và NVDA (Windows).
+== Understandable - Có thể hiểu
 
-=== Thông báo trạng thái (4.1.3)
-Thay đổi động (kết quả kiểm tra câu, tiến trình xử lý video, lỗi) được thông báo đến trình đọc màn hình qua vùng `aria-live` mà không cần chuyển focus: giá trị `polite` cho thông tin thông thường, `role="alert"` cho lỗi khẩn cấp. `NuxtRouteAnnouncer` đặt ở root ứng dụng thông báo chuyển trang đến trình đọc màn hình.
+NgheGo được thiết kế nhằm giảm tải nhận thức và giúp người dùng dễ dàng hiểu cách sử dụng.
 
-=== Kỹ thuật trợ năng bổ sung
-#wcag-table(
-  (3.2cm, 1fr),
-  [*Kỹ thuật*],
-  [*Mô tả*],
-  [Announcer],
-  [`NuxtAnnouncer` kết hợp `useAnnouncer()` gửi thông báo trạng thái trong trang. Gọi `polite()` cho thông tin không khẩn cấp; `assertive()` chỉ khi cần ngắt thông báo hiện tại. Âm thanh success/error được giữ lại cho người không dùng trình đọc màn hình; luôn có thông báo văn bản tương ứng để đảm bảo tiếp cận đầy đủ.],
-  [Phản hồi mức từ],
-  [Từ sai được gạch chân ngoài màu sắc, hỗ trợ người mù màu. Từ hiện tại hiển thị ký tự ẩn; có tùy chọn gợi ý chữ cái đầu để giảm khó khăn cho người học.],
-  [Skip link],
-  [Phần tử cố định (`position: fixed`) với class `.sr-only-focusable`, ẩn hoàn toàn cho đến khi nhận focus bàn phím. Không gây layout shift. Vùng chính nhận `tabindex="-1"` và focus ngay khi skip link được kích hoạt.],
-  [Quản lý focus],
-  [`scroll-margin-top` áp dụng cho các mục tiêu focus để tránh bị header cố định che khuất. Không sử dụng `outline: none` ở bất kỳ phần tử nào; viền focus tương phản tối thiểu 3:1 trên toàn ứng dụng.],
-  [Tương thích đa nền tảng],
-  [Kiểm tra trên Chrome, Firefox, Safari và Edge. Giao diện responsive từ 320 px (điện thoại nhỏ) đến 1920 px. Nội dung ban đầu render phía server (SSR với Nuxt và Nitro), không phụ thuộc JavaScript.],
+Các biện pháp bao gồm:
+
+- Điều hướng nhất quán giữa các trang.
+- Tên gọi chức năng rõ ràng và dễ hiểu.
+- Thông báo lỗi cụ thể, dễ nhận biết.
+- Luồng thao tác đơn giản và có thể dự đoán.
+- Tiến độ luyện tập luôn được hiển thị.
+- Các nút chức năng và điều khiển được đặt tại vị trí quen thuộc.
+- Cấu trúc nội dung theo phân cấp rõ ràng.
+
+Các tiêu chí WCAG liên quan:
+
+- 3.2.3 Consistent Navigation
+- 3.2.4 Consistent Identification
+- 3.3.1 Error Identification
+- 3.3.2 Labels or Instructions
+
+== Robust - Vững chắc
+
+NgheGo được xây dựng nhằm bảo đảm khả năng tương thích với nhiều trình duyệt, thiết bị và công nghệ hỗ trợ.
+
+Các giải pháp chính:
+
+- Sử dụng HTML ngữ nghĩa.
+- Duy trì cấu trúc heading hợp lý.
+- Cung cấp tên và vai trò rõ ràng cho các thành phần tương tác.
+- Hỗ trợ thông báo trạng thái cho công nghệ hỗ trợ.
+- Tương thích với trình đọc màn hình phổ biến.
+- Duy trì khả năng hoạt động ổn định trên nhiều môi trường khác nhau.
+
+Các tiêu chí WCAG liên quan:
+
+- 4.1.2 Name, Role, Value
+- 4.1.3 Status Messages
+
+== Trường hợp điển hình: Màn hình luyện tập
+
+Màn hình luyện tập là khu vực thể hiện rõ nhất việc áp dụng WCAG 2.2 trong NgheGo.
+
+Đây là nơi người dùng đồng thời thực hiện nhiều hoạt động:
+
+- Nghe nội dung.
+- Nhập câu trả lời.
+- Điều hướng giữa các câu.
+- Theo dõi tiến độ.
+- Nhận phản hồi tức thời.
+
+Người dùng có thể hoàn thành toàn bộ quá trình luyện tập chỉ bằng bàn phím.
+
+Khi kiểm tra đáp án, hệ thống cung cấp đồng thời:
+
+- Phản hồi trực quan trên giao diện.
+- Thông tin văn bản về kết quả.
+- Thông báo trạng thái cho trình đọc màn hình.
+
+Danh sách câu luyện tập cũng hiển thị rõ trạng thái:
+
+- Đang thực hiện.
+- Đã hoàn thành.
+- Chưa hoàn thành.
+
+Nhờ đó, người dùng khiếm thị hoặc người gặp khó khăn về vận động vẫn có thể học tập một cách độc lập và hiệu quả.
+
+== Kiểm thử và đánh giá
+
+NgheGo được đánh giá bằng cả công cụ tự động và kiểm thử thủ công.
+
+=== Công cụ đánh giá
+
+#table(
+  columns: (1.2fr, 2.8fr),
+  inset: 8pt,
+  stroke: 0.8pt + rgb("#e5e7eb"),
+  fill: (row, _) => if row == 0 { rgb("#f9fafb") } else { none },
+
+  [#strong[Công cụ]], [#strong[Mục tiêu đánh giá]],
+
+  [axe DevTools], [Kiểm tra ARIA, cấu trúc ngữ nghĩa và khả năng điều hướng],
+  [Lighthouse], [Đánh giá tổng thể khả năng tiếp cận],
 )
+
+=== Kiểm thử thủ công
+
+- Điều hướng hoàn toàn bằng bàn phím.
+- Kiểm thử với trình đọc màn hình.
+- Kiểm tra khả năng phóng to giao diện.
+- Đánh giá khả năng sử dụng khi không phụ thuộc màu sắc.
+- Kiểm tra trên nhiều kích thước màn hình và thiết bị khác nhau.
+
+Kết quả cho thấy hệ thống đáp ứng tốt các yêu cầu trợ năng cốt lõi và không phát hiện các vấn đề nghiêm trọng ảnh hưởng đến khả năng sử dụng.
+
+#pagebreak()
+
+= Định hướng phát triển
+
+Trong thời gian tới, NgheGo dự kiến mở rộng theo các hướng:
+
+- Hỗ trợ thêm nhiều ngôn ngữ học tập.
+- Bổ sung chức năng đánh giá phát âm.
+- Cá nhân hóa lộ trình học tập bằng AI.
+- Phát triển ứng dụng di động với tiêu chuẩn trợ năng tương đương.
+- Mở rộng các kỹ năng học tập ngoài nghe và viết.
+- Tiếp tục nâng cao mức độ tuân thủ các tiêu chuẩn trợ năng quốc tế.
+
+= Kết luận
+
+NgheGo là một dự án giáo dục số được xây dựng với mục tiêu kết hợp giữa hiệu quả học tập và khả năng tiếp cận.
+
+Thông qua việc áp dụng các nguyên tắc của WCAG 2.2 ngay từ giai đoạn thiết kế, dự án hướng tới việc tạo ra một môi trường học tập nơi mọi người đều có thể tiếp cận, tương tác và phát triển kỹ năng của mình một cách bình đẳng.
+
+Chúng tôi tin rằng khả năng tiếp cận không chỉ là một yêu cầu kỹ thuật mà còn là nền tảng để xây dựng các sản phẩm số có trách nhiệm với cộng đồng.
