@@ -423,9 +423,14 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             :class="{
               'text-dimmed': word.isPlaceholder && !word.isCurrent && !word.isHinted,
               'text-warning': word.isHinted,
+              'underline decoration-2 underline-offset-4': !word.isPlaceholder && !word.isCorrect,
             }"
             :aria-label="
-              !word.isPlaceholder && !word.isCurrent ? (word.isCorrect ? 'Đúng' : 'Sai') : undefined
+              !word.isPlaceholder && !word.isCurrent
+                ? word.isCorrect
+                  ? 'Đúng'
+                  : 'Sai, được gạch chân'
+                : undefined
             "
           >
             {{ word.text }}
