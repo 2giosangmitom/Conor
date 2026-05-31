@@ -35,27 +35,35 @@
     }
   }
 }
-
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 0;
-  z-index: 9999;
-  padding: 0.5rem 1rem;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 0.875rem;
-  outline-offset: 2px;
-  transition: top 0.1s;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
 *:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Visually hidden until focused — shows as fixed overlay when focused */
+.sr-only-focusable {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.sr-only-focusable:focus,
+.sr-only-focusable:focus-visible {
+  position: fixed !important;
+  left: 1rem !important;
+  top: 1rem !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  clip: auto !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  z-index: 9999 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,6 +13,7 @@ interface WordDisplay {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+const { polite } = useAnnouncer();
 
 const playerRef = useTemplateRef("scriptYouTubePlayer");
 const answerTextareaRef = useTemplateRef("answerTextarea");
@@ -54,6 +55,29 @@ function formatMs(ms: number) {
 
 const errorIndicesSet = computed(() => new Set(props.errorWordIndices));
 const revealedIndicesSet = computed(() => new Set(props.revealedWordIndices));
+
+watch(
+  () => [props.answerStatus, props.activeSentenceIndex, props.matchedWordCount, props.wordCount],
+  ([status, index, matched, total]) => {
+    const sentenceNumber = Number(index) + 1;
+    if (status === "checking") {
+      polite(`Đang kiểm tra câu ${sentenceNumber}.`);
+      return;
+    }
+    if (status === "correct") {
+      polite(`Câu ${sentenceNumber} đã đúng. ${matched}/${total} từ khớp.`);
+      return;
+    }
+    if (status === "incorrect") {
+      polite(
+        `Câu ${sentenceNumber} chưa đúng. ${matched}/${total} từ khớp. Các từ sai đã được gạch chân.`,
+      );
+      return;
+    }
+    polite(`Đang ở câu ${sentenceNumber}. ${matched}/${total} từ khớp.`);
+  },
+  { immediate: true },
+);
 
 const wordDisplay = computed<WordDisplay[]>(() => {
   const sentence = props.sentences[props.activeSentenceIndex];
@@ -345,12 +369,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               <div class="flex items-center gap-3">
                 <span>{{ props.answerInput.length }} ký tự</span>
                 <span>•</span>
-                <span
-                  >{{
-                    props.answerInput.trim() ? props.answerInput.trim().split(/\s+/).length : 0
-                  }}
-                  từ</span
-                >
+                <span>
+                  {{ props.answerInput.trim() ? props.answerInput.trim().split(/\s+/).length : 0 }}
+                  từ
+                </span>
               </div>
             </div>
           </div>

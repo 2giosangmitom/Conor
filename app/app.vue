@@ -1,6 +1,16 @@
 <template>
   <UApp>
-    <a href="#main-content" class="skip-link"> Bỏ qua điều hướng </a>
+    <UButton
+      href="#main-content"
+      color="primary"
+      variant="solid"
+      size="md"
+      class="sr-only-focusable"
+    >
+      Bỏ qua điều hướng
+    </UButton>
+    <NuxtAnnouncer />
+    <NuxtRouteAnnouncer />
     <NuxtLoadingIndicator
       color="repeating-linear-gradient(to right, #00dc82 0%, #34cdfe 50%, #0047e1 100%)"
       :height="3"
