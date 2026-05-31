@@ -54,6 +54,7 @@ test/unit/      — Vitest unit tests (node environment)
 - Auth catch-all route: `server/api/auth/[...all].ts`
 - **Protected routes:** use `defineProtectedEventHandler()` from `server/utils/auth.ts` — it validates session and injects `session.user` into the handler
 - Client-side: use Better Auth Vue client (auto-imported from `~/lib/auth-client` or similar)
+- Client-side: use Better Auth Vue client via `app/utils/auth.ts` (exports `useSession`, `signIn`, `signOut`)
 
 **Required env vars** (see `.env.example`): `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 
