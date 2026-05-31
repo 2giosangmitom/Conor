@@ -1,11 +1,11 @@
-#set text(font: "Liberation Serif", size: 12pt, lang: "vi")
+#set text(font: "Noto Serif", size: 12pt, lang: "vi")
 #set page(
   paper: "us-letter",
   margin: 2cm,
   numbering: "1",
 )
 
-#set par(justify: true, leading: 0.65em)
+#set par(justify: true, leading: 0.8em)
 #set heading(numbering: "1.1.")
 
 #align(center)[
@@ -279,8 +279,6 @@ NgheGo được đánh giá bằng cả công cụ tự động và kiểm thử
 - Kiểm tra trên nhiều kích thước màn hình và thiết bị khác nhau.
 
 Kết quả cho thấy hệ thống đáp ứng tốt các yêu cầu trợ năng cốt lõi và không phát hiện các vấn đề nghiêm trọng ảnh hưởng đến khả năng sử dụng.
-
-#pagebreak()
 
 = Định hướng phát triển
 
