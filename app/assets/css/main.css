@@ -35,11 +35,6 @@
     }
   }
 }
-*:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 /* Visually hidden until focused — shows as fixed overlay when focused */
 .sr-only-focusable {
   position: absolute !important;

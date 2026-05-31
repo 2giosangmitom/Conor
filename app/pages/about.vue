@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- Mission -->
-    <div class="bg-muted">
+    <div class="relative overflow-hidden">
+      <div
+        class="pointer-events-none absolute left-1/2 top-0 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/3 blur-3xl"
+        aria-hidden="true"
+      />
       <Motion
         :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
         :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
@@ -72,7 +76,11 @@
     </Motion>
 
     <!-- How it works recap -->
-    <div class="bg-muted">
+    <div class="relative overflow-hidden">
+      <div
+        class="pointer-events-none absolute left-1/2 top-0 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/3 blur-3xl"
+        aria-hidden="true"
+      />
       <Motion
         :initial="{ opacity: 0, filter: 'blur(5px)', y: 10 }"
         :while-in-view="{ opacity: 1, filter: 'blur(0px)', y: 0 }"
