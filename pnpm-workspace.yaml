@@ -12,3 +12,5 @@ allowBuilds:
   vue-demi: false
 
 autoInstallPeers: true
+overrides:
+  vite: "^8.0.0"
