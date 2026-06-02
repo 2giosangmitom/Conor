@@ -192,7 +192,10 @@ const wordDisplay = computed<WordDisplay[]>(() => {
           </div>
         </template>
 
-        <div class="relative aspect-video overflow-hidden rounded-lg border border-muted/40">
+        <div
+          class="relative aspect-video overflow-hidden rounded-lg border border-muted/40"
+          aria-label="Video YouTube"
+        >
           <ScriptYouTubePlayer
             ref="scriptYouTubePlayer"
             :video-id="props.youtubeId"
@@ -448,11 +451,13 @@ const wordDisplay = computed<WordDisplay[]>(() => {
               'underline decoration-2 underline-offset-4': !word.isPlaceholder && !word.isCorrect,
             }"
             :aria-label="
-              !word.isPlaceholder && !word.isCurrent
-                ? word.isCorrect
+              word.isPlaceholder
+                ? word.isCurrent
+                  ? 'Từ hiện tại'
+                  : 'Chưa nhập'
+                : word.isCorrect
                   ? 'Đúng'
                   : 'Sai, được gạch chân'
-                : undefined
             "
           >
             {{ word.text }}
@@ -470,65 +475,90 @@ const wordDisplay = computed<WordDisplay[]>(() => {
             <UBadge variant="soft" color="primary">{{ props.totalSentences }} câu</UBadge>
           </div>
         </template>
-        <div class="space-y-2 max-h-[calc(100vh-12rem)] overflow-auto">
-          <button
-            v-for="sentence in props.sentences"
-            :key="sentence.id"
-            type="button"
-            class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
-            :class="[
-              getAttemptStatus(sentence.sentenceIndex) === 'current'
-                ? 'bg-secondary/10 border-secondary/40'
-                : getAttemptStatus(sentence.sentenceIndex) === 'correct'
-                  ? 'bg-success/10 border-success/30'
-                  : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
-                    ? 'bg-warning/10 border-warning/30'
-                    : 'bg-background/60',
-            ]"
-            @click="emit('moveToSentence', sentence.sentenceIndex)"
-          >
-            <div class="flex items-center gap-2">
-              <span
-                class="size-2 rounded-full"
-                :class="[
-                  getAttemptStatus(sentence.sentenceIndex) === 'current'
-                    ? 'bg-secondary'
-                    : getAttemptStatus(sentence.sentenceIndex) === 'correct'
-                      ? 'bg-success'
-                      : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
-                        ? 'bg-warning'
-                        : 'bg-muted',
-                ]"
-                :aria-label="
-                  getAttemptStatus(sentence.sentenceIndex) === 'current'
-                    ? 'Câu hiện tại'
-                    : getAttemptStatus(sentence.sentenceIndex) === 'correct'
-                      ? 'Đã hoàn thành chính xác'
-                      : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
-                        ? 'Chưa chính xác'
-                        : 'Chưa luyện tập'
-                "
-              />
-              <span class="text-sm">Câu {{ sentence.sentenceIndex + 1 }}</span>
-              <UIcon
-                v-if="getAttemptStatus(sentence.sentenceIndex) === 'correct'"
-                name="i-lucide-circle-check"
-                class="size-4 text-success"
-                aria-label="Đã hoàn thành chính xác"
-              />
-              <UIcon
-                v-else-if="getAttemptStatus(sentence.sentenceIndex) === 'incorrect'"
-                name="i-lucide-alert-circle"
-                class="size-4 text-warning"
-                aria-label="Chưa chính xác"
-              />
-            </div>
-            <span class="text-xs text-muted">
-              {{ formatMs(sentence.startTime) }}
-            </span>
-          </button>
-        </div>
+        <nav aria-label="Danh sách câu">
+          <div class="space-y-2 max-h-[calc(100vh-12rem)] overflow-auto">
+            <button
+              v-for="sentence in props.sentences"
+              :key="sentence.id"
+              type="button"
+              class="flex w-full items-center justify-between gap-3 rounded-lg border border-muted/40 px-3 py-2 text-left transition"
+              :aria-current="
+                sentence.sentenceIndex === props.activeSentenceIndex ? 'true' : undefined
+              "
+              :class="[
+                getAttemptStatus(sentence.sentenceIndex) === 'current'
+                  ? 'bg-secondary/10 border-secondary/40'
+                  : getAttemptStatus(sentence.sentenceIndex) === 'correct'
+                    ? 'bg-success/10 border-success/30'
+                    : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                      ? 'bg-warning/10 border-warning/30'
+                      : 'bg-background/60',
+              ]"
+              @click="emit('moveToSentence', sentence.sentenceIndex)"
+            >
+              <div class="flex items-center gap-2">
+                <span
+                  class="size-2 rounded-full"
+                  :class="[
+                    getAttemptStatus(sentence.sentenceIndex) === 'current'
+                      ? 'bg-secondary'
+                      : getAttemptStatus(sentence.sentenceIndex) === 'correct'
+                        ? 'bg-success'
+                        : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                          ? 'bg-warning'
+                          : 'bg-muted',
+                  ]"
+                  :aria-label="
+                    getAttemptStatus(sentence.sentenceIndex) === 'current'
+                      ? 'Câu hiện tại'
+                      : getAttemptStatus(sentence.sentenceIndex) === 'correct'
+                        ? 'Đã hoàn thành chính xác'
+                        : getAttemptStatus(sentence.sentenceIndex) === 'incorrect'
+                          ? 'Chưa chính xác'
+                          : 'Chưa luyện tập'
+                  "
+                />
+                <span class="text-sm">Câu {{ sentence.sentenceIndex + 1 }}</span>
+                <UIcon
+                  v-if="getAttemptStatus(sentence.sentenceIndex) === 'correct'"
+                  name="i-lucide-circle-check"
+                  class="size-4 text-success"
+                  aria-label="Đã hoàn thành chính xác"
+                />
+                <UIcon
+                  v-else-if="getAttemptStatus(sentence.sentenceIndex) === 'incorrect'"
+                  name="i-lucide-alert-circle"
+                  class="size-4 text-warning"
+                  aria-label="Chưa chính xác"
+                />
+              </div>
+              <span class="text-xs text-muted">
+                {{ formatMs(sentence.startTime) }}
+              </span>
+            </button>
+          </div>
+        </nav>
       </UCard>
+    </div>
+
+    <div class="sr-only" role="region" aria-label="Phím tắt">
+      <h2>Phím tắt</h2>
+      <dl>
+        <dt>Cmd+Enter</dt>
+        <dd>Kiểm tra đáp án</dd>
+        <dt>Cmd+J</dt>
+        <dd>Câu tiếp theo</dd>
+        <dt>Cmd+K</dt>
+        <dd>Câu trước</dd>
+        <dt>Cmd+R</dt>
+        <dd>Phát lại câu hiện tại</dd>
+        <dt>Cmd+H</dt>
+        <dd>Hiển thị gợi ý</dd>
+        <dt>Cmd+S</dt>
+        <dd>Bỏ qua câu hiện tại</dd>
+        <dt>Ctrl+I</dt>
+        <dd>Di chuyển tới ô nhập liệu</dd>
+      </dl>
     </div>
   </div>
 </template>

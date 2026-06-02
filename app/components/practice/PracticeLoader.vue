@@ -49,28 +49,44 @@ const statusIcon: Record<string, string> = {
         <div v-if="props.runId" class="text-xs text-muted">Run ID: {{ props.runId }}</div>
       </div>
 
-      <div class="space-y-3">
-        <div
-          v-for="step in props.steps"
-          :key="step.id"
-          class="flex items-center justify-between rounded-lg border border-muted/40 bg-background/70 px-4 py-3"
-        >
-          <div class="flex items-center gap-3">
-            <UIcon
-              :name="statusIcon[step.status]"
-              class="size-5"
-              :class="[statusColor[step.status], step.status === 'running' ? 'animate-spin' : '']"
-            />
-            <span class="text-sm font-medium">{{ step.label }}</span>
-          </div>
-          <UBadge variant="soft" size="sm" :color="step.status === 'failed' ? 'error' : 'primary'">
-            {{ statusText[step.status] }}
-          </UBadge>
-        </div>
+      <div
+        role="progressbar"
+        :aria-valuenow="props.steps.filter((s) => s.status === 'done').length"
+        aria-valuemin="0"
+        :aria-valuemax="props.steps.length"
+        :aria-label="`Tiến trình: ${props.steps.filter((s) => s.status === 'done').length} trên ${props.steps.length} bước hoàn tất`"
+        class="space-y-3"
+      >
+        <ol class="space-y-3 list-none p-0 m-0">
+          <li
+            v-for="step in props.steps"
+            :key="step.id"
+            class="flex items-center justify-between rounded-lg border border-muted/40 bg-background/70 px-4 py-3"
+          >
+            <div class="flex items-center gap-3">
+              <UIcon
+                :name="statusIcon[step.status]"
+                class="size-5"
+                :class="[statusColor[step.status], step.status === 'running' ? 'animate-spin' : '']"
+                aria-hidden="true"
+              />
+              <span class="text-sm font-medium">{{ step.label }}</span>
+            </div>
+            <UBadge
+              variant="soft"
+              size="sm"
+              :color="step.status === 'failed' ? 'error' : 'primary'"
+            >
+              <span class="sr-only">{{ statusText[step.status] }}</span>
+              {{ statusText[step.status] }}
+            </UBadge>
+          </li>
+        </ol>
       </div>
 
       <UAlert
         v-if="props.isFailed"
+        role="alert"
         title="Không thể lập chỉ mục video"
         color="error"
         icon="i-lucide-triangle-alert"
@@ -82,6 +98,7 @@ const statusIcon: Record<string, string> = {
 
       <UAlert
         v-if="props.connectionIssue"
+        role="alert"
         title="Kết nối bị gián đoạn"
         color="warning"
         icon="i-lucide-wifi-off"

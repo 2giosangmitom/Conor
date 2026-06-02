@@ -41,15 +41,15 @@
 
 = Tổng quan
 
-NgheGo là nền tảng học tiếng Anh thông qua luyện nghe chép chính tả từ các video YouTube thực tế. Người học có thể lựa chọn nội dung yêu thích — từ công nghệ, khoa học, giáo dục đến giải trí — và luyện tập trực tiếp với tiếng Anh tự nhiên: ngữ điệu, tốc độ nói, cách dùng từ và biến thể ngôn ngữ xuất hiện trong bối cảnh thực tế. Mỗi câu luyện tập có phản hồi tức thời về độ chính xác và gợi ý cụ thể để cải thiện.
+NgheGo là nền tảng học tiếng Anh thông qua kỹ thuật chép chính tả từ các video YouTube thực tế. Người học có thể lựa chọn đa dạng nội dung theo sở thích $dash$ từ công nghệ, khoa học, giáo dục đến giải trí để luyện tập trực tiếp với tiếng Anh tự nhiên, bao gồm ngữ điệu, tốc độ nói, từ vựng và các biến thể ngôn ngữ trong bối cảnh thực tế. Mỗi câu luyện tập đều cung cấp phản hồi tức thì về độ chính xác và những gợi ý cụ thể để cải thiện.
 
-Mục tiêu của sản phẩm không chỉ là hỗ trợ học tiếng Anh hiệu quả mà còn góp phần xây dựng một môi trường học tập số bình đẳng, nơi mọi người đều có cơ hội tiếp cận tri thức mà không bị giới hạn bởi khả năng vận động, thị giác hoặc các rào cản công nghệ khác.
+Mục tiêu của sản phẩm không chỉ giúp người học nâng cao kỹ năng tiếng Anh mà còn kiến tạo một môi trường học tập số bình đẳng, nơi mọi người đều có cơ hội tiếp cận tri thức mà không bị rào cản bởi khả năng vận động, thị giác hay các giới hạn công nghệ khác.
 
 = Giới thiệu sản phẩm
 
 == Bối cảnh
 
-Kỹ năng nghe là một trong những kỹ năng khó nhất khi học tiếng Anh. Mặc dù hiện nay có nhiều nền tảng học tập trực tuyến, phần lớn vẫn tồn tại một số hạn chế:
+Kỹ năng nghe là một trong những kỹ năng khó nhất khi học tiếng Anh. Mặc dù hiện nay có nhiều nền tảng học tập trực tuyến, nhưng phần lớn vẫn tồn tại một số hạn chế:
 
 - Nội dung học tập cố định và khó cá nhân hóa.
 - Người học khó tìm được chủ đề phù hợp với sở thích cá nhân.
@@ -180,7 +180,7 @@ Các biện pháp bao gồm:
 
 === Hỗ trợ trình đọc màn hình với Announcer
 
-NgheGo cung cấp một cơ chế announcer — kênh thông báo trạng thái dành cho trình đọc màn hình. Thay vì buộc người dùng phải chuyển focus hoặc đọc lại toàn bộ nội dung, announcer phát các thông điệp ngắn, rõ ràng để mô tả thay đổi giao diện và kết quả thao tác.
+NgheGo cung cấp một cơ chế announcer - kênh thông báo trạng thái dành cho trình đọc màn hình. Thay vì buộc người dùng phải chuyển focus hoặc đọc lại toàn bộ nội dung, announcer phát các thông điệp ngắn, rõ ràng để mô tả thay đổi giao diện và kết quả thao tác.
 
 Các tính năng và lợi ích chính:
 

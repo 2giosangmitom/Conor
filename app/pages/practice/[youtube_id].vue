@@ -19,6 +19,8 @@ const PracticeLoader = defineAsyncComponent(
 );
 const PracticeMain = defineAsyncComponent(() => import("~/components/practice/PracticeMain.vue"));
 
+const { polite } = useAnnouncer();
+
 definePageMeta({
   layout: "practice",
 });
@@ -591,6 +593,8 @@ function useHint() {
       revealedWordIndices.value.push(i);
       hintCount.value += 1;
       sessionHintCount.value += 1;
+      const firstChar = expectedWords[i]![0] ?? "";
+      polite(`Gợi ý: chữ cái đầu là "${firstChar}".`);
       return;
     }
   }
@@ -608,6 +612,7 @@ async function checkAnswer() {
       errorAudio.value.currentTime = 0;
       errorAudio.value.play().catch(() => {});
     }
+    practiceMainRef.value?.focusInput();
     return;
   }
   sentenceAccuracyMap.value[activeSentenceIndex.value] = accuracyValue;
@@ -640,6 +645,7 @@ async function checkAnswer() {
 
   await persistAttempt(accuracyValue, answerInput.value);
   await persistProgress();
+  practiceMainRef.value?.focusInput();
 }
 
 async function moveToSentence(index: number) {
@@ -656,6 +662,7 @@ async function moveToSentence(index: number) {
   currentWordTypedChars.value = "";
   revealedWordIndices.value = [];
   await persistProgress();
+  polite(`Chuyển sang câu ${safeIndex + 1}. Sẵn sàng nhập.`);
   await playSegment();
 }
 
@@ -671,6 +678,7 @@ async function prevSentence() {
 
 async function replaySentence() {
   replayCount.value = 0;
+  polite(`Đang phát lại câu ${activeSentenceIndex.value + 1}.`);
   await playSegment();
 }
 
@@ -691,6 +699,15 @@ watch(
   async (ready) => {
     if (!ready) return;
     await loadOrCreateSession();
+  },
+);
+
+watch(
+  () => isCompleted.value,
+  (completed) => {
+    if (completed) {
+      polite("Hoàn thành! Đã luyện xong tất cả câu.");
+    }
   },
 );
 
