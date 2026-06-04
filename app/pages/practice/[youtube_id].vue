@@ -594,10 +594,15 @@ function useHint() {
       hintCount.value += 1;
       sessionHintCount.value += 1;
       const firstChar = expectedWords[i]![0] ?? "";
-      polite(`Gợi ý: chữ cái đầu là "${firstChar}".`);
+      const wordNumber = i + 1;
+      const totalWords = expectedWords.length;
+      polite(
+        `Gợi ý từ ${wordNumber}/${totalWords}: chữ cái đầu là "${firstChar}". Đã dùng ${hintCount.value} gợi ý.`,
+      );
       return;
     }
   }
+  polite("Không còn gợi ý nào. Tất cả từ đã được hiển thị hoặc đã đúng.");
 }
 
 async function checkAnswer() {
