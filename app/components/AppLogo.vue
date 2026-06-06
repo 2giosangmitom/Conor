@@ -26,6 +26,6 @@ withDefaults(
         mask: 'url(/images/logo.svg) no-repeat center / contain',
       }"
     />
-    <span v-if="withText" class="ml-2 font-bold">NgheGo</span>
+    <span v-if="withText" class="ml-2 font-bold">Conor</span>
   </div>
 </template>

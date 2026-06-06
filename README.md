@@ -1,4 +1,4 @@
-# NgheGo
+# Conor
 
 This is a Nuxt 4 project.
 

@@ -55,12 +55,12 @@ useSeoMeta({
   title: pageTitle,
   description: pageDescription,
   ogType: "article",
-  ogTitle: computed(() => `${pageTitle.value} - NgheGo`),
+  ogTitle: computed(() => `${pageTitle.value} - Conor`),
   ogDescription: pageDescription,
   ogUrl: computed(() => `${origin}/practice/${youtubeId.value}`),
   ogImage: `${origin}/images/logo.svg`,
   twitterCard: "summary_large_image",
-  twitterTitle: computed(() => `${pageTitle.value} - NgheGo`),
+  twitterTitle: computed(() => `${pageTitle.value} - Conor`),
   twitterDescription: pageDescription,
   twitterImage: `${origin}/images/logo.svg`,
 });
@@ -124,7 +124,7 @@ const sentenceAttempts = ref<SentenceAttemptStatus[]>([]);
 const sentenceAccuracyMap = ref<Record<number, number>>({});
 const sessionAttemptAccuracies = ref<number[]>([]);
 
-const DB_NAME = "nghego-practice";
+const DB_NAME = "conor-practice";
 const DB_VERSION = 1;
 const STORE_NAME = "sessions";
 

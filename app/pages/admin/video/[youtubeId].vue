@@ -58,7 +58,7 @@ const { data, refresh, status } = useFetch<{ video: VideoInfo; sentences: VideoS
 const video = computed(() => data.value?.video ?? null);
 
 useSeoMeta({
-  title: computed(() => `Chỉnh sửa transcript - ${video.value?.title ?? "NgheGo"}`),
+  title: computed(() => `Chỉnh sửa transcript - ${video.value?.title ?? "Conor"}`),
 });
 
 const sentences = ref<VideoSentence[]>([]);

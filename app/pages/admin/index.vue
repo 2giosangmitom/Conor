@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Quản trị - NgheGo",
+  title: "Quản trị - Conor",
 });
 
 interface VideoRow {

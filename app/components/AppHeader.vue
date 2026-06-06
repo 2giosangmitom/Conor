@@ -96,7 +96,7 @@ async function signInWithGoogle() {
 </script>
 
 <template>
-  <UHeader title="NgheGo" to="/">
+  <UHeader title="Conor" to="/">
     <template #title>
       <AppLogo with-text />
     </template>

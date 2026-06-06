@@ -14,7 +14,7 @@
       >
         <UPageSection
           headline=""
-          title="Tại sao NgheGo tồn tại?"
+          title="Tại sao Conor tồn tại?"
           description="Kỹ năng nghe là rào cản lớn nhất với người học tiếng Anh tại Việt Nam. Chúng tôi tin rằng cách học hiệu quả nhất là luyện tập với nội dung thực tế, không phải bài tập giả tạo."
         >
           <template #body>
@@ -51,11 +51,11 @@
       :transition="{ duration: 0.5, ease: 'easeInOut' }"
       :in-view-options="{ once: true }"
     >
-      <UPageSection headline="" title="NgheGo bắt đầu như thế nào?">
+      <UPageSection headline="" title="Conor bắt đầu như thế nào?">
         <template #body>
           <div class="max-w-3xl mx-auto space-y-6 text-base leading-relaxed">
             <p>
-              NgheGo bắt đầu từ một vấn đề quen thuộc: Dù học tiếng Anh nhiều năm, nhiều người vẫn
+              Conor bắt đầu từ một vấn đề quen thuộc: Dù học tiếng Anh nhiều năm, nhiều người vẫn
               không thể nghe hiểu khi xem phim, nghe podcast hay nói chuyện với người bản ngữ. Lý do
               không phải thiếu từ vựng hay ngữ pháp mà là thiếu luyện tập nghe thực tế.
             </p>
@@ -66,7 +66,7 @@
               chúng một cách có hệ thống.
             </p>
             <p>
-              NgheGo lấp đầy khoảng trống đó. Chúng tôi kết hợp AI transcription với giao diện luyện
+              Conor lấp đầy khoảng trống đó. Chúng tôi kết hợp AI transcription với giao diện luyện
               tập từng câu, giúp bạn nghe đi nghe lại, gõ lại những gì nghe được và nhận phản hồi
               tức thì với video YouTube bạn tự chọn.
             </p>
@@ -126,7 +126,7 @@
     >
       <UPageSection
         headline=""
-        title="Những người xây dựng NgheGo"
+        title="Những người xây dựng Conor"
         description="Nhóm nhỏ đam mê giáo dục và công nghệ, cùng nhau tạo ra công cụ học tiếng Anh tốt hơn cho người Việt."
       >
         <template #body>
@@ -195,15 +195,15 @@ const colorMode = useColorMode();
 useSeoMeta({
   title: "Về chúng tôi",
   description:
-    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
-  ogTitle: "Về chúng tôi - NgheGo",
+    "Conor giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
+  ogTitle: "Về chúng tôi - Conor",
   ogDescription:
-    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
+    "Conor giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích, hoàn toàn miễn phí.",
   ogUrl: `${origin}/about`,
   ogImage: `${origin}/images/logo.svg`,
-  twitterTitle: "Về chúng tôi - NgheGo",
+  twitterTitle: "Về chúng tôi - Conor",
   twitterDescription:
-    "NgheGo giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích.",
+    "Conor giúp người Việt cải thiện kỹ năng nghe tiếng Anh thông qua luyện tập chép chính tả với video YouTube yêu thích.",
   twitterImage: `${origin}/images/logo.svg`,
 });
 
@@ -279,7 +279,7 @@ const teamMembers = computed<TeamMember[]>(() => [
   {
     name: "Võ Quang Chiến",
     role: "Founder/Vibe Coder",
-    bio: "Đam mê về công nghệ. Xây dựng NgheGo để giải quyết vấn đề nghe tiếng Anh mà chính mình từng gặp phải.",
+    bio: "Đam mê về công nghệ. Xây dựng Conor để giải quyết vấn đề nghe tiếng Anh mà chính mình từng gặp phải.",
     avatar: "/images/2giosangmitom.png",
   },
   {
@@ -291,7 +291,7 @@ const teamMembers = computed<TeamMember[]>(() => [
   {
     name: "GitHub Copilot",
     role: "Senior Full-stack Developer",
-    bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển NgheGo.",
+    bio: "Trợ lý lập trình AI của GitHub, hỗ trợ gợi ý code, hoàn thiện hàm và giải thích logic trong suốt quá trình phát triển Conor.",
     avatar: colorMode.value === "dark" ? "/images/copilot-dark.png" : "/images/copilot.png",
   },
   {

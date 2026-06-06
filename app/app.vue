@@ -27,8 +27,8 @@
 const { origin } = useRequestURL();
 
 useHead({
-  title: "NgheGo",
-  titleTemplate: (titleChunk) => (titleChunk ? `${titleChunk} - NgheGo` : "NgheGo"),
+  title: "Conor",
+  titleTemplate: (titleChunk) => (titleChunk ? `${titleChunk} - Conor` : "Conor"),
   htmlAttrs: { lang: "vi" },
   link: [
     { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -38,21 +38,21 @@ useHead({
 
 useSeoMeta({
   description:
-    "NgheGo - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí với AI transcription chính xác, phản hồi tức thì.",
+    "Conor - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí với AI transcription chính xác, phản hồi tức thì.",
 
   ogType: "website",
-  ogSiteName: "NgheGo",
-  ogTitle: "NgheGo",
+  ogSiteName: "Conor",
+  ogTitle: "Conor",
   ogDescription:
-    "NgheGo - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí với AI transcription chính xác.",
+    "Conor - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí với AI transcription chính xác.",
   ogImage: `${origin}/images/logo.svg`,
   ogUrl: origin,
   ogLocale: "vi_VN",
 
   twitterCard: "summary_large_image",
-  twitterTitle: "NgheGo",
+  twitterTitle: "Conor",
   twitterDescription:
-    "NgheGo - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí.",
+    "Conor - Luyện nghe chép chính tả tiếng Anh với video YouTube. Cải thiện kỹ năng nghe tiếng Anh miễn phí.",
   twitterImage: `${origin}/images/logo.svg`,
 
   robots: "index, follow",

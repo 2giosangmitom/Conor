@@ -54,16 +54,16 @@ const columns: FooterColumn[] = [
 
     <template #left>
       <p class="text-muted text-sm">
-        &copy; {{ new Date().getFullYear() }} NgheGo. All rights reserved.
+        &copy; {{ new Date().getFullYear() }} Conor. All rights reserved.
       </p>
     </template>
 
     <template #right>
       <UButton
-        to="https://github.com/2giosangmitom/NgheGo"
+        to="https://github.com/2giosangmitom/Conor"
         target="_blank"
         icon="i-simple-icons-github"
-        aria-label="NgheGo on GitHub"
+        aria-label="Conor on GitHub"
         color="neutral"
         variant="ghost"
       />

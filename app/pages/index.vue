@@ -132,7 +132,7 @@
         id="faq"
         headline="FAQ"
         title="Câu hỏi thường gặp"
-        description="Giải đáp các thắc mắc thường gặp về NgheGo"
+        description="Giải đáp các thắc mắc thường gặp về Conor"
       >
         <template #body>
           <UAccordion :items="faqItems" class="mx-auto max-w-3xl" />
@@ -170,15 +170,15 @@ const { origin } = useRequestURL();
 useSeoMeta({
   title: "Luyện nghe tiếng Anh",
   description:
-    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
-  ogTitle: "Luyện nghe tiếng Anh - NgheGo",
+    "Conor - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
+  ogTitle: "Luyện nghe tiếng Anh - Conor",
   ogDescription:
-    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
+    "Conor - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube. Cải thiện kỹ năng nghe tiếng Anh qua AI transcription chính xác, phản hồi tức thì.",
   ogUrl: origin,
   ogImage: `${origin}/images/logo.svg`,
-  twitterTitle: "Luyện nghe tiếng Anh - NgheGo",
+  twitterTitle: "Luyện nghe tiếng Anh - Conor",
   twitterDescription:
-    "NgheGo - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube.",
+    "Conor - Công cụ luyện nghe chép chính tả tiếng Anh miễn phí với video YouTube.",
   twitterImage: `${origin}/images/logo.svg`,
 });
 
@@ -250,7 +250,7 @@ const howToUseSteps: HowToUseStep[] = [
   {
     icon: "lucide:link",
     title: "Dán link YouTube",
-    description: "Thêm video vào NgheGo chỉ trong vài giây",
+    description: "Thêm video vào Conor chỉ trong vài giây",
     points: [
       "Dán URL video YouTube vào ô nhập liệu",
       "Hệ thống tự động tải video và chuẩn bị audio",
@@ -309,12 +309,12 @@ const ctaLinks = [
 
 const faqItems = ref<AccordionItem[]>([
   {
-    label: "NgheGo là gì?",
+    label: "Conor là gì?",
     content:
-      "NgheGo là công cụ luyện nghe chép chính tả tiếng Anh miễn phí, sử dụng video YouTube và AI để tạo bản transcript chính xác, giúp bạn cải thiện kỹ năng nghe hiệu quả.",
+      "Conor là công cụ luyện nghe chép chính tả tiếng Anh miễn phí, sử dụng video YouTube và AI để tạo bản transcript chính xác, giúp bạn cải thiện kỹ năng nghe hiệu quả.",
   },
   {
-    label: "NgheGo có miễn phí không?",
+    label: "Conor có miễn phí không?",
     content:
       "Hoàn toàn miễn phí! Không giới hạn số lượng video luyện tập, không phí ẩn, bạn có thể sử dụng thoải mái mọi tính năng.",
   },
@@ -324,9 +324,9 @@ const faqItems = ref<AccordionItem[]>([
       "Bạn có thể luyện nghe ngay mà không cần đăng ký. Tuy nhiên, đăng nhập bằng Google giúp lưu tiến trình và theo dõi quá trình học của bạn.",
   },
   {
-    label: "NgheGo hỗ trợ ngôn ngữ nào?",
+    label: "Conor hỗ trợ ngôn ngữ nào?",
     content:
-      "Hiện tại NgheGo tập trung vào luyện nghe tiếng Anh với nhiều accent khác nhau. Chúng tôi sẽ hỗ trợ thêm ngôn ngữ trong tương lai.",
+      "Hiện tại Conor tập trung vào luyện nghe tiếng Anh với nhiều accent khác nhau. Chúng tôi sẽ hỗ trợ thêm ngôn ngữ trong tương lai.",
   },
   {
     label: "Làm sao để bắt đầu luyện nghe?",
