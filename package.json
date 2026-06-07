@@ -22,7 +22,7 @@
     "@nuxt/hints": "^1.1.2",
     "@nuxt/image": "^2.0.0",
     "@nuxt/scripts": "^1.2.0",
-    "@nuxt/ui": "^4.8.1",
+    "@nuxt/ui": "^4.8.2",
     "@nuxthub/core": "^0.10.7",
     "@upstash/redis": "^1.38.0",
     "@vueuse/core": "^14.3.0",
