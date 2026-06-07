@@ -52,7 +52,7 @@
     "@iconify-json/simple-icons": "^1.2.85",
     "@nuxt/test-utils": "^4.0.3",
     "@types/youtube": "^0.1.2",
-    "@vue/test-utils": "^2.4.10",
+    "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.9.0",
     "oxfmt": "^0.52.0",
     "typescript": "^5.9.3",
