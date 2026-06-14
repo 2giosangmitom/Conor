@@ -144,9 +144,9 @@ Toàn bộ chức năng của Conor có thể sử dụng bằng bàn phím mà 
 
 == Understandable - Có thể hiểu
 
-Conor được thiết kế để giảm tải nhận thức và giúp người dùng dễ dự đoán hành vi của hệ thống. Điều hướng nhất quán giữa các trang, tên gọi chức năng rõ ràng, luồng thao tác đơn giản, và tiến độ luyện tập luôn được hiển thị. Thông báo lỗi mô tả cụ thể vấn đề và hướng dẫn cách khắc phục.
+Conor được thiết kế để giảm tải nhận thức và giúp người dùng dễ dự đoán hành vi của hệ thống. Điều hướng nhất quán giữa các trang, tên gọi chức năng rõ ràng, thao tác đơn giản, và tiến độ luyện tập luôn được hiển thị. Thông báo lỗi mô tả cụ thể vấn đề và hướng dẫn cách khắc phục.
 
-Để hỗ trợ người dùng trình đọc màn hình, Conor triển khai hệ thống announcer — kênh thông báo trạng thái chuyên dụng hoạt động song song với giao diện mà không can thiệp vào focus. Khi người dùng kiểm tra đáp án, chuyển câu hoặc hệ thống hoàn tất xử lý video, announcer đọc thông điệp tương ứng ngay lập tức — đảm bảo người dùng khiếm thị nhận được phản hồi tương đương với người dùng quan sát trực tiếp trên màn hình. Hệ thống hỗ trợ nhiều mức ưu tiên thông báo để điều chỉnh cách và tần suất đọc thông điệp phù hợp với từng tình huống.
+Để hỗ trợ người dùng trình đọc màn hình Conor triển khai hệ thống announcer, kênh thông báo trạng thái chuyên dụng hoạt động song song với giao diện mà không can thiệp vào focus. Khi người dùng kiểm tra đáp án, chuyển câu hoặc hệ thống hoàn tất xử lý video, announcer đọc thông điệp tương ứng ngay lập tức đảm bảo người dùng khiếm thị nhận được phản hồi tương đương với người dùng quan sát trực tiếp trên màn hình.
 
 === Các tiêu chí WCAG liên quan
 
