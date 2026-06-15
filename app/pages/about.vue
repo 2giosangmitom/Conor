@@ -89,7 +89,7 @@
       >
         <UPageSection
           headline=""
-          title="Học bằng cách làm — không phải ghi nhớ"
+          title="Học bằng cách làm không phải ghi nhớ"
           description="Phương pháp dictation được chứng minh là cách hiệu quả nhất để cải thiện kỹ năng nghe và phát âm."
         >
           <template #body>
@@ -239,7 +239,7 @@ const methodology: MethodItem[] = [
     icon: "lucide:ear",
     title: "Nghe chủ động",
     description:
-      "Thay vì nghe thụ động, bạn buộc phải tập trung vào từng âm tiết để gõ lại chính xác — não bộ ghi nhớ sâu hơn nhiều.",
+      "Thay vì nghe thụ động, bạn buộc phải tập trung vào từng âm tiết để gõ lại chính xác, não bộ ghi nhớ sâu hơn nhiều.",
     color: "text-primary",
     bgColor: "bg-primary/10",
   },
