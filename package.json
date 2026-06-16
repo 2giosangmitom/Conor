@@ -54,7 +54,7 @@
     "@types/youtube": "^0.1.2",
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.3",
-    "oxfmt": "^0.53.0",
+    "oxfmt": "^0.55.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.8",
     "vue-tsc": "~3.2.9"
